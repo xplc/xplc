@@ -40,28 +40,28 @@ void test() {
   const char* err;
 
   servmgr = XPLC::getServiceManager();
-  ASSERT(servmgr, "could not obtain service manager");
+  ASSERT(servmgr != 0, "could not obtain service manager");
 
   obj = servmgr->getObject(XPLC::simpleDynamicLoader);
-  ASSERT(obj, "could not obtain simple dynamic loader component");
+  ASSERT(obj != 0, "could not obtain simple dynamic loader component");
 
   dynfactory = mutateInterface<IFactory>(obj);
-  ASSERT(dynfactory, "factory does not have expected interface");
+  ASSERT(dynfactory != 0, "factory does not have expected interface");
 
   obj = dynfactory->createObject();
-  ASSERT(obj, "could not create simple dynamic loader component");
+  ASSERT(obj != 0, "could not create simple dynamic loader component");
 
   dyn = mutateInterface<ISimpleDynamicLoader>(obj);
-  ASSERT(dyn, "simple dynamic loader does not have expected interface");
+  ASSERT(dyn != 0, "simple dynamic loader does not have expected interface");
 
-  err = dyn->loadModule("tests/test005/testobj.so");
+  err = dyn->loadModule("c:\\projects\\xplc\\tests\\test005\\TestComponent___Win32_Release\\TestComponent.dll");
   ASSERT(!err, err);
 
   obj = dyn->createObject();
-  ASSERT(obj, "could not create test object");
+  ASSERT(obj != 0, "could not create test object");
 
   test = mutateInterface<ITestComponent>(obj);
-  ASSERT(test, "test object did not have expected interface");
+  ASSERT(test != 0, "test object did not have expected interface");
 
   ASSERT(test->getAnswer() == 42, "test object did not have expected behavior");
 

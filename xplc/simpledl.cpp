@@ -19,8 +19,15 @@
  * 02111-1307, USA.
  */
 
-#include <stddef.h>
+#ifdef __LINUX__
 #include <dlfcn.h>
+#endif
+#ifdef WIN32
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#include <windows.h>
+#endif
+
 #include <xplc/utils.h>
 #include "simpledl.h"
 
@@ -44,7 +51,7 @@ IObject* SimpleDynamicLoader::getInterface(const UUID& aUuid) {
     return static_cast<ISimpleDynamicLoader*>(this);
   }
 
-  return NULL;
+  return 0;
 }
 
 IObject* SimpleDynamicLoader::createObject() {
@@ -59,6 +66,7 @@ IObject* SimpleDynamicLoader::createObject() {
 }
 
 const char* SimpleDynamicLoader::loadModule(const char* filename) {
+#ifdef __GCC__
   const char* err;
 
   /* clear out dl error */
@@ -92,6 +100,43 @@ const char* SimpleDynamicLoader::loadModule(const char* filename) {
   if(err)
     return err;
 
-  return NULL;
-}
+  return 0;
+#endif
+#ifdef WIN32
+	/*
+	 * TODO: unload previous DLL?
+	 */
 
+	// buffer for possible error message
+	static char msg[256];
+
+	/*
+	 * Load the DLL. This will do a typical DLL search: application dir, current dir,
+	 * windows/system, windows, path.
+	 */
+	HINSTANCE hInstance = LoadLibraryEx(filename, 0, 0);
+	if(!hInstance) {
+		if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, msg, sizeof(msg), 0))
+			return msg;
+		else
+			return "Something went wrong loading a module and error handling failed. Blame Windows.";
+	}
+
+	/*
+	 * Get entry point.
+	 */
+	FARPROC proc = GetProcAddress(hInstance, "XPLC_SimpleModule");
+	if(!proc) {
+		if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, msg, sizeof(msg), 0))
+			return msg;
+		else
+			return "Something went wrong finding the exported symbol and error handling failed. Blame Windows.";
+	}
+
+	/*
+	 * All done!
+	 */
+	factory = (IObject*(*)())proc;
+	return 0;
+#endif
+}

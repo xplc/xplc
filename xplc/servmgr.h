@@ -29,7 +29,7 @@ class ServiceManager: public IServiceManager {
 private:
   HandlerNode* handlers;
 public:
-  ServiceManager(): handlers(NULL) {
+  ServiceManager(): handlers(0) {
   }
   static ServiceManager* create();
   /* IObject */

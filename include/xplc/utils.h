@@ -92,7 +92,7 @@ public:
 template<class Interface>
 Interface* getInterface(IObject* aObj) {
   if(!aObj)
-    return NULL;
+    return 0;
 
   return (Interface*)aObj->getInterface(Interface::IID);
 }
@@ -108,7 +108,7 @@ Interface* mutateInterface(IObject* aObj) {
   Interface* rv;
 
   if(!aObj)
-    return NULL;
+    return 0;
 
   rv = (Interface*)aObj->getInterface(Interface::IID);
 

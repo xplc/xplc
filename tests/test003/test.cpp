@@ -37,12 +37,12 @@ void test() {
   ITestInterface *itest;
 
   handler = StaticServiceHandler::create();
-  ASSERT(handler, "could not instantiate static service handler");
+  ASSERT(handler != 0, "could not instantiate static service handler");
 
   handler->addRef();
 
   test = new TestObject;
-  ASSERT(test, "could not instantiate test object");
+  ASSERT(test != 0, "could not instantiate test object");
 
   test->addRef();
   VERIFY(test->getRefCount() == 1, "the test object has an incorrect refcount");
@@ -51,10 +51,10 @@ void test() {
   VERIFY(test->getRefCount() == 2, "static service handler did not addRef the test component");
 
   obj = handler->getObject(TestObject_CID);
-  ASSERT(obj, "could not get test component from static service handler");
+  ASSERT(obj != 0, "could not get test component from static service handler");
 
   itest = mutateInterface<ITestInterface>(obj);
-  ASSERT(itest, "test component does not have the expected interface");
+  ASSERT(itest != 0, "test component does not have the expected interface");
 
   VERIFY(test->getRefCount() == 3, "the test object has an incorrect refcount");
   itest->setRefCount(10);

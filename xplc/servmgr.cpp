@@ -19,7 +19,6 @@
  * 02111-1307, USA.
  */
 
-#include <stdlib.h>
 #include <xplc/utils.h>
 #include "servmgr.h"
 
@@ -28,15 +27,15 @@ ServiceManager* ServiceManager::create() {
 }
 
 IObject* ServiceManager::getInterface(const UUID& uuid) {
-  do {
+  for(;;) {
     if(uuid.equals(IObject::IID))
       break;
 
     if(uuid.equals(IServiceManager::IID))
       break;
 
-    return NULL;
-  } while(0);
+    return 0;
+  }
 
   addRef();
   return this;
@@ -98,7 +97,7 @@ IObject* ServiceManager::getObject(const UUID& aUuid) {
     handler = handler->next;
   }
 
-  return NULL;
+  return 0;
 }
 
 void ServiceManager::shutdown() {
@@ -112,6 +111,5 @@ void ServiceManager::shutdown() {
     delete ptr;
   }
 
-  handlers = NULL;
+  handlers = 0;
 }
-

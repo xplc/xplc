@@ -22,7 +22,6 @@
 #ifndef __TESTS_TEST_H__
 #define __TESTS_TEST_H__
 
-#include <stdlib.h>
 #include <xplc/xplc.h>
 
 void test();
@@ -88,7 +87,7 @@ public:
       return static_cast<ITestInterface*>(this);
     }
 
-    return NULL;
+    return 0;
   }
   virtual unsigned int getRefCount() {
     return refcount;

@@ -43,7 +43,7 @@ IObject* GenericFactory::getInterface(const UUID& aUuid) {
     return static_cast<IGenericFactory*>(this);
   }
 
-  return NULL;
+  return 0;
 }
 
 IObject* GenericFactory::createObject() {
@@ -60,4 +60,3 @@ IObject* GenericFactory::createObject() {
 void GenericFactory::setFactory(IObject*(*aFactory)()) {
   factory = aFactory;
 }
-

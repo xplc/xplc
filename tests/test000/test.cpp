@@ -29,5 +29,5 @@
  */
 
 void test() {
-  VERIFY(XPLC::getServiceManager(), "could not obtain service manager");
+  VERIFY(XPLC::getServiceManager() != 0, "could not obtain service manager");
 }

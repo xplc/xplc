@@ -19,7 +19,6 @@
  * 02111-1307, USA.
  */
 
-#include <stdlib.h>
 #include <xplc/xplc.h>
 #include <xplc/utils.h>
 #include "servmgr.h"
@@ -27,8 +26,8 @@
 #include "simpledl.h"
 #include "factory.h"
 
-static IServiceManager* servmgr = NULL;
-static IStaticServiceHandler* handler = NULL;
+static IServiceManager* servmgr = 0;
+static IStaticServiceHandler* handler = 0;
 
 IServiceManager* XPLC::getServiceManager() {
   IObject* obj;
@@ -49,7 +48,7 @@ IServiceManager* XPLC::getServiceManager() {
   if(servmgr)
     servmgr->addRef();
   else
-    return NULL;
+    return 0;
 
   /*
    * The static service handler could already have been created by a
@@ -60,7 +59,7 @@ IServiceManager* XPLC::getServiceManager() {
 
   if(!handler) {
     servmgr->release();
-    return NULL;
+    return 0;
   }
 
   servmgr->addHandler(handler);
@@ -93,4 +92,3 @@ IServiceManager* XPLC::getServiceManager() {
 
   return servmgr;
 }
-

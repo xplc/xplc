@@ -39,7 +39,7 @@ StaticServiceHandler::~StaticServiceHandler() {
     delete ptr;
   }
 
-  objects = NULL;
+  objects = 0;
 }
 
 IObject* StaticServiceHandler::getInterface(const UUID& uuid) {
@@ -58,7 +58,7 @@ IObject* StaticServiceHandler::getInterface(const UUID& uuid) {
     return static_cast<IStaticServiceHandler*>(this);
   }
 
-  return NULL;
+  return 0;
 }
 
 IObject* StaticServiceHandler::getObject(const UUID& aUuid) {
@@ -78,7 +78,7 @@ IObject* StaticServiceHandler::getObject(const UUID& aUuid) {
   /*
    * No match was found, we return empty-handed.
    */
-  return NULL;
+  return 0;
 }
 
 void StaticServiceHandler::addObject(const UUID& aUuid, IObject* aObj) {
@@ -122,4 +122,3 @@ void StaticServiceHandler::removeObject(const UUID& aUuid) {
     node = *ptr;
   }
 }
-

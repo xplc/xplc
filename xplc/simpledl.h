@@ -29,7 +29,7 @@ private:
   void* dlh;
   IObject* (*factory)();
 protected:
-  SimpleDynamicLoader(): dlh(NULL) {
+  SimpleDynamicLoader(): dlh(0) {
   }
 public:
   static IObject* create();

@@ -53,7 +53,7 @@ IObject* TestComponent::getInterface(const UUID& aUuid) {
     return static_cast<ITestComponent*>(this);
   }
 
-  return NULL;
+  return 0;
 }
 
 int TestComponent::getAnswer() {
@@ -63,6 +63,10 @@ int TestComponent::getAnswer() {
   return 42;
 }
 
-extern "C" IObject* XPLC_SimpleModule() {
+extern "C"
+#ifdef WIN32
+__declspec(dllexport)
+#endif
+IObject* XPLC_SimpleModule() {
   return TestComponent::create();
 }

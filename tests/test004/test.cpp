@@ -40,20 +40,20 @@ void test() {
   ITestInterface* test;
 
   obj = GenericFactory::create();
-  ASSERT(obj, "could not instantiate generic factory");
+  ASSERT(obj != 0, "could not instantiate generic factory");
 
   obj->addRef();
 
   factory = mutateInterface<IGenericFactory>(obj);
-  ASSERT(factory, "factory does not have expected interface");
+  ASSERT(factory != 0, "factory does not have expected interface");
 
   factory->setFactory(testfactory);
 
   obj = factory->createObject();
-  ASSERT(obj, "factory did not create test object");
+  ASSERT(obj != 0, "factory did not create test object");
 
   test = mutateInterface<ITestInterface>(obj);
-  ASSERT(test, "test object does not have expected interface");
+  ASSERT(test != 0, "test object does not have expected interface");
 
   VERIFY(test->release() == 0, "test object has non-zero refcount after release");
 

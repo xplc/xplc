@@ -30,7 +30,7 @@ private:
   ObjectNode* objects;
 public:
   static StaticServiceHandler* create();
-  StaticServiceHandler(): objects(NULL) {
+  StaticServiceHandler(): objects(0) {
   }
   virtual ~StaticServiceHandler();
   /* IObject */

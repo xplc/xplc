@@ -35,6 +35,11 @@ struct UUID {
   };
 };
 
+#ifdef __GCC__
 #define DEFINE_UUID(symbol) const UUID symbol __attribute__((weak))
+#endif
+#ifdef _MSC_VER
+#define DEFINE_UUID(symbol) __declspec(selectany) const UUID symbol
+#endif
 
 #endif /* __XPLC_UUID_H__ */

@@ -19,7 +19,8 @@
  * 02111-1307, USA.
  */
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 #include "test.h"
 
 unsigned int passed;

@@ -33,7 +33,7 @@ void test() {
 
   serv = XPLC::getServiceManager();
 
-  ASSERT(serv, "could not obtain service manager");
+  ASSERT(serv != 0, "could not obtain service manager");
 
   serv->shutdown();
 

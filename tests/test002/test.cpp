@@ -43,7 +43,7 @@ public:
       return reinterpret_cast<IObject*>(1);
     }
 
-    return NULL;
+    return 0;
   }
   virtual IObject* getInterface(const UUID& uuid) {
     if(uuid.equals(IObject::IID)) {
@@ -56,7 +56,7 @@ public:
       return static_cast<IServiceHandler*>(this);
     }
 
-    return NULL;
+    return 0;
   }
 };
 
@@ -70,7 +70,7 @@ public:
       return reinterpret_cast<IObject*>(2);
     }
 
-    return NULL;
+    return 0;
   }
   virtual IObject* getInterface(const UUID& uuid) {
     if(uuid.equals(IObject::IID)) {
@@ -83,7 +83,7 @@ public:
       return static_cast<IServiceHandler*>(this);
     }
 
-    return NULL;
+    return 0;
   }
 };
 
@@ -95,24 +95,24 @@ void test() {
 
   serv = XPLC::getServiceManager();
 
-  ASSERT(serv, "could not obtain service manager");
+  ASSERT(serv != 0, "could not obtain service manager");
 
   handler1 = Handler1::create();
-  ASSERT(handler1, "could not instantiate test handler 1");
+  ASSERT(handler1 != 0, "could not instantiate test handler 1");
   handler1->addRef();
   serv->addHandler(handler1);
 
   handler2 = Handler2::create();
-  ASSERT(handler2, "could not instantiate test handler 2");
+  ASSERT(handler2 != 0, "could not instantiate test handler 2");
   handler2->addRef();
   serv->addHandler(handler2);
 
   obj = serv->getObject(obj1);
-  VERIFY(obj, "object 1 was not found");
+  VERIFY(obj != 0, "object 1 was not found");
   VERIFY(obj == reinterpret_cast<IObject*>(1), "asked for object 1 and got another one");
 
   obj = serv->getObject(obj2);
-  VERIFY(obj, "object 2 was not found");
+  VERIFY(obj != 0, "object 2 was not found");
   VERIFY(obj == reinterpret_cast<IObject*>(2), "asked for object 2 and got another one");
 
   serv->removeHandler(handler1);
