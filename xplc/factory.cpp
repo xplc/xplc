@@ -23,7 +23,7 @@
 #include <xplc/utils.h>
 #include "factory.h"
 
-GenericFactory* GenericFactory::create() {
+IObject* GenericFactory::create() {
   return new GenericComponent<GenericFactory>;
 }
 

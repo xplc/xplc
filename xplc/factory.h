@@ -28,7 +28,7 @@ class GenericFactory: public IGenericFactory {
 private:
   IObject* (*factory)();
 public:
-  static GenericFactory* create();
+  static IObject* create();
   /* IObject */
   virtual IObject* getInterface(const UUID&);
   /* IFactory */
