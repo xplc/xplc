@@ -21,5 +21,5 @@
 IDLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard idlc/*.cpp))
 
 idlc/xplc-idlc: $(IDLC_OBJS)
-	$(CC) -lIDL -o $@ $^
+	$(LINK.cc) -lIDL -o $@ $^
 
