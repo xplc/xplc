@@ -24,7 +24,15 @@
 
 #include <xplc/IServiceManager.h>
 
+struct ObjectNode {
+  ObjectNode* next;
+  UUID uuid;
+  IObject* obj;
+};
+
 class ServiceManager: public IServiceManager {
+private:
+  ObjectNode* registered;
 public:
   /* IObject */
   virtual IObject* getInterface(const UUID&);

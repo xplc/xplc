@@ -23,7 +23,6 @@
 #include "servmgr.h"
 
 IObject* ServiceManager::getInterface(const UUID& uuid) {
-
   do {
     if(uuid.equals(IObject::IID))
       break;
@@ -38,16 +37,60 @@ IObject* ServiceManager::getInterface(const UUID& uuid) {
   return this;
 }
 
-void ServiceManager::registerUuid(const UUID&, IObject*) {
+void ServiceManager::registerUuid(const UUID& aUuid, IObject* aObj) {
+  ObjectNode* node;
+
+  node = registered;
+  while(node) {
+    if(node->uuid.equals(aUuid))
+      break;
+
+    node = node->next;
+  }
+
+  if(node)
+    return;
+
+  node = new ObjectNode;
+  node->next = registered;
+  node->uuid = aUuid;
+  node->obj = aObj;
+  node->obj->addRef();
+  registered = node;
 }
 
-void ServiceManager::unregisterUuid(const UUID&) {
+void ServiceManager::unregisterUuid(const UUID& aUuid) {
 }
 
-IObject* ServiceManager::getObjectByUuid(const UUID&) {
-  return NULL;
+IObject* ServiceManager::getObjectByUuid(const UUID& aUuid) {
+  ObjectNode* node;
+
+  node = registered;
+  while(node) {
+    if(node->uuid.equals(aUuid))
+      break;
+
+    node = node->next;
+  }
+
+  if(node) {
+    node->obj->addRef();
+    return node->obj;
+  } else
+    return NULL;
 }
 
 void ServiceManager::shutdown() {
+  ObjectNode* node;
+  ObjectNode* ptr;
+
+  node = registered;
+  while(node) {
+    node->obj->release();
+    ptr = node;
+    node = node->next;
+    delete ptr;
+  }
+  registered = NULL;
 }
 
