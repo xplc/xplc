@@ -79,7 +79,7 @@ int Foo::getFoo() {
   return foo;
 }
 
-const char* test() {
+void test() {
   IServiceManager* serv;
   Foo* foo;
   IFoo* ifoo;
@@ -88,40 +88,31 @@ const char* test() {
 
   serv = XPLC::getServiceManager();
 
-  if(!serv)
-    return "could not obtain service manager";
+  ASSERT(serv, "could not obtain service manager");
 
   foo = new GenericComponent<Foo>;
-  if(!foo)
-    return "could not instantiate test component";
+  ASSERT(foo, "could not instantiate test component");
 
   serv->addObject(foouuid, foo);
 
   obj = serv->getObject(foouuid);
-  if(!obj)
-    return "could not get component from the service manager";
+  ASSERT(obj, "could not get component from the service manager");
 
   ifoo = mutateInterface<IFoo>(obj);
-  if(!ifoo)
-    return "test component does not have expected interface";
+  ASSERT(ifoo, "test component does not have expected interface");
 
   ifoo->setFoo(10);
   ifoo->incFoo();
-  if(ifoo->getFoo() != 11)
-    return "test component has unexpected behavior";
+  VERIFY(ifoo->getFoo() == 11, "test component has unexpected behavior");
 
   ifoo->release();
 
   serv->removeObject(foouuid);
 
   obj = serv->getObject(foouuid);
-  if(obj)
-    return "service manager did not remove the test component";
+  VERIFY(!obj, "service manager did not remove the test component");
 
   serv->shutdown();
 
-  if(serv->release())
-    return "service manager has non-zero refcount after shutdown/release";
-
-  return NULL;
+  VERIFY(serv->release() == 0, "service manager has non-zero refcount after shutdown/release");
 }

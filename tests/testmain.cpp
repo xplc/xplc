@@ -22,18 +22,50 @@
 #include <stdio.h>
 #include "test.h"
 
-int main(int argc, char* argv[]) {
-  const char* reason;
+unsigned int passed;
+unsigned int failed;
+char* prog;
 
-  reason = test();
-
-  if(!reason) {
-    printf("%s passed\n", argv[0]);
+void test_assert(const char* file,
+                 unsigned int line,
+                 bool test,
+                 const char* reason) {
+  if(test) {
+    passed++;
   } else {
-    printf("%s FAILED (%s)\n", argv[0], reason);
+    failed++;
+    fprintf(stderr, "%s:%i: %s\n", file, line, reason);
+    fprintf(stderr, "%s: %i failed, %i passed\n", prog, failed, passed);
+    exit(1);
+  }
+}
+
+void test_verify(const char* file,
+                 unsigned int line,
+                 bool test,
+                 const char* reason) {
+  if(test) {
+    passed++;
+  } else {
+    failed++;
+    fprintf(stderr, "%s:%i: %s\n", file, line, reason);
+  }
+}
+
+int main(int argc, char* argv[]) {
+  passed = 0;
+  failed = 0;
+  prog = argv[0];
+
+  test();
+
+  if((failed + passed) == 0) {
+    fprintf(stderr, "%s: BAD TEST\n", prog);
     exit(1);
   }
 
-  return 0;
+  fprintf(stderr, "%s: %i failed, %i passed\n", prog, failed, passed);
+
+  return (failed != 0);
 }
 

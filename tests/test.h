@@ -24,6 +24,19 @@
 
 #include <stdlib.h>
 
-const char* test();
+void test();
+
+void test_assert(const char* file,
+                 unsigned int line,
+                 bool test,
+                 const char* reason);
+
+void test_verify(const char* file,
+                 unsigned int line,
+                 bool test,
+                 const char* reason);
+
+#define ASSERT(cond, desc) test_assert(__FILE__, __LINE__, cond, desc)
+#define VERIFY(cond, desc) test_verify(__FILE__, __LINE__, cond, desc)
 
 #endif /* __TESTS_TEST_H__ */

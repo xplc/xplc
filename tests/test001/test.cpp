@@ -28,18 +28,14 @@
  * Verifies that shutdown properly releases all the involved objects.
  */
 
-const char* test() {
+void test() {
   IServiceManager* serv;
 
   serv = XPLC::getServiceManager();
 
-  if(!serv)
-    return "could not obtain service manager";
+  ASSERT(serv, "could not obtain service manager");
 
   serv->shutdown();
 
-  if(serv->release())
-    return "service manager has non-zero refcount after shutdown/release";
-
-  return NULL;
+  VERIFY(serv->release() == 0, "service manager has non-zero refcount after shutdown/release");
 }

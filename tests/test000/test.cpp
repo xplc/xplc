@@ -28,13 +28,6 @@
  * Verifies that we can obtain the service manager.
  */
 
-const char* test() {
-  IServiceManager* serv;
-
-  serv = XPLC::getServiceManager();
-
-  if(!serv)
-    return "could not obtain service manager";
-
-  return NULL;
+void test() {
+  VERIFY(XPLC::getServiceManager(), "could not obtain service manager");
 }
