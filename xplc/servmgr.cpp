@@ -48,18 +48,33 @@ void ServiceManager::registerUuid(const UUID& aUuid, IObject* aObj) {
     node = node->next;
   }
 
+  /*
+   * FIXME: maybe add a "replace" bool parameter? Or would this
+   *  encourage UUID hijacking too much?
+   */
   if(node)
     return;
 
-  node = new ObjectNode;
-  node->next = registered;
-  node->uuid = aUuid;
-  node->obj = aObj;
-  node->obj->addRef();
+  node = new ObjectNode(aUuid, aObj, registered);
   registered = node;
 }
 
 void ServiceManager::unregisterUuid(const UUID& aUuid) {
+  ObjectNode* node;
+  ObjectNode** ptr;
+
+  node = registered;
+  ptr = &registered;
+  while(node) {
+    if(node->uuid.equals(aUuid)) {
+      *ptr = node->next;
+      delete node;
+      break;
+    }
+
+    ptr = &node->next;
+    node = *ptr;
+  }
 }
 
 IObject* ServiceManager::getObjectByUuid(const UUID& aUuid) {
@@ -86,7 +101,6 @@ void ServiceManager::shutdown() {
 
   node = registered;
   while(node) {
-    node->obj->release();
     ptr = node;
     node = node->next;
     delete ptr;

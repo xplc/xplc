@@ -24,10 +24,21 @@
 
 #include <xplc/IServiceManager.h>
 
-struct ObjectNode {
+class ObjectNode {
+public:
   ObjectNode* next;
   UUID uuid;
   IObject* obj;
+  ObjectNode(const UUID& aUuid,
+             IObject* aObj,
+             ObjectNode* aNext): next(aNext),
+                                 uuid(aUuid),
+                                 obj(aObj) {
+    obj->addRef();
+  }
+  ~ObjectNode() {
+    obj->release();
+  }
 };
 
 class ServiceManager: public IServiceManager {
