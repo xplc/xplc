@@ -26,9 +26,21 @@
 
 class XPLC {
 public:
+  /*
+   * Global methods
+   */
   static IServiceManager* getServiceManager();
   static void addObject(const UUID&, IObject*);
   static void removeObject(const UUID&);
+  /*
+   * XPLC components
+   */
+  static const UUID simpleDynamicLoader;
+  static const UUID genericFactory;
 };
+
+DEFINE_UUID(XPLC::simpleDynamicLoader) = {0xc8c4d2c6, 0x76b8, 0x4f86, {0x90, 0x7d, 0x05, 0x42, 0x9b, 0xc8, 0x62, 0xe8}};
+
+DEFINE_UUID(XPLC::genericFactory) = {0x414a69c6, 0x3c9e, 0x49f7, {0xab, 0x08, 0xe5, 0x5c, 0x7b, 0x6c, 0x23, 0x34}};
 
 #endif /* __XPLC_XPLC_H__ */
