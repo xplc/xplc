@@ -18,5 +18,9 @@
 #
 # $Id$
 
+ifeq ($(BUILD_IDLC), "yes")
 TARGETS+=idlc/xplc-idlc
+else
+GARBAGES+=idlc/xplc-idlc
+endif
 

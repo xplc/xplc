@@ -18,8 +18,12 @@
 #
 # $Id$
 
+ifeq ($(BUILD_IDLC), "yes")
+
 IDLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard idlc/*.cpp))
 
 idlc/xplc-idlc: $(IDLC_OBJS)
 	$(LINK.cc) -lIDL -o $@ $^
+
+endif
 
