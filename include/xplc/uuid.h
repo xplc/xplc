@@ -28,10 +28,11 @@ struct UUID {
   unsigned short data2;
   unsigned char data3[8];
   inline bool equals(const UUID& uuid) const {
-    return (((unsigned int*)&data0)[0] == ((unsigned int*)&uuid.data0)[0] &&
-            ((unsigned int*)&data0)[1] == ((unsigned int*)&uuid.data0)[1] &&
-            ((unsigned int*)&data0)[2] == ((unsigned int*)&uuid.data0)[2] &&
-            ((unsigned int*)&data0)[3] == ((unsigned int*)&uuid.data0)[3]);
+    return
+      (static_cast<const unsigned int*>(&data0)[0] == static_cast<const unsigned int*>(&uuid.data0)[0]) &&
+      (static_cast<const unsigned int*>(&data0)[1] == static_cast<const unsigned int*>(&uuid.data0)[1]) &&
+      (static_cast<const unsigned int*>(&data0)[2] == static_cast<const unsigned int*>(&uuid.data0)[2]) &&
+      (static_cast<const unsigned int*>(&data0)[3] == static_cast<const unsigned int*>(&uuid.data0)[3]);
   };
 };
 

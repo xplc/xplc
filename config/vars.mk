@@ -16,10 +16,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: vars.mk,v 1.9 2000/12/22 20:57:42 pphaneuf Exp $
+# $Id: vars.mk,v 1.10 2001/06/08 15:32:23 pphaneuf Exp $
 
-DISTCLEAN+=config/config.mk
-REALCLEAN+=config/depends.mk
+DISTCLEAN+=config/config.mk ChangeLog.bak
+REALCLEAN+=config/depends.mk ChangeLog
 
 # the 'S' option to 'ar' seems to cause problem on Solaris?
 #ARFLAGS=rcS

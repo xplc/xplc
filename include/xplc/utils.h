@@ -94,7 +94,7 @@ Interface* getInterface(IObject* aObj) {
   if(!aObj)
     return 0;
 
-  return (Interface*)aObj->getInterface(Interface::IID);
+  return static_cast<Interface*>(aObj->getInterface(Interface::IID));
 }
 
 /*
@@ -110,7 +110,7 @@ Interface* mutateInterface(IObject* aObj) {
   if(!aObj)
     return 0;
 
-  rv = (Interface*)aObj->getInterface(Interface::IID);
+  rv = static_cast<Interface*>(aObj->getInterface(Interface::IID));
 
   aObj->release();
 

@@ -1,0 +1,13 @@
+New in 0.1.1
+------------
+
+ * Added the missing test for the generic component template.
+ * Automated some of the release work.
+ * Added 'configure' switches for a number of compiler behaviors.
+ * The simple dynamic loader does not append the platform-specific
+   extension for shared objects anymore.
+ * Added addFirstHandler and addLastHandler methods to the
+   IServiceManager interface (bug #431200).
+ * Enabled more warnings and fixed them.
+ * Bug fixes.
+

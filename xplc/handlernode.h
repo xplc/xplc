@@ -28,9 +28,12 @@ class HandlerNode {
 public:
   HandlerNode* next;
   IServiceHandler* handler;
+  bool intercept;
   HandlerNode(IServiceHandler* aHandler,
-              HandlerNode* aNext): next(aNext),
-                                   handler(aHandler) {
+              HandlerNode* aNext,
+              bool aIntercept): next(aNext),
+                                handler(aHandler),
+                                intercept(aIntercept) {
     handler->addRef();
   }
 

@@ -54,7 +54,7 @@ void test() {
   dyn = mutateInterface<ISimpleDynamicLoader>(obj);
   ASSERT(dyn != 0, "simple dynamic loader does not have expected interface");
 
-  err = dyn->loadModule("tests/test005/testobj");
+  err = dyn->loadModule("tests/test005/testobj.dll");
   ASSERT(!err, err);
 
   obj = dyn->createObject();

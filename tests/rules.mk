@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.4 2000/08/03 21:00:49 pphaneuf Exp $
+# $Id: rules.mk,v 1.5 2001/06/08 15:07:45 pphaneuf Exp $
 
 .PHONY: tests
 
@@ -24,7 +24,7 @@ TESTS:=$(patsubst %,%/test,$(wildcard tests/test[0-9][0-9][0-9]))
 
 tests: $(TESTS)
 	@echo "Running tests:"
-	@for TEST in $(TESTS); do $$TEST; done
+	@for TEST in $(TESTS); do $$TEST || break; done
 
 include $(wildcard tests/*/rules.mk)
 

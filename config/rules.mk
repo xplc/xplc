@@ -16,9 +16,16 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.5 2000/06/16 20:39:09 pphaneuf Exp $
+# $Id: rules.mk,v 1.6 2001/06/08 15:32:23 pphaneuf Exp $
 
-.PHONY: dustclean clean distclean realclean
+.PHONY: ChangeLog dist dustclean clean distclean realclean
+
+dist: distclean ChangeLog
+	autoconf
+
+ChangeLog:
+	rm -f ChangeLog ChangeLog.bak
+	cvs2cl.pl --utc -U config/cvs-users
 
 dustclean:
 	rm -f $(shell find . -name 'core' -print)

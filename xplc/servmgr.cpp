@@ -43,6 +43,32 @@ IObject* ServiceManager::getInterface(const UUID& uuid) {
 
 void ServiceManager::addHandler(IServiceHandler* aHandler) {
   HandlerNode* node;
+  HandlerNode** ptr;
+
+  ptr = &handlers;
+  node = *ptr;
+  while(node) {
+    if(node->handler == aHandler)
+      break;
+
+    if(node->intercept) {
+      ptr = &node->next;
+    }
+    node = node->next;
+  }
+
+  /*
+   * The handler is already there.
+   */
+  if(node)
+    return;
+
+  node = new HandlerNode(aHandler, *ptr, false);
+  *ptr = node;
+}
+
+void ServiceManager::addFirstHandler(IServiceHandler* aHandler) {
+  HandlerNode* node;
 
   node = handlers;
   while(node) {
@@ -58,8 +84,32 @@ void ServiceManager::addHandler(IServiceHandler* aHandler) {
   if(node)
     return;
 
-  node = new HandlerNode(aHandler, handlers);
+  node = new HandlerNode(aHandler, handlers, true);
   handlers = node;
+}
+
+void ServiceManager::addLastHandler(IServiceHandler* aHandler) {
+  HandlerNode* node;
+  HandlerNode** ptr;
+
+  ptr = &handlers;
+  node = *ptr;
+  while(node) {
+    if(node->handler == aHandler)
+      break;
+
+    ptr = &node->next;
+    node = *ptr;
+  }
+
+  /*
+   * The handler is already there.
+   */
+  if(node)
+    return;
+
+  node = new HandlerNode(aHandler, *ptr, false);
+  *ptr = node;
 }
 
 void ServiceManager::removeHandler(IServiceHandler* aHandler) {
