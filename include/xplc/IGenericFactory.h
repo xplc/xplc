@@ -22,14 +22,14 @@
 #ifndef __XPLC_IGENERICFACTORY_H__
 #define __XPLC_IGENERICFACTORY_H__
 
-#include <xplc/IObject.h>
+#include <xplc/IFactory.h>
 
 class IGenericFactory: public IFactory {
 public:
   static const UUID IID;
-  /* FIXME: there should be something here! */
+  virtual void setFactory(IObject*(*)()) = 0;
 };
 
-DEFINE_UUID(IGenericFactory::IID) = {0x11e2d782, 0x065a, 0x47f8, {0xb4b38eb42462c9ff}};
+DEFINE_UUID(IGenericFactory::IID) = {0x11e2d782, 0x065a, 0x47f8, {0xb4, 0xb3, 0x8e, 0xb4, 0x24, 0x62, 0xc9, 0xff}};
 
 #endif /* __XPLC_IGENERICFACTORY_H__ */
