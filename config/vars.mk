@@ -18,9 +18,8 @@
 #
 # $Id$
 
-GARBAGES+=config/depends.mk
-
 DISTCLEAN+=config/config.mk
+REALCLEAN+=config/depends.mk
 
 # the 'S' option to 'ar' seems to cause problem on Solaris?
 #ARFLAGS=rcS

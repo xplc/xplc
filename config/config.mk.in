@@ -27,7 +27,7 @@ REALCLEAN:=
 
 CXXDEPS:=
 
-CXXFLAGS=-Wall -pedantic -pipe -Iinclude $(shell glib-config --cflags glib) @CXXFLAGS@
+CXXFLAGS=-Wall -pedantic -pipe -Iinclude @CXXFLAGS@
 
 ifeq ("@debug@", "yes")
 CXXFLAGS+=-ggdb
