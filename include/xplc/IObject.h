@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  * Copyright (C) 2002, Stéphane Lajoie
  *
@@ -32,12 +32,15 @@
 #define UNSTABLE_INTERFACE
 #endif
 
+class IWeakRef;
+
 class IObject {
   UNSTABLE_INTERFACE
 public:
   virtual unsigned int addRef() = 0;
   virtual unsigned int release() = 0;
   virtual IObject* getInterface(const UUID&) = 0;
+  virtual IWeakRef* getWeakRef() = 0;
 };
 
 DEFINE_IID(IObject, {0x8ca76e98, 0xb653, 0x43d7,

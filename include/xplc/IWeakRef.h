@@ -1,8 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2003, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -20,31 +19,18 @@
  * USA
  */
 
-#ifndef __XPLC_XPLC_H__
-#define __XPLC_XPLC_H__
+#ifndef __XPLC_IWEAKREF_H__
+#define __XPLC_IWEAKREF_H__
 
-#include <xplc/core.h>
-#include <xplc/utils.h>
+#include <xplc/IObject.h>
 
-class XPLC {
-private:
-  IServiceManager* servmgr;
+class IWeakRef: public IObject {
+  UNSTABLE_INTERFACE
 public:
-  XPLC(): servmgr(XPLC_getServiceManager()) {}
-  XPLC(IServiceManager* _servmgr): servmgr(_servmgr) {}
-  ~XPLC();
-
-  IObject* create(const UUID& cid);
-  template<class Interface>
-  Interface* create(const UUID& cid) {
-    return mutate<Interface>(create(cid));
-  }
-
-  IObject* create(const char*);
-  template<class Interface>
-  Interface* create(const char* aMoniker) {
-    return mutate<Interface>(create(aMoniker));
-  }
+  virtual IObject* getObject() = 0;
 };
 
-#endif /* __XPLC_XPLC_H__ */
+DEFINE_IID(IWeakRef, {0x6a97f962, 0xeeec, 0x48e2,
+  {0xb4, 0x68, 0x56, 0x60, 0x57, 0x3f, 0xd9, 0x24}});
+
+#endif /* __XPLC_IWEAKREF_H__ */

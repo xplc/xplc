@@ -47,7 +47,7 @@ rm -rf %{buildroot}
 %doc README CREDITS NEWS LICENSE ChangeLog
 
 %files devel
-%attr(0644,root,root) /usr/include/xplc
+%attr(-,root,root) /usr/include/xplc
 %attr(0644,root,root) /usr/lib/libxplc.a
 %attr(0644,root,root) /usr/lib/libxplc-cxx.a
 %attr(-,root,root) /usr/lib/libxplc_s.a

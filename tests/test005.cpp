@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2001-2002, Pierre Phaneuf
+ * Copyright (C) 2001-2003, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -93,6 +93,8 @@ void test005() {
   IObject* iobj = 0;
   IFoo* ifoo = 0;
   IBar* ibar = 0;
+  IWeakRef* weak = 0;
+  IObject* itest = 0;
 
   test = MyTestObject::create();
   ASSERT(test, "could not instantiate test object");
@@ -102,6 +104,9 @@ void test005() {
 
   VERIFY(reinterpret_cast<void*>(iobj) == reinterpret_cast<void*>(test), "identity test failed");
 
+  weak = iobj->getWeakRef();
+  ASSERT(weak, "could not obtain weak reference");
+
   ifoo = get<IFoo>(iobj);
   VERIFY(ifoo, "get<IFoo> failed on test object");
 
@@ -110,6 +115,10 @@ void test005() {
 
   ifoo->setFoo(10);
   ibar->setBar(20);
+
+  itest = weak->getObject();
+  ASSERT(itest, "could not strengthen the weak reference");
+  VERIFY(itest->release() == 3, "incorrect refcount");
 
   VERIFY(ifoo->getFoo() == 10, "test object has unexpected behavior");
   VERIFY(ibar->getBar() == 20, "test object has unexpected behavior");
@@ -125,5 +134,10 @@ void test005() {
   VERIFY(iobj->release() == 2, "incorrect refcount");
   VERIFY(ifoo->release() == 1, "incorrect refcount");
   VERIFY(ibar->release() == 0, "incorrect refcount");
+
+  itest = weak->getObject();
+  VERIFY(!itest, "weak->getObject gave us something when it shouldn't");
+
+  VERIFY(weak->release() == 0, "incorrect refcount");
 }
 

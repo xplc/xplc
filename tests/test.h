@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
@@ -25,6 +25,7 @@
 #define __TESTS_TEST_H__
 
 #include <xplc/core.h>
+#include <xplc/IWeakRef.h>
 #include <xplc/IFactory.h>
 
 void test000();
@@ -60,14 +61,77 @@ public:
 DEFINE_IID(ITestInterface, {0x794e20af, 0x5d35, 0x4d7a,
   {0x8f, 0x23, 0xf8, 0x53, 0xd7, 0x34, 0xb3, 0xa7}});
 
+class TestWeakRef: public IWeakRef {
+private:
+  unsigned int refcount;
+  bool destroyed;
+  TestWeakRef* weakref;
+public:
+  IObject* object;
+  TestWeakRef(IObject* aObject): refcount(0), destroyed(false),
+                                 weakref(0), object(aObject) {
+  }
+  virtual ~TestWeakRef() {
+  }
+  virtual unsigned int addRef() {
+    return ++refcount;
+  }
+  virtual unsigned int release() {
+    if(--refcount)
+      return refcount;
+
+    ASSERT(!destroyed, "test object factory destroyed more than once");
+
+    refcount = 1;
+    destroyed = true;
+
+    if(weakref)
+      weakref->object = 0;
+
+    delete this;
+
+    return 0;
+  }
+  virtual IObject* getInterface(const UUID& uuid) {
+    ASSERT(!destroyed, "using destroyed test object");
+
+    if(uuid.equals(IID<IObject>::get())) {
+      addRef();
+      return static_cast<IObject*>(this);
+    }
+
+    if(uuid.equals(IID<IWeakRef>::get())) {
+      addRef();
+      return static_cast<IWeakRef*>(this);
+    }
+
+    return 0;
+  }
+  virtual IWeakRef* getWeakRef() {
+    if(!weakref) {
+      weakref = new TestWeakRef(this);
+      weakref->addRef();
+    }
+
+    return weakref;
+  }
+  virtual IObject* getObject() {
+    if(object)
+      object->addRef();
+
+    return object;
+  }
+};
+
 class TestObject: public ITestInterface {
 private:
   unsigned int refcount;
   bool destroyed;
   bool deletethis;
+  TestWeakRef* weakref;
 public:
   TestObject(const bool _deletethis = false): refcount(0), destroyed(false),
-                                      deletethis(_deletethis) {
+                                      deletethis(_deletethis), weakref(0) {
   }
   virtual ~TestObject() {
   }
@@ -107,6 +171,14 @@ public:
 
     return 0;
   }
+  virtual IWeakRef* getWeakRef() {
+    if(!weakref) {
+      weakref = new TestWeakRef(this);
+      weakref->addRef();
+    }
+
+    return weakref;
+  }
   virtual unsigned int getRefCount() {
     ASSERT(!destroyed, "using destroyed test object");
 
@@ -130,13 +202,11 @@ class TestObjectFactory: public IFactory {
 private:
   unsigned int refcount;
   bool destroyed;
+  TestWeakRef* weakref;
 public:
-  TestObjectFactory(): refcount(0), destroyed(false) {
+  TestObjectFactory(): refcount(0), destroyed(false), weakref(0) {
   }
   virtual ~TestObjectFactory() {
-  }
-  void operator delete(void* self) {
-    ::operator delete(self);
   }
   virtual unsigned int addRef() {
     return ++refcount;
@@ -166,6 +236,14 @@ public:
     }
 
     return 0;
+  }
+  virtual IWeakRef* getWeakRef() {
+    if(!weakref) {
+      weakref = new TestWeakRef(this);
+      weakref->addRef();
+    }
+
+    return weakref;
   }
   virtual IObject* createObject() {
     IObject* obj = new TestObject(true);

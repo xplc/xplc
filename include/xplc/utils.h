@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
@@ -25,6 +25,7 @@
 #define __XPLC_UTILS_H__
 
 #include <stddef.h>
+#include <xplc/IWeakRef.h>
 #include <xplc/IFactory.h>
 
 struct UUID_Info {
@@ -41,6 +42,20 @@ struct UUID_Info {
 #define UUID_MAP_END { 0, 0 } };
 
 /*
+ * Common implementation of a weak reference.
+ */
+class WeakRef: public IWeakRef {
+public:
+  IObject* object;
+  virtual IObject* getObject() {
+    if(object)
+      object->addRef();
+
+    return object;
+  }
+};
+
+/*
  * Mix-in template that contains an implementation of methods a basic
  * component will need to implement.
  */
@@ -50,8 +65,9 @@ private:
   typedef GenericComponent ThisComponent;
   static const UUID_Info uuids[];
   unsigned int refcount;
+  WeakRef* weakref;
 public:
-  GenericComponent(): refcount(0) {
+  GenericComponent(): refcount(0), weakref(0) {
   }
   virtual unsigned int addRef() {
     return ++refcount;
@@ -63,12 +79,25 @@ public:
     /* protect against re-entering the destructor */
     refcount = 1;
 
+    if(weakref)
+      weakref->object = 0;
+
     delete this;
 
     return 0;
   }
   virtual IObject* getInterface(const UUID& uuid) {
     return XPLC_getInterface_real(this, uuid, uuids);
+  }
+  virtual IWeakRef* getWeakRef() {
+    if(!weakref) {
+      weakref = new GenericComponent<WeakRef>;
+      weakref->addRef();
+      weakref->object = this->getInterface(IObject_IID);
+      this->release();
+    }
+
+    return weakref;
   }
 };
 
