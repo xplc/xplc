@@ -47,10 +47,10 @@ void test() {
   test->addRef();
   VERIFY(test->getRefCount() == 1, "the test object has an incorrect refcount");
 
-  handler->addObject(TestObject::CID, test);
+  handler->addObject(TestObject_CID, test);
   VERIFY(test->getRefCount() == 2, "static service handler did not addRef the test component");
 
-  obj = handler->getObject(TestObject::CID);
+  obj = handler->getObject(TestObject_CID);
   ASSERT(obj, "could not get test component from static service handler");
 
   itest = mutateInterface<ITestInterface>(obj);
@@ -64,10 +64,10 @@ void test() {
 
   VERIFY(itest->release() == 2, "test component has incorrect refcount");
 
-  handler->removeObject(TestObject::CID);
+  handler->removeObject(TestObject_CID);
   VERIFY(test->getRefCount() == 1, "static service handler did not release the test component");
 
-  obj = handler->getObject(TestObject::CID);
+  obj = handler->getObject(TestObject_CID);
   VERIFY(!obj, "static service handler did not remove the test component");
   if(obj)
     obj->release();
