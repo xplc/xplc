@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id$
+# $Id: vars.mk,v 1.2 2000/12/14 00:53:51 pphaneuf Exp $
 
 CXXDEPS+=$(wildcard tests/test004/*.cpp)
 

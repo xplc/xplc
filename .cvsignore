@@ -1,4 +1,11 @@
+ChangeLog
 configure
 config.cache
 config.log
 config.status
+Debug
+Release
+*.dsw
+*.opt
+*.ncb
+Tags.WW

@@ -1,0 +1,71 @@
+XPLC (Cross-Platform Lightweight Components)
+============================================
+
+Release: 0.1.0
+Web Site: http://xplc.sourceforge.net/
+Maintainer: Pierre Phaneuf <pp@ludusdesign.com>
+
+General
+-------
+
+Do not use XPLC unless you actually work on it. :-)
+
+License
+-------
+
+All files included in this package are covered by the Lesser General
+Public License, unless noted otherwise. Refer to the 'LICENSE' for
+terms and conditions.
+
+Releases
+--------
+
+XPLC uses a numbering scheme for releases similar to what the Linux
+kernel uses. In short, a release number is composed of three parts,
+the major, minor and patchlevel numbers (like this: 3.4.31).
+
+The minor number has a special signification depending on whether it
+is even or odd. If it is even, it means that this is a stable release,
+suitable for use in production environment. If it is odd, it means
+that this is a development release, intended for people willing to
+test XPLC, report bugs and/or work on its development.
+
+Installation
+------------
+
+See the 'INSTALL' file.
+
+Patches
+-------
+
+Patches should preferably be submitted to the patch tracking system on
+our SourceForge project page (http://sourceforge.net/projects/xplc/),
+but could also be send via e-mail to the maintainer.
+
+                          *** IMPORTANT ***
+Before preparing a patch, you should make sure that 'make tests'
+passes all tests. Those tests are made to be as easy to use as
+possible, so please use them.
+
+The simpler way to prepare a patch requires CVS and Internet
+access. Just issue the following command in the root XPLC project
+directory:
+
+$ cvs diff -u > mypatch.diff
+
+You can also send a patch that is limited to a few files in the
+following way:
+
+$ cvs diff -u [FILES] > mypatch.diff
+
+If you do not have CVS and/or Internet access, you should do the
+following:
+
+ - rename the XPLC source directory to something like 'xplc-modified'
+ - unpack the fresh XPLC sources
+ - run the following command:
+
+$ diff -ruN xplc-X.Y.Z xplc-modified > mypatch.diff
+
+You can then submit the mypatch.diff file for inclusion in XPLC!
+

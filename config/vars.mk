@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id$
+# $Id: vars.mk,v 1.9 2000/12/22 20:57:42 pphaneuf Exp $
 
 DISTCLEAN+=config/config.mk
 REALCLEAN+=config/depends.mk

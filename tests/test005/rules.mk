@@ -16,9 +16,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id$
+# $Id: rules.mk,v 1.2 2001/01/30 06:18:54 pphaneuf Exp $
 
 tests/test005/test: tests/test005/test.o tests/testmain.o xplc/libxplc_s.a -ldl tests/test005/testobj.so
+	$(LINK.cc) tests/test005/test.o tests/testmain.o xplc/libxplc_s.a -ldl $(LOADLIBES) $(LDLIBS) -o $@
 
 tests/test005/testobj.so: tests/test005/testobj.o
 	$(LINK.cc) -shared -o $@ $^

@@ -35,7 +35,7 @@ struct UUID {
   };
 };
 
-#ifdef __GCC__
+#ifdef __GNUC__
 #define DEFINE_UUID(symbol) const UUID symbol __attribute__((weak))
 #endif
 #ifdef _MSC_VER

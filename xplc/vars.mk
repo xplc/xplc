@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id$
+# $Id: vars.mk,v 1.4 2000/01/31 05:06:14 pphaneuf Exp $
 
 TARGETS+=xplc/libxplc_s.a xplc/libxplc.so
 

@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id$
+# $Id: Makefile,v 1.4 2000/06/16 20:05:31 pphaneuf Exp $
 
 .PHONY: default all
 

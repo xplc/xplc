@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id$
+# $Id: rules.mk,v 1.2 2000/12/14 01:04:11 pphaneuf Exp $
 
 tests/test003/test: tests/test003/test.o tests/testmain.o xplc/libxplc_s.a -ldl
 

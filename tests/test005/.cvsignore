@@ -1,1 +1,9 @@
 test
+TestComponent___Win32_Debug
+TestComponent___Win32_Release
+Debug
+Release
+*.dsw
+*.opt
+*.ncb
+Tags.WW
