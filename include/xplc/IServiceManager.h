@@ -19,10 +19,20 @@
  * 02111-1307, USA.
  */
 
-#include <stdlib.h>
-#include <xplc/xplc.h>
+#ifndef __XPLC_ISERVICEMANAGER_H__
+#define __XPLC_ISERVICEMANAGER_H__
 
-IServiceManager* XPLC::getServiceManager() {
-  return NULL;
-}
+#include <xplc/IObject.h>
 
+class IServiceManager: public IObject {
+public:
+  static const UUID IID;
+  virtual void registerUuid(const UUID&, IObject*) = 0;
+  virtual void unregisterUuid(const UUID&) = 0;
+  virtual IObject* getObjectByUuid(const UUID&) = 0;
+  virtual void registerAlias(const char*, const UUID&) = 0;
+  virtual void unregisterAlias(const char*) = 0;
+  virtual IObject* getObjectByAlias(const char*) = 0;
+};
+
+#endif /* __XPLC_ISERVICEMANAGER_H__ */

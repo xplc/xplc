@@ -22,15 +22,11 @@
 #ifndef __XPLC_XPLC_H__
 #define __XPLC_XPLC_H__
 
+#include <xplc/IServiceManager.h>
+
 class XPLC {
 public:
+  static IServiceManager* getServiceManager();
 };
-
-#define BEGIN_INTERFACE(name, parent) \
-class name: publib parent { \
-public: \
-  static const UUID IID;
-
-#define END_INTERFACE() };
 
 #endif /* __XPLC_XPLC_H__ */
