@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.20 2004/03/20 18:04:39 pphaneuf Exp $
+# $Id: rules.mk,v 1.21 2005/01/05 23:21:12 pphaneuf Exp $
 
 .PHONY: tests
 
@@ -27,7 +27,7 @@ else
 tests: default tests/testmain tests/testobj.dll
 endif
 	@echo "Running tests:"
-	@cd tests && ./testmain
+	@cd tests && ./testmain $(TESTS)
 
 tests/testmain: tests/testmain.o $(patsubst %.cpp,%.o,$(wildcard tests/test[0-9][0-9][0-9].cpp)) libxplc.a libxplc-cxx.a $(LIBS)
 

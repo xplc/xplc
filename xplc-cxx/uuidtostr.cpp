@@ -36,7 +36,7 @@
 char* UuidToString(const UUID& uuid, char* str) {
   assert(str);
 
-  sprintf(str, "{%08lx-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
+  sprintf(str, "{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
           uuid.Data1, uuid.Data2, uuid.Data3,
           uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
           uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);

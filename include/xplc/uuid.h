@@ -72,6 +72,14 @@
  * UUID.
  */
 
+#ifdef WIN32
+typedef unsigned long u_int32_t;
+typedef unsigned short u_int16_t;
+typedef unsigned char u_int8_t;
+#else
+#include <sys/types.h>
+#endif
+
 //@{
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
@@ -81,10 +89,10 @@
  */
 typedef struct _GUID {
   //@{
-  unsigned long Data1;
-  unsigned short Data2;
-  unsigned short Data3;
-  unsigned char Data4[8];
+  u_int32_t Data1;
+  u_int16_t Data2;
+  u_int16_t Data3;
+  u_int8_t Data4[8];
   //@}
 } GUID;
 #endif

@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Simon Law <sfllaw@debian.org>
 Uploaders: James Morrison <phython@debian.org>
-Build-Depends: cdbs
+Build-Depends: cdbs, debhelper (>= 4.1.0)
 Standards-Version: 3.6.1.0
 
 Package: libxplc@VERSION@

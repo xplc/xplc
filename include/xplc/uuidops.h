@@ -45,10 +45,10 @@
 inline int operator==(const UUID& uuid1, const UUID& uuid2) {
     return
       (&uuid1 == &uuid2) ||
-      ((static_cast<const unsigned long*>(&uuid1.Data1)[0] == static_cast<const unsigned long*>(&uuid2.Data1)[0]) &&
-       (static_cast<const unsigned long*>(&uuid1.Data1)[1] == static_cast<const unsigned long*>(&uuid2.Data1)[1]) &&
-       (static_cast<const unsigned long*>(&uuid1.Data1)[2] == static_cast<const unsigned long*>(&uuid2.Data1)[2]) &&
-       (static_cast<const unsigned long*>(&uuid1.Data1)[3] == static_cast<const unsigned long*>(&uuid2.Data1)[3]));
+      ((static_cast<const u_int32_t*>(&uuid1.Data1)[0] == static_cast<const u_int32_t*>(&uuid2.Data1)[0]) &&
+       (static_cast<const u_int32_t*>(&uuid1.Data1)[1] == static_cast<const u_int32_t*>(&uuid2.Data1)[1]) &&
+       (static_cast<const u_int32_t*>(&uuid1.Data1)[2] == static_cast<const u_int32_t*>(&uuid2.Data1)[2]) &&
+       (static_cast<const u_int32_t*>(&uuid1.Data1)[3] == static_cast<const u_int32_t*>(&uuid2.Data1)[3]));
 }
 
 /**
@@ -57,10 +57,10 @@ inline int operator==(const UUID& uuid1, const UUID& uuid2) {
 inline int operator!=(const UUID& uuid1, const UUID& uuid2) {
     return
       (&uuid1 != &uuid2) &&
-      ((static_cast<const unsigned long*>(&uuid1.Data1)[0] != static_cast<const unsigned long*>(&uuid2.Data1)[0]) ||
-       (static_cast<const unsigned long*>(&uuid1.Data1)[1] != static_cast<const unsigned long*>(&uuid2.Data1)[1]) ||
-       (static_cast<const unsigned long*>(&uuid1.Data1)[2] != static_cast<const unsigned long*>(&uuid2.Data1)[2]) ||
-       (static_cast<const unsigned long*>(&uuid1.Data1)[3] != static_cast<const unsigned long*>(&uuid2.Data1)[3]));
+      ((static_cast<const u_int32_t*>(&uuid1.Data1)[0] != static_cast<const u_int32_t*>(&uuid2.Data1)[0]) ||
+       (static_cast<const u_int32_t*>(&uuid1.Data1)[1] != static_cast<const u_int32_t*>(&uuid2.Data1)[1]) ||
+       (static_cast<const u_int32_t*>(&uuid1.Data1)[2] != static_cast<const u_int32_t*>(&uuid2.Data1)[2]) ||
+       (static_cast<const u_int32_t*>(&uuid1.Data1)[3] != static_cast<const u_int32_t*>(&uuid2.Data1)[3]));
 }
 
 #endif

@@ -1,3 +1,11 @@
+New in 0.3.11
+-------------
+
+ * Fixed an AMD64 portability issue (possibly affected other 64 bit
+   systems).
+ * Improved the test framework.
+ * Improved the Debian package.
+
 New in 0.3.10
 -------------
 

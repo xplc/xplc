@@ -61,7 +61,7 @@ void test007() {
   u1 = UuidFromString(u3);
   VERIFY(u1 == u0, "u3 was not parsed properly into u1");
 
-  rv = snprintf(u4, 39, "{%lx-%x-%x-%x%x-%x%x%x%x%x%x}",
+  rv = snprintf(u4, 39, "{%x-%x-%x-%x%x-%x%x%x%x%x%x}",
 		u0.Data1, u0.Data2, u0.Data3,
 		u0.Data4[0],
 		u0.Data4[1],

@@ -9,6 +9,9 @@ DEB_MAKE_CHECK_TARGET := tests
 PKG_VERSION := $(shell awk -F, '/AC_INIT/{print $$2}' configure.ac \
 		 | sed 's/[ 	]//g')
 
+# Don't install the CVS/ and .cvsignore from the examples
+DEB_INSTALL_EXAMPLES_libxplc$(PKG_VERSION)-dev := -XCVS -X.cvsignore
+
 # Make sure the install files are in the right place
 build/libxplc$(PKG_VERSION)::
 	cp -f debian/libxplc.install debian/libxplc$(PKG_VERSION).install
@@ -16,8 +19,10 @@ cleanbuilddir/libxplc$(PKG_VERSION)::
 	rm -f debian/libxplc$(PKG_VERSION).install
 build/libxplc$(PKG_VERSION)-dev::
 	cp -f debian/libxplc-dev.install debian/libxplc$(PKG_VERSION)-dev.install
+	cp -f debian/libxplc-dev.examples debian/libxplc$(PKG_VERSION)-dev.examples
 cleanbuilddir/libxplc$(PKG_VERSION)-dev::
 	rm -f debian/libxplc$(PKG_VERSION)-dev.install
+	rm -f debian/libxplc$(PKG_VERSION)-dev.examples
 
 # Fix ldconfig-symlink-missing-for-shlib
 binary-predeb/libxplc$(PKG_VERSION)::

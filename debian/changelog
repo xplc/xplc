@@ -1,6 +1,25 @@
+xplc (0.3.11-0.1) experimental; urgency=low
+
+  * Unofficial build from CVS.
+
+ -- J. Random Hacker <jrhacker@example.com>  Thu,  4 Feb 2005 11:13:04 -0500
+
+xplc (0.3.10-3) unstable; urgency=low
+
+  * Add a Build-Depends for debhelper, which I though cdbs pulled in
+    automatically.  (Closes: Bug#283884)
+
+ -- Simon Law <sfllaw@debian.org>  Thu,  2 Dec 2004 07:52:49 -0500
+
+xplc (0.3.10-2) unstable; urgency=low
+
+  * Install examples into libxplc-dev.
+
+ -- Simon Law <sfllaw@debian.org>  Thu, 07 Oct 2004 15:02:12 -0400
+
 xplc (0.3.10-1) unstable; urgency=low
 
-  * New upstream release.
+  * New upstream release.  (Closes: Bug#281786)
   * New maintainer.
   * Renamed libxplc and libxplc-dev to reflect that they have unstable
     API and ABIs.
