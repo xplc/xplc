@@ -22,20 +22,42 @@
 #ifndef __XPLC_UTILS_H__
 #define __XPLC_UTILS_H__
 
+#undef GENERICDEBUG
+
+#ifdef GENERICDEBUG
+#include <stdio.h>
+#endif
+
 template<class Component>
 class GenericComponent: public Component {
 private:
   unsigned int refcount;
 public:
   GenericComponent(): refcount(0) {
+#ifdef GENERICDEBUG
+    fprintf(stderr, "%s: instantiated\n", __PRETTY_FUNCTION__);
+#endif
   }
+#ifdef GENERICDEBUG
+  virtual ~GenericComponent() {
+    fprintf(stderr, "%s: destroyed\n", __PRETTY_FUNCTION__);
+  }
+#endif
   void operator delete(void* self) {
     ::delete self;
   }
   virtual unsigned int addRef() {
+#ifdef GENERICDEBUG
+    fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount + 1);
+#endif
+
     return ++refcount;
   }
   virtual unsigned int release() {
+#ifdef GENERICDEBUG
+    fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount - 1);
+#endif
+
     if(--refcount)
       return refcount;
 
