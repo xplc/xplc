@@ -79,6 +79,7 @@ void ServiceManager::removeObject(const UUID& aUuid) {
 
 IObject* ServiceManager::getObject(const UUID& aUuid) {
   ObjectNode* obj;
+  HandlerNode* handler;
 
   /*
    * We look through the objects list and return if we find a match.
@@ -89,8 +90,15 @@ IObject* ServiceManager::getObject(const UUID& aUuid) {
       obj->obj->addRef();
       return obj->obj;
     }
-
     obj = obj->next;
+  }
+
+  /*
+   * Then, we ask our handlers.
+   */
+  handler = handlers;
+  while(handler) {
+    handler = handler->next;
   }
 
   /*

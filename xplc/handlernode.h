@@ -19,28 +19,24 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_SERVMGR_H__
-#define __XPLC_SERVMGR_H__
+#ifndef __XPLC_HANDLERNODE_H__
+#define __XPLC_HANDLERNODE_H__
 
-#include <xplc/IServiceManager.h>
-#include "objectnode.h"
-#include "handlernode.h"
+#include <xplc/IServiceManagerHandler.h>
 
-class ServiceManager: public IServiceManager {
-private:
-  ObjectNode* objects;
-  HandlerNode* handlers;
+class HandlerNode {
 public:
-  ServiceManager(): objects(NULL),
-                    handlers(NULL) {
+  HandlerNode* next;
+  IServiceManagerHandler* handler;
+  HandlerNode(IServiceManagerHandler* aHandler,
+              HandlerNode* aNext): next(aNext),
+                                   handler(aHandler) {
+    handler->addRef();
   }
-  /* IObject */
-  virtual IObject* getInterface(const UUID&);
-  /* IServiceManager */
-  virtual void addObject(const UUID&, IObject*);
-  virtual void removeObject(const UUID&);
-  virtual IObject* getObject(const UUID&);
-  virtual void shutdown();
+
+  ~HandlerNode() {
+    handler->release();
+  }
 };
 
-#endif /* __XPLC_SERVMGR_H__ */
+#endif /* __XPLC_HANDLERNODE_H__ */

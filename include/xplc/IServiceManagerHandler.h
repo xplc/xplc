@@ -19,28 +19,17 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_SERVMGR_H__
-#define __XPLC_SERVMGR_H__
+#ifndef __XPLC_ISERVICEMANAGERHANDLER_H__
+#define __XPLC_ISERVICEMANAGERHANDLER_H__
 
-#include <xplc/IServiceManager.h>
-#include "objectnode.h"
-#include "handlernode.h"
+#include <xplc/IObject.h>
 
-class ServiceManager: public IServiceManager {
-private:
-  ObjectNode* objects;
-  HandlerNode* handlers;
+class IServiceManagerHandler: public IObject {
 public:
-  ServiceManager(): objects(NULL),
-                    handlers(NULL) {
-  }
-  /* IObject */
-  virtual IObject* getInterface(const UUID&);
-  /* IServiceManager */
-  virtual void addObject(const UUID&, IObject*);
-  virtual void removeObject(const UUID&);
-  virtual IObject* getObject(const UUID&);
-  virtual void shutdown();
+  static const UUID IID;
+  virtual IObject* getObject(const UUID&) = 0;
 };
 
-#endif /* __XPLC_SERVMGR_H__ */
+const UUID IServiceManagerHandler::IID __attribute__((weak)) = {0xe897384f, 0x3ba6, 0x46e3, {0xad, 0x06, 0x53, 0x76, 0x21, 0xa6, 0x0a, 0x03}};
+
+#endif /* __XPLC_ISERVICEMANAGERHANDLER_H__ */
