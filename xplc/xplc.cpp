@@ -21,13 +21,19 @@
 
 #include <stdlib.h>
 #include <xplc/xplc.h>
+#include <xplc/utils.h>
 #include "servmgr.h"
 #include "statichandler.h"
+#include "simpledl.h"
+#include "factory.h"
 
 static IServiceManager* servmgr = NULL;
 static IStaticServiceHandler* handler = NULL;
 
 IServiceManager* XPLC::getServiceManager() {
+  IObject* obj;
+  IGenericFactory* factory;
+
   if(servmgr) {
     servmgr->addRef();
     return servmgr;
@@ -62,10 +68,23 @@ IServiceManager* XPLC::getServiceManager() {
    * Populate the static service handler.
    */
 
-  /*
-   * ... but we have no component yet to put in the static service
-   * handler (yet).
-   */
+  obj = GenericFactory::create();
+  if(obj)
+    obj->addRef();
+  factory = mutateInterface<IGenericFactory>(obj);
+  if(factory) {
+    factory->setFactory(SimpleDynamicLoader::create);
+    handler->addObject(XPLC::simpleDynamicLoader, factory);
+  }
+
+  obj = GenericFactory::create();
+  if(obj)
+    obj->addRef();
+  factory = mutateInterface<IGenericFactory>(obj);
+  if(factory) {
+    factory->setFactory(GenericFactory::create);
+    handler->addObject(XPLC::genericFactory, factory);
+  }
 
   return servmgr;
 }

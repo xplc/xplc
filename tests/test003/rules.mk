@@ -18,5 +18,5 @@
 #
 # $Id$
 
-tests/test003/test: tests/test003/test.o tests/testmain.o xplc/libxplc_s.a
+tests/test003/test: tests/test003/test.o tests/testmain.o xplc/libxplc_s.a -ldl
 

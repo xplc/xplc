@@ -19,26 +19,50 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_ISIMPLEDL_H__
-#define __XPLC_ISIMPLEDL_H__
+#include <stddef.h>
+#include <xplc/utils.h>
+#include "testobj.h"
 
-#include <xplc/ISimpleDynamicLoader.h>
+/*
+ * testobj
+ *
+ * Contains a small test object.
+ */
 
-class SimpleDynamicLoader: public ISimpleDynamicLoader {
-private:
-  void* dlh;
-  IObject* (*factory)();
-protected:
-  SimpleDynamicLoader(): dlh(NULL) {
-  }
+class TestComponent: public ITestComponent {
 public:
-  static IObject* create();
+  static TestComponent* create();
   /* IObject */
   virtual IObject* getInterface(const UUID&);
-  /* IFactory */
-  virtual IObject* createObject();
-  /* ISimpleDynamicLoader */
-  virtual const char* loadModule(const char* filename);
+  /* ITestComponent */
+  virtual int getAnswer();
 };
 
-#endif /* __XPLC_ISIMPLEDL_H__ */
+inline TestComponent* TestComponent::create() {
+  return new GenericComponent<TestComponent>;
+}
+
+IObject* TestComponent::getInterface(const UUID& aUuid) {
+  if(aUuid.equals(IObject::IID)) {
+    addRef();
+    return static_cast<IObject*>(this);
+  }
+
+  if(aUuid.equals(ITestComponent::IID)) {
+    addRef();
+    return static_cast<ITestComponent*>(this);
+  }
+
+  return NULL;
+}
+
+int TestComponent::getAnswer() {
+  /*
+   * The Answer to Life, Universe and Everything.
+   */
+  return 42;
+}
+
+extern "C" IObject* XPLC_SimpleModule() {
+  return TestComponent::create();
+}

@@ -19,23 +19,79 @@
  * 02111-1307, USA.
  */
 
+#include <stddef.h>
+#include <dlfcn.h>
+#include <xplc/utils.h>
 #include "simpledl.h"
 
-/* FIXME: stubbed */
-
-SimpleDynamicLoader* SimpleDynamicLoader::create() {
-  return 0;
+IObject* SimpleDynamicLoader::create() {
+  return new GenericComponent<SimpleDynamicLoader>;
 }
 
-IObject* SimpleDynamicLoader::getInterface(const UUID&) {
-  return 0;
+IObject* SimpleDynamicLoader::getInterface(const UUID& aUuid) {
+  if(aUuid.equals(IObject::IID)) {
+    addRef();
+    return static_cast<IObject*>(this);
+  }
+
+  if(aUuid.equals(IFactory::IID)) {
+    addRef();
+    return static_cast<IFactory*>(this);
+  }
+
+  if(aUuid.equals(ISimpleDynamicLoader::IID)) {
+    addRef();
+    return static_cast<ISimpleDynamicLoader*>(this);
+  }
+
+  return NULL;
 }
 
 IObject* SimpleDynamicLoader::createObject() {
-  return 0;
+  IObject* obj;
+
+  obj = factory();
+
+  if(obj)
+    obj->addRef();
+
+  return obj;
 }
 
 const char* SimpleDynamicLoader::loadModule(const char* filename) {
-  return 0;
+  const char* err;
+
+  /* clear out dl error */
+  (void)dlerror();
+
+  if(dlh)
+    dlclose(dlh);
+
+  err = dlerror();
+  if(err)
+    return err;
+
+  /*
+   * FIXME: should we open with RTLD_LAZY instead? RTLD_NOW is safer,
+   * but if it is too costly, maybe we should just verify that
+   * libraries are complete during development?
+   */
+  dlh = dlopen(filename, RTLD_NOW);
+  if(!dlh) {
+    err = dlerror();
+    return err;
+  }
+
+  /*
+   * FIXME: What is the proper C++ cast to use here? reinterpret_cast
+   * with GCC gives a warning that "ISO C++ forbids casting between
+   * pointer-to-function and pointer-to-object".
+   */
+  factory = (IObject*(*)())(dlsym(dlh, "XPLC_SimpleModule"));
+  err = dlerror();
+  if(err)
+    return err;
+
+  return NULL;
 }
 

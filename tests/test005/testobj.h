@@ -19,26 +19,14 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_ISIMPLEDL_H__
-#define __XPLC_ISIMPLEDL_H__
+#ifndef __TESTS_TEST004_TESTOBJ_H__
+#define __TESTS_TEST004_TESTOBJ_H__
 
-#include <xplc/ISimpleDynamicLoader.h>
+#include <xplc/IObject.h>
 
-class SimpleDynamicLoader: public ISimpleDynamicLoader {
-private:
-  void* dlh;
-  IObject* (*factory)();
-protected:
-  SimpleDynamicLoader(): dlh(NULL) {
-  }
+class ITestComponent: public IObject {
 public:
-  static IObject* create();
-  /* IObject */
-  virtual IObject* getInterface(const UUID&);
-  /* IFactory */
-  virtual IObject* createObject();
-  /* ISimpleDynamicLoader */
-  virtual const char* loadModule(const char* filename);
+  virtual int getAnswer() = 0;
 };
 
-#endif /* __XPLC_ISIMPLEDL_H__ */
+#endif /* __TESTS_TEST004_TESTOBJ_H__ */
