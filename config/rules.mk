@@ -18,10 +18,16 @@
 #
 # $Id$
 
-.PHONY: clean distclean realclean
+.PHONY: dustclean clean distclean realclean
 
-clean:
-	rm -f $(GARBAGES) $(TARGETS)
+dustclean:
+	rm -f $(shell find . -name 'core' -print)
+	rm -f $(shell find . -name '*~' -print)
+
+clean: dustclean
+	rm -f $(shell find . -name '*.o' -print)
+	rm -f $(GARBAGES)
+	rm -f $(TARGETS)
 
 distclean: clean
 	rm -f $(DISTCLEAN)
