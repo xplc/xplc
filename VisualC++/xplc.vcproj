@@ -124,6 +124,9 @@
 				RelativePath="..\xplc\category.cpp">
 			</File>
 			<File
+				RelativePath="..\xplc\catiter.cpp">
+			</File>
+			<File
 				RelativePath="..\xplc\catmgr.cpp">
 			</File>
 			<File

@@ -2,7 +2,7 @@
 #
 # XPLC - Cross-Platform Lightweight Components
 # Copyright (C) 2000-2002, Pierre Phaneuf
-# Copyright (C) 2002, Net Integration Technologies, Inc.
+# Copyright (C) 2002-2004, Net Integration Technologies, Inc.
 #
 #
 # This library is free software; you can redistribute it and/or modify
@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(XPLC, 0.3.4, pp@ludusdesign.com)
-AC_REVISION($Id: configure.ac,v 1.20 2004/04/08 01:05:09 pphaneuf Exp $)
+AC_INIT(XPLC, 0.3.5, pp@ludusdesign.com)
+AC_REVISION($Id: configure.ac,v 1.21 2004/05/21 20:24:02 pphaneuf Exp $)
 
 AC_CANONICAL_HOST
 

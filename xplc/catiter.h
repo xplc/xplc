@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -19,28 +19,24 @@
  * USA
  */
 
-#ifndef __XPLC_ICATEGORY_H__
-#define __XPLC_ICATEGORY_H__
+#ifndef __XPLC_CATITER_H__
+#define __XPLC_CATEITER_H__
 
-#include <xplc/IFactory.h>
+#include <xplc/ICategory.h>
 #include <xplc/ICategoryIterator.h>
+#include "categorynode.h"
 
-/**
- * Represents a category.
- */
-
-#if 0
-class ICategory: public IFactory {
-#else
-class ICategory: public IObject {
-#endif
-  UNSTABLE_INTERFACE
+class CategoryIterator: public ICategoryIterator {
+  IMPLEMENT_IOBJECT(CategoryIterator);
+private:
+  ICategory* category;
+  CategoryEntryNode* current;
 public:
-  /** Gets an iterator for the category. */
-  virtual ICategoryIterator* getIterator() = 0;
+  CategoryIterator(ICategory*, CategoryEntryNode*);
+  virtual const UUID& getUuid();
+  virtual void next();
+  virtual bool done();
+  virtual ~CategoryIterator();
 };
 
-DEFINE_IID(ICategory, {0x90abfe8d, 0x50a9, 0x44d8,
-  {0x96, 0x03, 0x29, 0x9c, 0x8b, 0x21, 0x9e, 0x5d}});
-
-#endif /* __XPLC_ICATEGORYMANAGER_H__ */
+#endif /* __XPLC_CATEITER_H__ */

@@ -154,6 +154,9 @@
 				RelativePath="..\tests\test010.cpp">
 			</File>
 			<File
+				RelativePath="..\tests\test011.cpp">
+			</File>
+			<File
 				RelativePath="..\tests\testmain.cpp">
 			</File>
 		</Filter>

@@ -22,16 +22,23 @@
 #ifndef __XPLC_CATEGORY_H__
 #define __XPLC_CATEGORY_H__
 
-#include <xplc/ICategory.h>
+#include <xplc/ICategoryManager.h>
+#include "categorynode.h"
 
 class Category: public ICategory {
   IMPLEMENT_IOBJECT(Category);
+private:
+  ICategoryManager* mgr;
+  CategoryEntryNode* entries;
 public:
+  Category(ICategoryManager*, CategoryEntryNode*);
+#if 0
   /* IFactory */
   virtual IObject* createObject();
+#endif
   /* ICategory */
-  virtual unsigned int numEntries();
-  virtual ICategoryEntry* getEntry(unsigned int aIndex);
+  virtual ICategoryIterator* getIterator();
+  virtual ~Category();
 };
 
 #endif /* __XPLC_CATEGORY_H__ */

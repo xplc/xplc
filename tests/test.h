@@ -39,6 +39,7 @@ void test007();
 void test008();
 void test009();
 void test010();
+void test011();
 
 void test_assert(const char* file,
                  unsigned int line,
@@ -65,6 +66,14 @@ public:
 
 DEFINE_IID(ITestInterface, {0x794e20af, 0x5d35, 0x4d7a,
   {0x8f, 0x23, 0xf8, 0x53, 0xd7, 0x34, 0xb3, 0xa7}});
+
+class ITestInterface2: public ITestInterface {
+public:
+  virtual unsigned int getAnswer() = 0;
+};
+
+DEFINE_IID(ITestInterface2, {0xdb0f1055, 0x805d, 0x4ad7,
+  {0x98, 0xaa, 0xd0, 0x84, 0x59, 0xb5, 0x2f, 0xac}});
 
 class TestWeakRef: public IWeakRef {
 private:
@@ -127,7 +136,7 @@ public:
   }
 };
 
-class TestObject: public ITestInterface {
+class TestObject: public ITestInterface2 {
 private:
   unsigned int refcount;
   bool destroyed;
@@ -138,6 +147,7 @@ public:
                                       deletethis(_deletethis), weakref(0) {
   }
   virtual ~TestObject() {
+    VERIFY(destroyed, "test object leaked");
   }
   virtual unsigned int addRef() {
     ASSERT(!destroyed, "using destroyed test object");
@@ -193,6 +203,9 @@ public:
       refcount = 1;
       destroyed = true;
     }
+  }
+  virtual unsigned int getAnswer() {
+    return 42;
   }
 };
 

@@ -5,10 +5,32 @@ Release: @VERSION@
 Web Site: http://xplc.sourceforge.net/
 Maintainer: Pierre Phaneuf <pp@ludusdesign.com>
 
-General
--------
+Introduction
+------------
 
-Do not use XPLC unless you actually work on it. :-)
+XPLC (cross-platform lightweight components) is a component system
+that provide extensibility and reusability both inside and between
+applications, being portable across platforms and languages, easy to
+use and having the lowest possible overhead.
+
+Stability/Usability
+-------------------
+
+XPLC is quickly becoming usable, but it's API is still in a state of
+flux. A project that would like to use XPLC would thus have to either
+require a precise version or link it statically. They should also be
+prepared to follow changes in the API as they change from one version
+of XPLC to the other.
+
+That said, using XPLC should now be possible, provided that you are
+subscribed to the mailing list and know what you are doing.
+
+Documentation
+-------------
+
+The documentation for XPLC is available online:
+
+		   http://xplc.sourceforge.net/doc/
 
 Thanks
 ------
@@ -50,6 +72,7 @@ our SourceForge project page (http://sourceforge.net/projects/xplc/),
 but could also be send via e-mail to the maintainer.
 
                           *** IMPORTANT ***
+				   
 Before preparing a patch, you should make sure that 'make tests'
 passes all tests. Those tests are made to be as easy to use as
 possible, so please use them. Using the "--enable-fatal-warnings"

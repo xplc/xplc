@@ -46,7 +46,7 @@ IObject* CategoryManager::getObject(const UUID&) {
 
 void CategoryManager::registerComponent(const UUID& aCatid,
                                         const UUID& aUuid) {
-  CategoryNode* cat = categories;
+  CategoryNode* cat;
   CategoryEntryNode* entry;
 
   for(cat = categories; cat; cat = cat->next) {
@@ -72,7 +72,14 @@ void CategoryManager::registerComponent(const UUID& aCatid,
   cat->entries = entry;
 }
 
-ICategory* CategoryManager::getCategory(const UUID&) {
-  return NULL;
+ICategory* CategoryManager::getCategory(const UUID& aUuid) {
+  CategoryNode* cat;
+
+  for(cat = categories; cat; cat = cat->next) {
+    if(cat->category == aUuid)
+      return new Category(this, cat->entries);
+  }
+
+  return new Category(this, NULL);
 }
 

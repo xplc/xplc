@@ -9,6 +9,7 @@ Release
 README
 *.dsw
 *.opt
+*.pc
 *.ncb
 Tags.WW
 libxplc.so.*

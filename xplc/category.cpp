@@ -21,22 +21,38 @@
 
 #include <xplc/utils.h>
 #include "category.h"
+#include "catiter.h"
 
 UUID_MAP_BEGIN(Category)
   UUID_MAP_ENTRY(IObject)
+#if 0
   UUID_MAP_ENTRY(IFactory)
+#endif
   UUID_MAP_ENTRY(ICategory)
   UUID_MAP_END
 
+Category::Category(ICategoryManager* aMgr, CategoryEntryNode* aEntries):
+  mgr(aMgr),
+  entries(aEntries) {
+  /*
+   * Prevent the category manager from dying (which would free the
+   * list).
+   */
+  mgr->addRef();
+}
+
+#if 0
+/* FIXME: unimplemented... */
 IObject* Category::createObject() {
   return NULL;
 }
+#endif
 
-unsigned int Category::numEntries() {
-  return 0;
+ICategoryIterator* Category::getIterator() {
+  return new CategoryIterator(this, entries);
 }
 
-ICategoryEntry* Category::getEntry(unsigned int aIndex) {
-  return NULL;
+Category::~Category() {
+  mgr->release();
 }
 
