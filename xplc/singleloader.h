@@ -26,16 +26,17 @@
 
 #include <xplc/IModule.h>
 #include <xplc/ISingleModuleLoader.h>
+#include <xplc/module.h>
 
 class SingleModuleLoader: public ISingleModuleLoader {
   IMPLEMENT_IOBJECT(SingleModuleLoader);
 private:
   void* dlh;
-  IModule* module;
+  const XPLC_ModuleInfo* info;
 protected:
   SingleModuleLoader():
     dlh(0),
-    module(0) {
+    info(0) {
   }
   virtual ~SingleModuleLoader();
 public:

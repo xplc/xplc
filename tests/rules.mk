@@ -17,14 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.19 2002/12/11 15:54:51 pphaneuf Exp $
+# $Id: rules.mk,v 1.20 2004/03/20 18:04:39 pphaneuf Exp $
 
 .PHONY: tests
 
 ifeq ("$(enable_loader)", "no")
-tests: tests/testmain
+tests: default tests/testmain
 else
-tests: tests/testmain tests/testobj.dll
+tests: default tests/testmain tests/testobj.dll
 endif
 	@echo "Running tests:"
 	@cd tests && ./testmain

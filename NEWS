@@ -1,3 +1,10 @@
+New in 0.3.3
+------------
+
+ * Major improvements to the Win32 port, including compatibility with
+   windows.h.
+ * Continuing work on the module loader subsystem.
+
 New in 0.3.2
 ------------
 

@@ -26,6 +26,7 @@
 #include <xplc/module.h>
 #include <xplc/utils.h>
 #include "loader.h"
+#include "moduleloader.h"
 #include "singleloader.h"
 
 UUID_MAP_BEGIN(SingleModuleLoader)
@@ -35,28 +36,20 @@ UUID_MAP_BEGIN(SingleModuleLoader)
   UUID_MAP_END
 
 SingleModuleLoader::~SingleModuleLoader() {
-  if(module)
-    module->release();
-
   if(dlh)
     loaderClose(dlh);
 }
 
 IObject* SingleModuleLoader::getObject(const UUID& uuid) {
-  if(module)
-    return module->getObject(uuid);
-  else
-    return 0;
+  if(info)
+    return getModuleObject(info->components, uuid);
+
+  return 0;
 }
 
 const char* SingleModuleLoader::loadModule(const char* filename) {
+  const XPLC_ModuleInfo* moduleinfo;
   const char* err;
-  XPLC_ModuleInfo* moduleinfo = 0;
-
-  if(module) {
-    module->release();
-    module = 0;
-  }
 
   if(dlh)
     loaderClose(dlh);
@@ -66,27 +59,39 @@ const char* SingleModuleLoader::loadModule(const char* filename) {
     return err;
 
   err = loaderSymbol(dlh, "XPLC_Module",
-                     reinterpret_cast<void**>(&moduleinfo));
+                     reinterpret_cast<void**>(const_cast<XPLC_ModuleInfo**>(&moduleinfo)));
   if(err) {
     loaderClose(dlh);
-    dlh = 0;
     return err;
   }
 
   if(!moduleinfo) {
     loaderClose(dlh);
-    dlh = 0;
     return "could not find XPLC_Module entry point";
   }
 
-  if(!moduleinfo->module) {
+  if(moduleinfo->magic != XPLC_MODULE_MAGIC) {
     loaderClose(dlh);
-    dlh = 0;
-    return "could not obtain module";
+    return "module has wrong magic";
   }
 
-  module = moduleinfo->module;
-  module->addRef();
+  switch(moduleinfo->version_major) {
+#ifdef UNSTABLE
+  case -1:
+    /* nothing to do */
+    break;
+#endif
+  default:
+    loaderClose(dlh);
+    return "unsupported module major version";
+  };
+
+  if(moduleinfo->loadModule && !moduleinfo->loadModule()) {
+    loaderClose(dlh);
+    return "cannot load module";
+  }
+
+  info = moduleinfo;
 
   return 0;
 }

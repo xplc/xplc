@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  * Copyright (C) 2002-2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
@@ -25,24 +25,17 @@
 
 #include <xplc/IModule.h>
 #include <xplc/IModuleLoader.h>
+#include <xplc/module.h>
 
-struct ModuleNode {
-  ModuleNode* next;
-  IModule* module;
-  void* dlh;
-  ModuleNode(IModule* aModule, void* aDlh, ModuleNode* aNext):
-    next(aNext), module(aModule), dlh(aDlh) {
-    module->addRef();
-  }
-  ~ModuleNode() {
-    module->release();
-  }
-};
+IObject* getModuleObject(const XPLC_ComponentEntry*, const UUID&);
+
+struct ModuleNode;
 
 class ModuleLoader: public IModuleLoader {
   IMPLEMENT_IOBJECT(ModuleLoader);
 private:
   ModuleNode* modules;
+  void loadModule(const char*);
 protected:
   ModuleLoader():
     modules(0) {

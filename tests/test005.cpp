@@ -101,7 +101,7 @@ void test005() {
   test = MyTestObject::create();
   ASSERT(test, "could not instantiate test object");
 
-  iobj = static_cast<IFoo*>(test)->getInterface(IID<IObject>::get());
+  iobj = static_cast<IFoo*>(test)->getInterface(IObject_IID);
   VERIFY(iobj, "getInterface(IObject::getIID()) failed on test object");
 
   VERIFY(reinterpret_cast<void*>(iobj) == reinterpret_cast<void*>(test), "identity test failed");

@@ -1,9 +1,9 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Net Integration Technologies, Inc.
- * Copyright (C) 2002-2003, Pierre Phaneuf
- * Copyright (C) 2002, Stéphane Lajoie
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Pierre Phaneuf
+ * Copyright (C) 2002-2004, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -44,6 +44,8 @@
 #   include <ndir.h>
 #  endif
 # endif
+#else
+# include <io.h>
 #endif
 
 #include <xplc/core.h>
@@ -58,6 +60,37 @@ UUID_MAP_BEGIN(ModuleLoader)
   UUID_MAP_ENTRY(IModuleLoader)
   UUID_MAP_END
 
+struct ModuleNode {
+  ModuleNode* next;
+  const XPLC_ModuleInfo* info;
+  void* dlh;
+  ModuleNode(const XPLC_ModuleInfo* aInfo, void* aDlh, ModuleNode* aNext):
+    next(aNext), info(aInfo), dlh(aDlh) {
+  }
+  ~ModuleNode() {
+    if(dlh)
+      loaderClose(dlh);
+  }
+};
+
+IObject* getModuleObject(const XPLC_ComponentEntry* components,
+                         const UUID& uuid) {
+  IObject* obj = 0;
+
+  if(components) {
+    const XPLC_ComponentEntry* entry = components;
+
+    while(!obj && entry->uuid != UUID_null) {
+      if(entry->uuid == uuid)
+        obj = entry->getObject();
+
+      ++entry;
+    }
+  }
+    
+  return obj;
+}
+
 ModuleLoader::~ModuleLoader() {
   ModuleNode* next;
   void* dlh;
@@ -66,25 +99,65 @@ ModuleLoader::~ModuleLoader() {
     dlh = modules->dlh;
     next = modules->next;
     delete modules;
-    loaderClose(dlh);
     modules = next;
   }
 }
 
 IObject* ModuleLoader::getObject(const UUID& uuid)
 {
-  ModuleNode* module = modules;
-  IObject* obj = 0;
+  ModuleNode* node = modules;
 
-  while(module) {
-    if(module->module)
-      obj = module->module->getObject(uuid);
+  while(node) {
+    IObject* obj = getModuleObject(node->info->components, uuid);
 
     if(obj)
       return obj;
+
+    node = node->next;
   }
 
   return 0;
+}
+
+void ModuleLoader::loadModule(const char* fname)
+{
+  XPLC_ModuleInfo* moduleinfo = 0;
+  ModuleNode* newmodule;
+  void* dlh;
+  const char* err;
+
+  err = loaderOpen(fname, &dlh);
+  if(err)
+    return;
+
+  err = loaderSymbol(dlh, "XPLC_Module",
+                     reinterpret_cast<void**>(&moduleinfo));
+  if(err
+     || !moduleinfo
+     || moduleinfo->magic != XPLC_MODULE_MAGIC) {
+    loaderClose(dlh);
+    return;
+  }
+
+  switch(moduleinfo->version_major) {
+#ifdef UNSTABLE
+  case -1:
+    /* nothing to do */
+    break;
+#endif
+  default:
+    loaderClose(dlh);
+    return;
+  };
+
+  if(moduleinfo->loadModule && !moduleinfo->loadModule()) {
+    loaderClose(dlh);
+    return;
+  }
+
+  newmodule = new ModuleNode(moduleinfo, dlh, modules);
+  if(newmodule)
+    modules = newmodule;
 }
 
 #if !defined(WIN32)
@@ -105,30 +178,9 @@ void ModuleLoader::setModuleDirectory(const char* directory)
 
   rewinddir(dir);
   while((ent = readdir(dir)) && fname && servmgr) {
-    const char* err;
-    void* dlh;
-    XPLC_ModuleInfo* moduleinfo = 0;
-    ModuleNode* newmodule;
-
     snprintf(fname, len, "%s/%s", directory, ent->d_name);
 
-    err = loaderOpen(fname, &dlh);
-    if(err)
-      continue;
-
-    err = loaderSymbol(dlh, "XPLC_Module",
-		       reinterpret_cast<void**>(&moduleinfo));
-    if(err
-       || !moduleinfo
-       || moduleinfo->version != XPLC_MODULE_VERSION
-       || !moduleinfo->module) {
-      loaderClose(dlh);
-      continue;
-    }
-
-    newmodule = new ModuleNode(moduleinfo->module, dlh, modules);
-    if(newmodule)
-      modules = newmodule;
+    loadModule(fname);
   }
 
   if(servmgr)
@@ -140,7 +192,6 @@ void ModuleLoader::setModuleDirectory(const char* directory)
 }
 
 #elif defined(WIN32)
-#include <io.h>
 
 void ModuleLoader::setModuleDirectory(const char* directory)
 {
@@ -166,30 +217,10 @@ void ModuleLoader::setModuleDirectory(const char* directory)
 	if(!first && _findnext(dir, &data))
       break;
     first = false;
-    const char* err;
-    void* dlh;
-    XPLC_ModuleInfo* moduleinfo = 0;
-    ModuleNode* newmodule;
 
     _snprintf(fname, len, "%s/%s", directory, data.name);
 
-    err = loaderOpen(fname, &dlh);
-    if(err)
-      continue;
-
-    err = loaderSymbol(dlh, "XPLC_Module",
-		       reinterpret_cast<void**>(&moduleinfo));
-    if(err
-       || !moduleinfo
-       || moduleinfo->version != XPLC_MODULE_VERSION
-       || !moduleinfo->module) {
-      loaderClose(dlh);
-      continue;
-    }
-
-    newmodule = new ModuleNode(moduleinfo->module, dlh, modules);
-    if(newmodule)
-      modules = newmodule;
+    loadModule(fname);
   }
 
   if(servmgr)

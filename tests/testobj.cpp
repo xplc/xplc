@@ -50,44 +50,35 @@ int TestComponent::getAnswer() {
   return 42;
 }
 
-static IModule* module = 0;
+static IObject* factory() {
+  static TestComponent* component = 0;
 
-class TestModule: public IModule {
-  IMPLEMENT_IOBJECT(TestModule);
-private:
-  TestComponent* component;
-public:
-  TestModule(): component(0) {}
-  virtual ~TestModule() {
-    module = 0;
-    if(component)
-      component->release();
-  }
-  virtual IObject* getObject(const UUID& uuid) {
-    if(!component)
-      component = TestComponent::create();
+  if(!component)
+    component = TestComponent::create();
 
-    if(uuid == TestComponent_CID) {
-      component->addRef();
-      return component;
-    }
+  if(component)
+    component->addRef();
 
-    return 0;
-  }
-};
+  return component;
+}
 
 UUID_MAP_BEGIN(TestComponent)
   UUID_MAP_ENTRY(IObject)
   UUID_MAP_ENTRY(ITestComponent)
   UUID_MAP_END
 
-UUID_MAP_BEGIN(TestModule)
-  UUID_MAP_ENTRY(IObject)
-  UUID_MAP_ENTRY(IModule)
-  UUID_MAP_END
+const XPLC_ComponentEntry components[] = {
+  { TestComponent_CID, &factory },
+  { UUID_null, 0 }
+};
 
 const XPLC_ModuleInfo XPLC_Module = {
-  XPLC_MODULE_VERSION,
-  new TestModule
+  XPLC_MODULE_MAGIC,
+  XPLC_MODULE_VERSION_MAJOR,
+  XPLC_MODULE_VERSION_MINOR,
+  "Test Module",
+  components,
+  0,
+  0
 };
 

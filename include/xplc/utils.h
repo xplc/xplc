@@ -163,7 +163,7 @@ Interface* get(IObject* aObj) {
   if(!aObj)
     return 0;
 
-  return static_cast<Interface*>(aObj->getInterface(IID<Interface>::get()));
+  return static_cast<Interface*>(aObj->getInterface(XPLC_IID<Interface>::get()));
 }
 
 /**
@@ -179,7 +179,7 @@ Interface* mutate(IObject* aObj) {
   if(!aObj)
     return 0;
 
-  rv = static_cast<Interface*>(aObj->getInterface(IID<Interface>::get()));
+  rv = static_cast<Interface*>(aObj->getInterface(XPLC_IID<Interface>::get()));
 
   aObj->release();
 

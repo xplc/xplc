@@ -29,6 +29,6 @@ const char* loaderSymbol(void* aHandle,
                          const char* aSymbol,
                          void** aPointer);
 
-bool loaderClose(void* aHandle);
+bool loaderClose(void*& aHandle);
 
 #endif /* __XPLC_LOADER_H__ */

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="xplc"
 	ProjectGUID="{B815FC75-59A0-44CD-A9AD-F13838091045}"
 	SccProjectName=""
@@ -35,13 +35,12 @@
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
-				CompileAs="0"/>
+				CompileAs="0"
+				DisableSpecificWarnings="4800"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile=".\Debug\xplc.lib"
-				SuppressStartupBanner="TRUE"/>
+				Name="VCLibrarianTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -56,6 +55,12 @@
 				Culture="3084"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -81,13 +86,12 @@
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
-				CompileAs="0"/>
+				CompileAs="0"
+				DisableSpecificWarnings="4800"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile=".\Release\xplc.lib"
-				SuppressStartupBanner="TRUE"/>
+				Name="VCLibrarianTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -102,14 +106,28 @@
 				Culture="3084"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="..\xplc\factory.cpp">
+				RelativePath="..\xplc\category.cpp">
+			</File>
+			<File
+				RelativePath="..\xplc\catmgr.cpp">
+			</File>
+			<File
+				RelativePath="..\xplc-cxx\factory.cpp">
 			</File>
 			<File
 				RelativePath="..\xplc-cxx\getiface.cpp">
@@ -143,28 +161,43 @@
 			</File>
 			<File
 				RelativePath="..\xplc-cxx\xplc.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\include\xplc\IFactory.h">
+				RelativePath="..\xplc\category.h">
 			</File>
 			<File
-				RelativePath="..\include\xplc\IGenericFactory.h">
+				RelativePath="..\xplc\categorynode.h">
+			</File>
+			<File
+				RelativePath="..\xplc\catmgr.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\config.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\core.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\factory.h">
+			</File>
+			<File
+				RelativePath="..\xplc\handlernode.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\ICategory.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\ICategoryEntry.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\ICategoryManager.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\IFactory.h">
 			</File>
 			<File
 				RelativePath="..\include\xplc\IModule.h">
@@ -194,10 +227,7 @@
 				RelativePath="..\include\xplc\IStaticServiceHandler.h">
 			</File>
 			<File
-				RelativePath="..\xplc\factory.h">
-			</File>
-			<File
-				RelativePath="..\xplc\handlernode.h">
+				RelativePath="..\include\xplc\IWeakRef.h">
 			</File>
 			<File
 				RelativePath="..\xplc\loader.h">
@@ -219,6 +249,9 @@
 			</File>
 			<File
 				RelativePath="..\xplc\objectnode.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\ptr.h">
 			</File>
 			<File
 				RelativePath="..\xplc\servmgr.h">

@@ -103,7 +103,7 @@ private:
       return;
     }
 
-    ptr = static_cast<T*>(obj->getInterface(IID<T>::get()));
+    ptr = static_cast<T*>(obj->getInterface(XPLC_IID<T>::get()));
   }
 
   T**& operator&();

@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2004, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -97,10 +98,13 @@ typedef GUID UUID;
 #endif
 //@}
 
+#if !defined _SYS_GUID_OPERATOR_EQ_ && !defined _NO_SYS_GUID_OPERATOR_EQ_
+#define _SYS_GUID_OPERATOR_EQ_
+
 /**
  * Equality operator for UUIDs.
  */
-inline bool operator==(const UUID& uuid1, const UUID& uuid2) {
+inline int operator==(const UUID& uuid1, const UUID& uuid2) {
     return
       (&uuid1 == &uuid2) ||
       ((static_cast<const unsigned long*>(&uuid1.Data1)[0] == static_cast<const unsigned long*>(&uuid2.Data1)[0]) &&
@@ -112,7 +116,7 @@ inline bool operator==(const UUID& uuid1, const UUID& uuid2) {
 /**
  * Inequality operator for UUIDs.
  */
-inline bool operator!=(const UUID& uuid1, const UUID& uuid2) {
+inline int operator!=(const UUID& uuid1, const UUID& uuid2) {
     return
       (&uuid1 != &uuid2) &&
       ((static_cast<const unsigned long*>(&uuid1.Data1)[0] != static_cast<const unsigned long*>(&uuid2.Data1)[0]) ||
@@ -120,6 +124,8 @@ inline bool operator!=(const UUID& uuid1, const UUID& uuid2) {
        (static_cast<const unsigned long*>(&uuid1.Data1)[2] != static_cast<const unsigned long*>(&uuid2.Data1)[2]) ||
        (static_cast<const unsigned long*>(&uuid1.Data1)[3] != static_cast<const unsigned long*>(&uuid2.Data1)[3]));
 }
+
+#endif
 
 /**
  * Converts a printable C string to a UUID.  The string is of the form
@@ -153,10 +159,10 @@ static const UUID UUID_null = {0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}};
  * Generate a UUID for your IID using 'uuidgen', then declare your IID
  * using DEFINE_IID(ClassName).  If you need to obtain the UUID corresponding
  * to that interface in the future, call the static function
- * IID<ClassName>::get().
+ * XPLC_IID<ClassName>::get().
  */
 template<class T>
-struct IID {
+struct XPLC_IID {
 };
 
 /**
@@ -165,7 +171,7 @@ struct IID {
 #define DEFINE_IID(iface, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11) \
 static const UUID iface##_IID = u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11; \
 template <> \
-struct IID<iface> { \
+struct XPLC_IID<iface> { \
   static const UUID& get() { \
     return iface##_IID; \
   } \
