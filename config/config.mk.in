@@ -39,6 +39,9 @@ endif
 
 .PHONY: test
 
+prefix:=@prefix@
+exec_prefix:=@exec_prefix@
+
 test:
 	@echo "debug = \"@debug@\""
 	@echo "bindir = \"@bindir@\""
