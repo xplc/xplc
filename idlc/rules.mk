@@ -18,7 +18,7 @@
 #
 # $Id$
 
-ifeq ($(BUILD_IDLC), "yes")
+ifdef BUILD_IDLC
 
 IDLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard idlc/*.cpp))
 
