@@ -60,7 +60,7 @@ public:
   }
 #endif
   void operator delete(void* self) {
-    ::delete self;
+    ::operator delete(self);
   }
   virtual unsigned int addRef() {
 #ifdef GENERICDEBUG_REFS
