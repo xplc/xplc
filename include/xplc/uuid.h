@@ -98,55 +98,6 @@ typedef GUID UUID;
 #endif
 //@}
 
-#if !defined _SYS_GUID_OPERATOR_EQ_ && !defined _NO_SYS_GUID_OPERATOR_EQ_
-#define _SYS_GUID_OPERATOR_EQ_
-
-/**
- * Equality operator for UUIDs.
- */
-inline int operator==(const UUID& uuid1, const UUID& uuid2) {
-    return
-      (&uuid1 == &uuid2) ||
-      ((static_cast<const unsigned long*>(&uuid1.Data1)[0] == static_cast<const unsigned long*>(&uuid2.Data1)[0]) &&
-       (static_cast<const unsigned long*>(&uuid1.Data1)[1] == static_cast<const unsigned long*>(&uuid2.Data1)[1]) &&
-       (static_cast<const unsigned long*>(&uuid1.Data1)[2] == static_cast<const unsigned long*>(&uuid2.Data1)[2]) &&
-       (static_cast<const unsigned long*>(&uuid1.Data1)[3] == static_cast<const unsigned long*>(&uuid2.Data1)[3]));
-}
-
-/**
- * Inequality operator for UUIDs.
- */
-inline int operator!=(const UUID& uuid1, const UUID& uuid2) {
-    return
-      (&uuid1 != &uuid2) &&
-      ((static_cast<const unsigned long*>(&uuid1.Data1)[0] != static_cast<const unsigned long*>(&uuid2.Data1)[0]) ||
-       (static_cast<const unsigned long*>(&uuid1.Data1)[1] != static_cast<const unsigned long*>(&uuid2.Data1)[1]) ||
-       (static_cast<const unsigned long*>(&uuid1.Data1)[2] != static_cast<const unsigned long*>(&uuid2.Data1)[2]) ||
-       (static_cast<const unsigned long*>(&uuid1.Data1)[3] != static_cast<const unsigned long*>(&uuid2.Data1)[3]));
-}
-
-#endif
-
-/**
- * Converts a printable C string to a UUID.  The string is of the form
- * "9c318f06-52ec-4a62-b5fb-9279216e8586" (without the quotes), but
- * will also tolerate opening and closing braces before and after.
- * 
- * This is the form produced by the 'uuidgen' program and is used in
- * the Windows registry.
- */
-const UUID UuidFromString(const char* str);
-
-/**
- * Fill the given pointer with a printable string representing the
- * given UUID.  The string is of the form
- * "9c318f06-52ec-4a62-b5fb-9279216e8586" (without the quotes).
- * 
- * 'str' should point to at least 39 bytes of available memory.
- * Always returns 'str', which has been null-terminated.
- */
-char* UuidToString(const UUID& uuid, char* str);
-
 /// The NULL UUID.  Nothing will ever have this UUID, I promise.
 static const UUID UUID_null = {0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}};
 

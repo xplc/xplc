@@ -25,6 +25,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <xplc/uuidops.h>
+
 #include "config.h"
 
 #if !defined(WIN32)

@@ -1,0 +1,4 @@
+LIBRARY	xplc
+
+EXPORTS
+	XPLC_getServiceManager

@@ -27,6 +27,7 @@
 #include <xplc/core.h>
 #include <xplc/IWeakRef.h>
 #include <xplc/IFactory.h>
+#include <xplc/uuidops.h>
 
 void test000();
 void test001();

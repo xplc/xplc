@@ -22,6 +22,7 @@
 
 #include <assert.h>
 #include <xplc/utils.h>
+#include <xplc/uuidops.h>
 #include "catmgr.h"
 #include "category.h"
 

@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <xplc/utils.h>
+#include <xplc/uuidops.h>
 #include "statichandler.h"
 
 UUID_MAP_BEGIN(StaticServiceHandler)

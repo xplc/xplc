@@ -1,3 +1,14 @@
+New in 0.3.6
+------------
+
+ * Added a clause to the license on the C++ bindings, to allow
+   closed-source programs and libraries to use the XPLC C++ bindings.
+ * Build XPLC as a DLL on Windows, and put the C++ bindings in a
+   separate statically linked library, as on Unix.
+ * Fixed some interaction between xplc_ptr and the "illegal delete
+   detector".
+ * Fixed an issue when building XPLC with GCC 3.4.
+
 New in 0.3.5
 ------------
 

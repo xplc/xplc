@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: vars.mk,v 1.34 2004/01/09 07:18:13 pphaneuf Exp $
+# $Id: vars.mk,v 1.35 2004/06/13 21:57:11 pphaneuf Exp $
 
 DEPFILES:=$(shell find . -name '.*.d')
 
@@ -77,7 +77,7 @@ CXXFLAGS+=-O2
 endif
 
 ifneq ("$(enable_warnings)", "no")
-CXXFLAGS+=-pedantic -Wall -Woverloaded-virtual
+CXXFLAGS+=-Wall -Woverloaded-virtual
 ifeq ("$(enable_warnings)", "yes")
 CXXFLAGS+=-Wold-style-cast
 endif

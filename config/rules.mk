@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.36 2004/04/08 01:05:09 pphaneuf Exp $
+# $Id: rules.mk,v 1.37 2004/06/25 19:01:08 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen
 
@@ -64,6 +64,8 @@ $(DIST): ChangeLog README xplc.spec configure
 	done
 
 dist: default tests $(DIST).tar.gz
+	@echo REMINDER: did you update the version number in configure.ac?
+	@echo The NEWS file? The debian/changelog file?
 
 ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
