@@ -1,0 +1,22 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_REVISION($Id$)
+
+AC_INIT(include/xplc/xplc.h)
+
+AC_CONFIG_HEADER(config.h)
+
+AC_CANONICAL_SYSTEM
+
+dnl Checks for programs.
+AC_PROG_CXX
+AC_PROG_INSTALL
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+dnl Checks for library functions.
+
+AC_OUTPUT(Makefile)
