@@ -3,7 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -53,6 +53,10 @@ void test_verify(const char* file,
 #define ASSERT(cond, desc) test_assert(__FILE__, __LINE__, cond, desc)
 #define VERIFY(cond, desc) test_verify(__FILE__, __LINE__, cond, desc)
 
+#ifndef xplcdelete
+#define xplcdelete delete
+#endif
+
 class ITestInterface: public IObject {
 public:
   virtual unsigned int getRefCount() = 0;
@@ -89,7 +93,7 @@ public:
     if(weakref)
       weakref->object = 0;
 
-    delete this;
+    xplcdelete this;
 
     return 0;
   }
@@ -135,9 +139,6 @@ public:
   }
   virtual ~TestObject() {
   }
-  void operator delete(void* self) {
-    ::operator delete(self);
-  }
   virtual unsigned int addRef() {
     ASSERT(!destroyed, "using destroyed test object");
 
@@ -152,7 +153,7 @@ public:
     refcount = 1;
     destroyed = true;
     if(deletethis)
-      delete this;
+      xplcdelete this;
 
     return 0;
   }
@@ -219,7 +220,7 @@ public:
     refcount = 1;
     destroyed = true;
 
-    delete this;
+    xplcdelete this;
 
     return 0;
   }

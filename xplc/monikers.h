@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  * Copyright (C) 2002-2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
@@ -30,12 +30,11 @@ class MonikerService: public IMonikerService {
   IMPLEMENT_IOBJECT(MonikerService);
 private:
   MonikerNode* monikers;
-protected:
-  virtual ~MonikerService();
 public:
   MonikerService():
     monikers(0) {
   }
+  virtual ~MonikerService();
   /* IMoniker */
   virtual IObject* resolve(const char*);
   /* IMonikerService */

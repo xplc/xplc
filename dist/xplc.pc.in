@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: XPLC
+Description: Cross-platform lightweight component system
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lxplc -lxplc-cxx -ldl
+Cflags: -I${includedir}

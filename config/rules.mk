@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.35 2004/01/13 07:03:58 pphaneuf Exp $
+# $Id: rules.mk,v 1.36 2004/04/08 01:05:09 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen
 
@@ -91,13 +91,14 @@ realclean: distclean
 	-rm -rf $(wildcard $(REALCLEAN))
 
 installdirs:
-	mkdir -p $(DESTDIR)$(libdir)
+	mkdir -p $(DESTDIR)$(libdir)/pkgconfig
 	mkdir -p $(DESTDIR)$(includedir)/xplc
 
 install: default installdirs
 	$(INSTALL_PROGRAM) libxplc.so $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION)
 	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) libxplc-cxx.a $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) dist/xplc.pc $(DESTDIR)$(libdir)/pkgconfig
 	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(DESTDIR)$(includedir)/xplc
 	ln -s libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/libxplc.so
 	ln -s libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
@@ -105,11 +106,12 @@ install: default installdirs
 uninstall:
 	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/libxplc.so
 	rm -f $(DESTDIR)$(libdir)/libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
+	rm -f $(DESTDIR)$(libdir)/pkgconfig/xplc.pc
 	rm -rf $(DESTDIR)$(includedir)/xplc
 
 ifeq ($(filter-out $(SIMPLETARGETS),$(MAKECMDGOALS)),$(MAKECMDGOALS))
 
-config/config.mk: config/config.mk.in configure
+config/config.mk dist/xplc.pc: config/config.mk.in dist/xplc.pc.in configure
 	@echo "Please run './configure'."
 	@exit 1
 

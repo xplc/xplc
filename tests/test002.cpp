@@ -3,7 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -74,6 +74,6 @@ void test002() {
 
   VERIFY(test->release() == 0, "test object has non-zero refcount after release");
 
-  delete test;
+  xplcdelete test;
 }
 

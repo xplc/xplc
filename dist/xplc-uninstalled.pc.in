@@ -1,0 +1,7 @@
+top_builddir=@abs_top_builddir@
+
+Name: XPLC
+Description: Cross-platform lightweight component system
+Version: @PACKAGE_VERSION@
+Libs: -L${top_builddir} -lxplc -lxplc-cxx -ldl
+Cflags: -I${top_builddir}/include

@@ -1,3 +1,11 @@
+New in 0.3.4
+------------
+
+ * Added an "illegal delete detector".
+ * Added support for pkg-config.
+ * Re-enabled support for dyld on Mac OS X/Darwin.
+ * Avoid leaking autoconf headers in the installed headers.
+
 New in 0.3.3
 ------------
 

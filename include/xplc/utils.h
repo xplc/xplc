@@ -3,7 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -31,7 +31,6 @@
 
 #include <stddef.h>
 #include <xplc/IWeakRef.h>
-#include <xplc/IFactory.h>
 
 /**
  * Utility structure used for the interface map.
@@ -90,6 +89,10 @@ struct IObjectImplInternal {
                         const UUID_Info* uuidlist);
 };
 
+#ifndef xplcdelete
+#define xplcdelete delete
+#endif
+
 /**
  * Helper macro to implement the IObject methods automatically. Put
  * this at the beginning of your class, specifiying the class name as
@@ -116,7 +119,7 @@ public: \
       xplc_iobject_internal.weakref->release(); \
       xplc_iobject_internal.weakref->object = 0; \
     } \
-    delete this; \
+    xplcdelete this; \
     return 0; \
   } \
   virtual IObject* getInterface(const UUID& uuid) { \
@@ -182,31 +185,6 @@ Interface* mutate(IObject* aObj) {
   rv = static_cast<Interface*>(aObj->getInterface(XPLC_IID<Interface>::get()));
 
   aObj->release();
-
-  return rv;
-}
-
-/**
- * Shorthand to get a factory, create an object and get an interface.
- */
-template<class Interface>
-Interface* create(const UUID& cid) {
-  IServiceManager* servmgr;
-  IFactory* factory;
-  Interface* rv;
-
-  servmgr = XPLC_getServiceManager();
-  if(!servmgr)
-    return 0;
-
-  factory = mutate<IFactory>(servmgr->getObject(cid));
-  servmgr->release();
-  if(!factory)
-    return 0;
-
-  rv = mutate<Interface>(factory->createObject());
-
-  factory->release();
 
   return rv;
 }

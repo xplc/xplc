@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(XPLC, 0.3.3, pp@ludusdesign.com)
-AC_REVISION($Id: configure.ac,v 1.17 2004/03/20 19:51:46 pphaneuf Exp $)
+AC_INIT(XPLC, 0.3.4, pp@ludusdesign.com)
+AC_REVISION($Id: configure.ac,v 1.20 2004/04/08 01:05:09 pphaneuf Exp $)
 
 AC_CANONICAL_HOST
 
@@ -100,8 +100,7 @@ if test "$with_dyld" != "no"; then
 fi
 
 # dyld not really supported yet
-#if test "$with_dlopen" = "no" && test "$with_dyld" = "no"; then
-if test "$with_dlopen" = "no"; then
+if test "$with_dlopen" = "no" && test "$with_dyld" = "no"; then
     enable_loader=no
 fi
 
@@ -123,8 +122,8 @@ AC_SUBST(enable_loader)
 AC_SUBST(with_dlopen)
 AC_SUBST(so_style)
 
-AC_CONFIG_FILES([config/config.mk])
-AC_CONFIG_HEADERS([include/xplc/autoconf.h])
+AC_CONFIG_FILES([config/config.mk dist/xplc.pc dist/xplc-uninstalled.pc])
+AC_CONFIG_HEADERS([include/autoconf.h])
 
 AC_OUTPUT
 

@@ -2,7 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2001-2003, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -61,9 +61,6 @@ public:
   virtual ~MyTestObject() {
     ASSERT(!destroyed, "test object destroyed twice");
     destroyed = true;
-  }
-  void operator delete(void* self) {
-    ::operator delete(self);
   }
   virtual unsigned int getFoo() {
     return foo;

@@ -27,7 +27,7 @@
  * file.
  */
 #if !defined(WIN32)
-#include <xplc/autoconf.h>
+#include "autoconf.h"
 #else
 
 #ifdef WIN32

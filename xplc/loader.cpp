@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <xplc/config.h>
+#include "config.h"
 #include "loader.h"
 
 #ifdef HAVE_DLFCN_H

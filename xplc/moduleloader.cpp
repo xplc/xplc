@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <xplc/config.h>
+#include "config.h"
 
 #if !defined(WIN32)
 # if HAVE_DIRENT_H

@@ -30,6 +30,7 @@ This is the parts of XPLC needed for development.
 %build
 %configure
 make
+make tests
 
 %install
 rm -rf %{buildroot}
@@ -43,17 +44,24 @@ rm -rf %{buildroot}
 %postun -p /sbin/ldconfig
 
 %files
-%attr(0755,root,root) /usr/lib/libxplc.so.%{version}
+%defattr(-,root,root)
+/usr/lib/libxplc.so.%{version}
 %doc README CREDITS NEWS LICENSE ChangeLog
 
 %files devel
-%attr(-,root,root) /usr/include/xplc
-%attr(0644,root,root) /usr/lib/libxplc.a
-%attr(0644,root,root) /usr/lib/libxplc-cxx.a
-%attr(-,root,root) /usr/lib/libxplc_s.a
-%attr(-,root,root) /usr/lib/libxplc.so
+%defattr(-,root,root)
+/usr/include/xplc
+/usr/lib/libxplc.a
+/usr/lib/libxplc-cxx.a
+/usr/lib/libxplc_s.a
+/usr/lib/libxplc.so
+/usr/lib/pkgconfig/xplc.pc
 
 %changelog
+ * Wed Apr  7 2004  Pierre Phaneuf <pp@ludusdesign.com>
+ - Fixed the ownership of the documentation files.
+ - Runs the unit tests while packaging.
+
  * Fri Jan 17 2003  Pierre Phaneuf <pp@ludusdesign.com>
  - Minor fix to the permission of the header files.
 

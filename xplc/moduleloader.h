@@ -40,11 +40,11 @@ protected:
   ModuleLoader():
     modules(0) {
   }
-  virtual ~ModuleLoader();
 public:
   static IObject* create() {
     return new ModuleLoader;
   }
+  virtual ~ModuleLoader();
   /* IServiceHandler */
   virtual IObject* getObject(const UUID&);
   /* IModuleLoader */

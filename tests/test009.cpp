@@ -20,7 +20,7 @@
  * USA
  */
 
-#include <xplc/config.h>
+#include "config.h"
 #include <xplc/utils.h>
 #include <xplc/IModuleLoader.h>
 #include "test.h"

@@ -55,9 +55,11 @@ void test010() {
   IServiceManager* servmgr;
   IObject* obj;
   ICategoryManager* catmgr;
+#if 0
   ICategory* cat;
   unsigned int num;
   bool seen[3] = { false, false, false };
+#endif
 
   servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");

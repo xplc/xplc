@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002-2003, Pierre Phaneuf
+ * Copyright (C) 2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -26,11 +27,10 @@
 
 class NewMoniker: public IMoniker {
   IMPLEMENT_IOBJECT(NewMoniker);
-protected:
-  virtual ~NewMoniker();
 public:
   /* IMoniker */
   virtual IObject* resolve(const char*);
+  virtual ~NewMoniker();
 };
 
 #endif /* __XPLC_NEW_H__ */

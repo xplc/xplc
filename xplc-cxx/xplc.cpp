@@ -21,6 +21,7 @@
  */
 
 #include <xplc/IMoniker.h>
+#include <xplc/IFactory.h>
 #include <xplc/xplc.h>
 #include <xplc/ptr.h>
 
