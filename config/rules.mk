@@ -17,18 +17,23 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.15 2002/06/28 16:49:11 pphaneuf Exp $
+# $Id: rules.mk,v 1.17 2002/09/27 21:10:27 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall
 
-dist: distclean ChangeLog README
+dist: distclean ChangeLog README xplc.spec
 	autoconf
+	autoheader
+	rm -rf autom4te.cache
 
 ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
 	cvs2cl.pl --utc -U config/cvs-users
 
-README: dist/README.in
+README: dist/README.in config/version.mk
+	sed $< -e 's%@VERSION@%$(VERSION)%g' > $@
+
+xplc.spec: dist/xplc.spec.in config/version.mk
 	sed $< -e 's%@VERSION@%$(VERSION)%g' > $@
 
 dustclean:
@@ -47,20 +52,20 @@ realclean: distclean
 	rm -f $(wildcard $(REALCLEAN))
 
 installdirs:
-	mkdir -p $(libdir)
-	mkdir -p $(includedir)/xplc
+	mkdir -p $(DESTDIR)$(libdir)
+	mkdir -p $(DESTDIR)$(includedir)/xplc
 
 install: $(TARGETS) installdirs
-	$(INSTALL_PROGRAM) libxplc.so.$(VERSION) $(libdir)
-	$(INSTALL_DATA) libxplc.a $(libdir)
-	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(includedir)/xplc
-	ln -s libxplc.so.$(VERSION) $(libdir)/libxplc.so
-	ln -s libxplc.a $(libdir)/libxplc_s.a
+	$(INSTALL_PROGRAM) libxplc.so.$(VERSION) $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(DESTDIR)$(includedir)/xplc
+	ln -s libxplc.so.$(VERSION) $(DESTDIR)$(libdir)/libxplc.so
+	ln -s libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
 
 uninstall:
-	rm -f $(libdir)/libxplc.so.$(VERSION) $(libdir)/libxplc.so
-	rm -f $(libdir)/libxplc.a $(libdir)/libxplc_s.a
-	rm -rf $(includedir)/xplc
+	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(VERSION) $(DESTDIR)$(libdir)/libxplc.so
+	rm -f $(DESTDIR)$(libdir)/libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
+	rm -rf $(DESTDIR)$(includedir)/xplc
 
 ifeq ($(filter-out $(SIMPLETARGETS),$(MAKECMDGOALS)),$(MAKECMDGOALS))
 
@@ -70,6 +75,7 @@ config/config.mk: config/config.mk.in configure
 
 configure: configure.in
 	autoconf
+	autoheader
 
 config/depends.mk: config/config.mk
 	@echo "Building dependencies file ($@)"

@@ -25,21 +25,21 @@
 #include <xplc/IModule.h>
 #include <xplc/IModuleLoader.h>
 
-struct ModuleList {
-  ModuleList* next;
+struct ModuleNode {
+  ModuleNode* next;
   IModule* module;
   void* dlh;
-  ModuleList(IModule* aModule, void* aDlh, ModuleList* aNext):
+  ModuleNode(IModule* aModule, void* aDlh, ModuleNode* aNext):
     next(aNext), module(aModule), dlh(aDlh) {
   }
-  ~ModuleList() {
+  ~ModuleNode() {
     module->release();
   }
 };
 
 class ModuleLoader: public IModuleLoader {
 private:
-  ModuleList* modules;
+  ModuleNode* modules;
 protected:
   ModuleLoader(): modules(0) {
   }

@@ -1,0 +1,58 @@
+Name: xplc
+Version: @VERSION@
+Release: 1
+Summary: Cross-platform lightweight component system
+Group: System Environment/Libraries
+License: LGPL
+Source: xplc-%{version}.tar.gz
+URL: http://xplc.sourceforge.net/
+Prefix: /usr
+BuildRoot: %{_tmppath}/%{name}-root
+Requires: /sbin/ldconfig
+
+%package devel
+Summary: Cross-platform lightweight component system (development)
+Group: Development/Libraries
+Requires: xplc = %{version}
+
+%description
+XPLC (cross-platform lightweight components) is a component system
+that provide extensibility and reusability both inside and between
+applications, being portable across platforms and languages, easy to
+use and having the lowest possible overhead.
+
+%description devel
+This is the parts of XPLC needed for development.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+rm -rf %{buildroot}
+%makeinstall
+
+%clean
+rm -rf %{buildroot}
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%files
+%attr(0755,root,root) /usr/lib/libxplc.so.%{version}
+%doc README CREDITS NEWS LICENSE ChangeLog
+
+%files devel
+%attr(0644,root,root) /usr/include/xplc
+%attr(0644,root,root) /usr/lib/libxplc.a
+%attr(-,root,root) /usr/lib/libxplc_s.a
+%attr(-,root,root) /usr/lib/libxplc.so
+
+%changelog
+* Fri Sep 27 2002  Pierre Phaneuf <pp@ludusdesign.com>
+- Initial RPM release.
+

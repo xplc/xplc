@@ -2,8 +2,6 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
- * Copyright (C) 2002, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -21,28 +19,15 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_MODULE_H__
-#define __XPLC_MODULE_H__
-
-#include <xplc/IModule.h>
-#include <xplc/IServiceManager.h>
-
-#ifdef WIN32
-#define ENTRYPOINT extern "C" __declspec(dllexport)
-#else
-#define ENTRYPOINT extern "C"
-#endif
+#ifndef __XPLC_CONFIG_H__
+#define __XPLC_CONFIG_H__
 
 /*
- * The IModule returned by XPLC_GetModule should be already addRef'd.
+ * Platforms that do not support Autoconf should skip including that
+ * file.
  */
+#if !defined(WIN32)
+#include <xplc/autoconf.h>
+#endif
 
-ENTRYPOINT IModule* XPLC_GetModule(IServiceManager*,
-				   const unsigned int);
-
-typedef IModule*(*XPLC_GetModuleFunc)(IServiceManager*,
-				      const unsigned int);
-
-#define XPLC_MODULE_VERSION 0
-
-#endif /* __XPLC_MODULE_H__ */
+#endif /* __XPLC_CONFIG_H__ */

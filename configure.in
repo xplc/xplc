@@ -19,9 +19,10 @@ dnl License along with this library; if not, write to the Free Software
 dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 dnl 02111-1307, USA.
 
-AC_REVISION($Id: configure.in,v 1.16 2002/06/14 20:22:26 pphaneuf Exp $)
+AC_REVISION($Id: configure.in,v 1.17 2002/09/20 18:52:15 pphaneuf Exp $)
 
-AC_INIT(include/xplc/xplc.h)
+AC_INIT
+AC_CONFIG_SRCDIR([include/xplc/xplc.h])
 
 AC_CANONICAL_HOST
 
@@ -64,10 +65,14 @@ test "$LIBDL" = "none required" && LIBDL=
 AC_SUBST(LIBDL)
 
 dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_CHECK_HEADERS(dlfcn.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_OUTPUT(config/config.mk)
+AC_CONFIG_FILES([config/config.mk])
+AC_CONFIG_HEADERS([include/xplc/autoconf.h])
+AC_OUTPUT
 

@@ -1,3 +1,10 @@
+New in 0.1.5
+------------
+
+ * Added an RPM package spec file.
+ * Improved general portability.
+ * Fixed the Win32 port and added Visual Studio 2002 project files.
+
 New in 0.1.4
 ------------
 

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: Makefile,v 1.7 2002/06/21 21:13:50 pphaneuf Exp $
+# $Id: Makefile,v 1.8 2002/09/27 21:10:27 pphaneuf Exp $
 
 .PHONY: default all
 
@@ -29,7 +29,7 @@ include config/version.mk
 
 GARBAGES+=$(wildcard libxplc.so.*)
 DISTCLEAN+=config.cache config.log config.status
-REALCLEAN+=configure README
+REALCLEAN+=configure README xplc.spec
 
 include $(wildcard */vars.mk)
 

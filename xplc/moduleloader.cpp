@@ -2,6 +2,8 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002, Pierre Phaneuf
+ * Copyright (C) 2002, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -20,7 +22,28 @@
  */
 
 #include <stdio.h>
-#include <dirent.h>
+
+#include <xplc/config.h>
+
+#if !defined(WIN32)
+# if HAVE_DIRENT_H
+#  include <dirent.h>
+#  define NAMLEN(dirent) strlen((dirent)->d_name)
+# else
+#  define dirent direct
+#  define NAMLEN(dirent) (dirent)->d_namlen
+#  if HAVE_SYS_NDIR_H
+#   include <sys/ndir.h>
+#  endif
+#  if HAVE_SYS_DIR_H
+#   include <sys/dir.h>
+#  endif
+#  if HAVE_NDIR_H
+#   include <ndir.h>
+#  endif
+# endif
+#endif
+
 #include <xplc/xplc.h>
 #include <xplc/module.h>
 #include <xplc/utils.h>
@@ -56,7 +79,7 @@ IObject* ModuleLoader::getInterface(const UUID& aUuid) {
 
 IObject* ModuleLoader::getObject(const UUID& uuid)
 {
-  ModuleList* module = modules;
+  ModuleNode* module = modules;
   IObject* obj = 0;
 
   while(module) {
@@ -72,7 +95,7 @@ IObject* ModuleLoader::getObject(const UUID& uuid)
 
 void ModuleLoader::shutdown()
 {
-  ModuleList* next;
+  ModuleNode* next;
 
   while(modules) {
     loaderClose(modules->dlh);
@@ -82,6 +105,7 @@ void ModuleLoader::shutdown()
   }
 }
 
+#if !defined(WIN32)
 void ModuleLoader::setModuleDirectory(const char* directory)
 {
   DIR* dir;
@@ -103,7 +127,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
     void* dlh;
     XPLC_GetModuleFunc getmodule = 0;
     IModule* module;
-    ModuleList* newmodule;
+    ModuleNode* newmodule;
 
     snprintf(fname, len, "%s/%s", directory, ent->d_name);
 
@@ -124,7 +148,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
       continue;
     }
 
-    newmodule = new ModuleList(module, dlh, modules);
+    newmodule = new ModuleNode(module, dlh, modules);
     if(newmodule)
       modules = newmodule;
   }
@@ -137,3 +161,69 @@ void ModuleLoader::setModuleDirectory(const char* directory)
   closedir(dir);
 }
 
+#elif defined(WIN32)
+#include <io.h>
+
+void ModuleLoader::setModuleDirectory(const char* directory)
+{
+  const size_t len = strlen(directory) + 256 + 1;
+  char pattern[1024];
+  strcpy(pattern, directory);
+  strcat(pattern, "/*.*");
+
+  _finddata_t data;
+  intptr_t dir = _findfirst(pattern, &data);
+
+  if(!dir)
+    return;
+
+  char* fname;
+  IServiceManager* servmgr;
+
+  fname = static_cast<char*>(malloc(len));
+  servmgr = XPLC::getServiceManager();
+
+  bool first = true;
+  while(fname && servmgr) {
+	if(!first && _findnext(dir, &data))
+      break;
+    first = false;
+    const char* err;
+    void* dlh;
+    XPLC_GetModuleFunc getmodule = 0;
+    IModule* module;
+    ModuleNode* newmodule;
+
+    snprintf(fname, len, "%s/%s", directory, data.name);
+
+    err = loaderOpen(fname, &dlh);
+    if(err)
+      continue;
+
+    err = loaderSymbol(dlh, "XPLC_GetModule",
+		       reinterpret_cast<void**>(&getmodule));
+    if(err || !getmodule) {
+      loaderClose(dlh);
+      continue;
+    }
+
+    module = getmodule(servmgr, XPLC_MODULE_VERSION);
+    if(!module) {
+      loaderClose(dlh);
+      continue;
+    }
+
+    newmodule = new ModuleNode(module, dlh, modules);
+    if(newmodule)
+      modules = newmodule;
+  }
+
+  if(servmgr)
+    servmgr->release();
+
+  free(fname);
+
+  _findclose(dir);
+}
+
+#endif
