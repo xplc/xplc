@@ -39,10 +39,13 @@ void test() {
   IObject* obj;
   ITestInterface* test;
 
-  factory = GenericFactory::create();
-  ASSERT(factory, "could not instantiate generic factory");
+  obj = GenericFactory::create();
+  ASSERT(obj, "could not instantiate generic factory");
 
-  factory->addRef();
+  obj->addRef();
+
+  factory = mutateInterface<IGenericFactory>(obj);
+  ASSERT(factory, "factory does not have expected interface");
 
   factory->setFactory(testfactory);
 
