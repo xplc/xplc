@@ -22,22 +22,6 @@
 #include <stdlib.h>
 #include "servmgr.h"
 
-unsigned int ServiceManager::addRef() {
-  return ++refcount;
-}
-
-unsigned int ServiceManager::release() {
-  if(--refcount)
-    return refcount;
-
-  /* protect against re-entering the destructor */
-  refcount = 1;
-
-  delete this;
-
-  return 0;
-}
-
 IObject* ServiceManager::getInterface(const UUID& uuid) {
 
   do {

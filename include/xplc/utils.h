@@ -19,20 +19,31 @@
  * 02111-1307, USA.
  */
 
-#include <stdlib.h>
-#include <xplc/xplc.h>
-#include <xplc/utils.h>
-#include "servmgr.h"
+#ifndef __XPLC_UTILS_H__
+#define __XPLC_UTILS_H__
 
-static ServiceManager* servmgr;
+template<class Component>
+class RefcountedComponent: public Component {
+private:
+  unsigned int refcount;
+ public:
+  void operator delete(void* self) {
+    ::delete self;
+  }
+  virtual unsigned int addRef() {
+    return ++refcount;
+  }
+  virtual unsigned int release() {
+    if(--refcount)
+      return refcount;
 
-IServiceManager* XPLC::getServiceManager() {
-  if(!servmgr)
-    servmgr = new RefcountedComponent<ServiceManager>;
+    /* protect against re-entering the destructor */
+    refcount = 1;
 
-  if(servmgr)
-    servmgr->addRef();
+    delete this;
 
-  return servmgr;
-}
+    return 0;
+  }
+};
 
+#endif /* __XPLC_UTILS_H__ */
