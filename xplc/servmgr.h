@@ -23,23 +23,20 @@
 #define __XPLC_SERVMGR_H__
 
 #include <xplc/IServiceManager.h>
-#include "objectnode.h"
 #include "handlernode.h"
 
 class ServiceManager: public IServiceManager {
 private:
-  ObjectNode* objects;
   HandlerNode* handlers;
 public:
-  ServiceManager(): objects(NULL),
-                    handlers(NULL) {
+  ServiceManager(): handlers(NULL) {
   }
   static ServiceManager* create();
   /* IObject */
   virtual IObject* getInterface(const UUID&);
   /* IServiceManager */
-  virtual void addObject(const UUID&, IObject*);
-  virtual void removeObject(const UUID&);
+  virtual void addHandler(IServiceHandler*);
+  virtual void removeHandler(IServiceHandler*);
   virtual IObject* getObject(const UUID&);
   virtual void shutdown();
 };

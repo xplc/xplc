@@ -22,13 +22,13 @@
 #ifndef __XPLC_HANDLERNODE_H__
 #define __XPLC_HANDLERNODE_H__
 
-#include <xplc/IServiceManagerHandler.h>
+#include <xplc/IServiceHandler.h>
 
 class HandlerNode {
 public:
   HandlerNode* next;
-  IServiceManagerHandler* handler;
-  HandlerNode(IServiceManagerHandler* aHandler,
+  IServiceHandler* handler;
+  HandlerNode(IServiceHandler* aHandler,
               HandlerNode* aNext): next(aNext),
                                    handler(aHandler) {
     handler->addRef();

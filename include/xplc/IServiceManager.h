@@ -23,12 +23,13 @@
 #define __XPLC_ISERVICEMANAGER_H__
 
 #include <xplc/IObject.h>
+#include <xplc/IServiceHandler.h>
 
 class IServiceManager: public IObject {
 public:
   static const UUID IID;
-  virtual void addObject(const UUID&, IObject*) = 0;
-  virtual void removeObject(const UUID&) = 0;
+  virtual void addHandler(IServiceHandler*) = 0;
+  virtual void removeHandler(IServiceHandler*) = 0;
   virtual IObject* getObject(const UUID&) = 0;
   virtual void shutdown() = 0;
 };

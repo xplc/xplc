@@ -26,91 +26,88 @@
 /*
  * test002
  *
- * Verifies add, get and remove operations on the service manager.
+ * Verifies that the service manager queries handlers properly.
  */
 
-class IFoo: public IObject {
+const UUID obj1 = {0xd60530d8, 0x9a3d, 0x4c8e, {0xaa, 0x0b, 0x48, 0x32, 0xc6, 0x9c, 0xf0, 0x1a}};
+
+const UUID obj2 = {0x862adfe4, 0x0821, 0x4f88, {0x85, 0x4a, 0xb9, 0xbf, 0xb9, 0xdc, 0x8a, 0x29}};
+
+class Handler1: public IServiceHandler {
 public:
-  static const UUID IID;
-  virtual void setFoo(int) = 0;
-  virtual void incFoo() = 0;
-  virtual int getFoo() = 0;
-};
-
-const UUID IFoo::IID __attribute__((weak)) = {0xb5633a54, 0xf900, 0x4601, {0xa5, 0xa4, 0xc0, 0x1a, 0x0c, 0x98, 0x26, 0x06}};
-
-class Foo: public IFoo {
-private:
-  int foo;
-public:
-  Foo(): foo(0) {};
-  /* IObject */
-  virtual IObject* getInterface(const UUID&);
-  /* IFoo */
-  virtual void setFoo(int);
-  virtual void incFoo();
-  virtual int getFoo();
-};
-
-IObject* Foo::getInterface(const UUID& uuid) {
-  do {
-    if(uuid.equals(IObject::IID))
-      break;
-
-    if(uuid.equals(IFoo::IID))
-      break;
+  virtual IObject* getObject(const UUID& uuid) {
+    if(uuid.equals(obj1)) {
+      return reinterpret_cast<IObject*>(1);
+    }
 
     return NULL;
-  } while(0);
+  }
+  virtual IObject* getInterface(const UUID& uuid) {
+    if(uuid.equals(IObject::IID))
+      return static_cast<IObject*>(this);
 
-  addRef();
-  return this;
-}
+    if(uuid.equals(IServiceHandler::IID))
+      return static_cast<IServiceHandler*>(this);
 
-void Foo::setFoo(int aFoo) {
-  foo = aFoo;
-}
+    return NULL;
+  }
+};
 
-void Foo::incFoo() {
-  foo++;
-}
+class Handler2: public IServiceHandler {
+public:
+  virtual IObject* getObject(const UUID& uuid) {
+    if(uuid.equals(obj2)) {
+      return reinterpret_cast<IObject*>(2);
+    }
 
-int Foo::getFoo() {
-  return foo;
-}
+    return NULL;
+  }
+  virtual IObject* getInterface(const UUID& uuid) {
+    if(uuid.equals(IObject::IID))
+      return static_cast<IObject*>(this);
+
+    if(uuid.equals(IServiceHandler::IID))
+      return static_cast<IServiceHandler*>(this);
+
+    return NULL;
+  }
+};
 
 void test() {
   IServiceManager* serv;
-  Foo* foo;
-  IFoo* ifoo;
+  IServiceHandler* handler1;
+  IServiceHandler* handler2;
   IObject* obj;
-  const UUID foouuid = {0x696bdfba, 0x9b5e, 0x4bcd, {0xaf, 0x10, 0x39, 0x94, 0x92, 0x94, 0x92, 0x3b}};
 
   serv = XPLC::getServiceManager();
 
   ASSERT(serv, "could not obtain service manager");
 
-  foo = new GenericComponent<Foo>;
-  ASSERT(foo, "could not instantiate test component");
+  handler1 = new GenericComponent<Handler1>;
+  ASSERT(handler1, "could not instantiate test handler 1");
+  handler1->addRef();
+  serv->addHandler(handler1);
 
-  serv->addObject(foouuid, foo);
+  handler2 = new GenericComponent<Handler2>;
+  ASSERT(handler2, "could not instantiate test handler 2");
+  handler2->addRef();
+  serv->addHandler(handler2);
 
-  obj = serv->getObject(foouuid);
-  ASSERT(obj, "could not get component from the service manager");
+  obj = serv->getObject(obj1);
+  VERIFY(obj, "object 1 was not found");
+  VERIFY(obj == reinterpret_cast<IObject*>(1), "asked for object 1 and got another one");
 
-  ifoo = mutateInterface<IFoo>(obj);
-  ASSERT(ifoo, "test component does not have expected interface");
+  obj = serv->getObject(obj2);
+  VERIFY(obj, "object 2 was not found");
+  VERIFY(obj == reinterpret_cast<IObject*>(2), "asked for object 2 and got another one");
 
-  ifoo->setFoo(10);
-  ifoo->incFoo();
-  VERIFY(ifoo->getFoo() == 11, "test component has unexpected behavior");
+  serv->removeHandler(handler1);
+  obj = serv->getObject(obj1);
+  VERIFY(!obj, "object 1 still returned after removing handler 1");
 
-  ifoo->release();
-
-  serv->removeObject(foouuid);
-
-  obj = serv->getObject(foouuid);
-  VERIFY(!obj, "service manager did not remove the test component");
+  serv->removeHandler(handler2);
+  obj = serv->getObject(obj2);
+  VERIFY(!obj, "object 2 still returned after removing handler 2");
 
   serv->shutdown();
 
