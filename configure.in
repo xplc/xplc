@@ -3,9 +3,7 @@ AC_REVISION($Id$)
 
 AC_INIT(include/xplc/xplc.h)
 
-AC_CONFIG_HEADER(config.h)
-
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 
 dnl Checks for programs.
 AC_PROG_CXX
@@ -19,4 +17,4 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT(config/config.mk)

@@ -1,4 +1,3 @@
-#
 # XPLC - Cross-Platform Lightweight Components
 # Copyright (C) 2000, Pierre Phaneuf
 #
@@ -19,27 +18,6 @@
 #
 # $Id$
 
-default:
-	@echo "bindir = \"@bindir@\""
-	@echo "datadir = \"@datadir@\""
-	@echo "exec_prefix = \"@exec_prefix@\""
-	@echo "includedir = \"@includedir@\""
-	@echo "infodir = \"@infodir@\""
-	@echo "libdir = \"@libdir@\""
-	@echo "libexecdir = \"@libexecdir@\""
-	@echo "localstatedir = \"@localstatedir@\""
-	@echo "mandir = \"@mandir@\""
-	@echo "oldincludedir = \"@oldincludedir@\""
-	@echo "prefix = \"@prefix@\""
-	@echo "sbindir = \"@sbindir@\""
-	@echo "sharedstatedir = \"@sharedstatedir@\""
-	@echo "srcdir = \"@srcdir@\""
-	@echo "sysconfdir = \"@sysconfdir@\""
-	@echo "top_srcdir = \"@top_srcdir@\""
-	@echo "CFLAGS = \"@CFLAGS@\""
-	@echo "CPPFLAGS = \"@CPPFLAGS@\""
-	@echo "CXXFLAGS = \"@CXXFLAGS@\""
-	@echo "DEFS = \"@DEFS@\""
-	@echo "LDFLAGS = \"@LDFLAGS@\""
-	@echo "LIBS = \"@LIBS@\""
-
+config/config.mk: config/config.mk.in
+	@echo "Please run './configure'."
+	@exit 1

@@ -19,18 +19,5 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_XPLC_H__
-#define __XPLC_XPLC_H__
+#include <xplc/xplc.h>
 
-class XPLC {
-public:
-};
-
-#define BEGIN_INTERFACE(name, parent) \
-class name: publib parent { \
-public: \
-  static const UUID IID;
-
-#define END_INTERFACE() };
-
-#endif /* __XPLC_XPLC_H__ */
