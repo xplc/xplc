@@ -20,11 +20,11 @@
 
 .PHONY: tests
 
-TESTS_EXE:=$(patsubst %.cpp,%,$(wildcard tests/test[0-9][0-9][0-9].cpp))
+TESTS:=$(patsubst %,%/test,$(wildcard tests/test[0-9][0-9][0-9]))
 
-tests: $(TESTS_EXE)
+tests: $(TESTS)
 	@echo "Running tests:"
-	@for TEST in $(TESTS_EXE); do $$TEST; done
+	@for TEST in $(TESTS); do $$TEST; done
 
-$(TESTS_EXE): tests/test.o xplc/libxplc_s.a
+include $(wildcard tests/*/rules.mk)
 

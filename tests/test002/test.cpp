@@ -19,7 +19,7 @@
  * 02111-1307, USA.
  */
 
-#include "test.h"
+#include "../test.h"
 #include <xplc/xplc.h>
 #include <xplc/utils.h>
 

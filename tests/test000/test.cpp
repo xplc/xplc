@@ -19,13 +19,13 @@
  * 02111-1307, USA.
  */
 
-#include "test.h"
+#include "../test.h"
 #include <xplc/xplc.h>
 
 /*
- * test001
+ * test000
  *
- * Verifies that shutdown properly releases all the involved objects.
+ * Verifies that we can obtain the service manager.
  */
 
 const char* test() {
@@ -35,11 +35,6 @@ const char* test() {
 
   if(!serv)
     return "could not obtain service manager";
-
-  serv->shutdown();
-
-  if(serv->release())
-    return "service manager has non-zero refcount after shutdown/release";
 
   return NULL;
 }

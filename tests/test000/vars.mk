@@ -18,7 +18,5 @@
 #
 # $Id$
 
-CXXDEPS+=tests/testmain.cpp
-
-include $(wildcard tests/*/vars.mk)
+CXXDEPS+=$(wildcard tests/test000/*.cpp)
 

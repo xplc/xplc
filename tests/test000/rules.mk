@@ -18,7 +18,5 @@
 #
 # $Id$
 
-CXXDEPS+=tests/testmain.cpp
-
-include $(wildcard tests/*/vars.mk)
+tests/test000/test: tests/test000/test.o tests/testmain.o xplc/libxplc_s.a
 
