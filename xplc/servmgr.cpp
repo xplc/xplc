@@ -40,7 +40,7 @@ IObject* ServiceManager::getInterface(const UUID& uuid) {
 void ServiceManager::addObject(const UUID& aUuid, IObject* aObj) {
   ObjectNode* node;
 
-  node = registered;
+  node = objects;
   while(node) {
     if(node->uuid.equals(aUuid))
       break;
@@ -55,16 +55,16 @@ void ServiceManager::addObject(const UUID& aUuid, IObject* aObj) {
   if(node)
     return;
 
-  node = new ObjectNode(aUuid, aObj, registered);
-  registered = node;
+  node = new ObjectNode(aUuid, aObj, objects);
+  objects = node;
 }
 
 void ServiceManager::removeObject(const UUID& aUuid) {
   ObjectNode* node;
   ObjectNode** ptr;
 
-  node = registered;
-  ptr = &registered;
+  node = objects;
+  ptr = &objects;
   while(node) {
     if(node->uuid.equals(aUuid)) {
       *ptr = node->next;
@@ -81,10 +81,9 @@ IObject* ServiceManager::getObject(const UUID& aUuid) {
   ObjectNode* obj;
 
   /*
-   * We look through the registered objects and return if we find a
-   * match.
+   * We look through the objects listand return if we find a match.
    */
-  obj = registered;
+  obj = objects;
   while(obj) {
     if(obj->uuid.equals(aUuid)) {
       obj->obj->addRef();
@@ -104,12 +103,12 @@ void ServiceManager::shutdown() {
   ObjectNode* node;
   ObjectNode* ptr;
 
-  node = registered;
+  node = objects;
   while(node) {
     ptr = node;
     node = node->next;
     delete ptr;
   }
-  registered = NULL;
+  objects = NULL;
 }
 
