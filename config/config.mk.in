@@ -25,7 +25,7 @@ GARBAGES:=
 
 CXXDEPS:=
 
-CXXFLAGS=-Wall -pedantic -pipe -Iinclude
+CXXFLAGS=-Wall -pedantic -pipe -Iinclude @CXXFLAGS@
 
 ifeq ("@debug@", "yes")
 CXXFLAGS+=-ggdb
