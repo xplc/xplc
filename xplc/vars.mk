@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: vars.mk,v 1.11 2002/11/22 23:03:37 pphaneuf Exp $
+# $Id: vars.mk,v 1.13 2002/12/05 03:48:19 pphaneuf Exp $
 
 # This number should only be increased when a new version breaks
 # binary compatibility with the previous one. It is used to set
@@ -28,5 +28,11 @@ ifeq ("$(call oddeven,$(VERSION_MINOR))", "even")
 libxplc.so: SONAME:=libxplc.so.$(BINARY_VERSION)
 else
 libxplc.so: SONAME:=libxplc.so.$(PACKAGE_VERSION)-unstable
+endif
+
+ifneq ("$(enable_loader)", "no")
+ifneq ("$(with_dlopen)", "no")
+libxplc.so: LDFLAGS+=$(with_dlopen)
+endif
 endif
 

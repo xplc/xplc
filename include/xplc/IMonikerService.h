@@ -25,14 +25,13 @@
 
 #include <xplc/IMoniker.h>
 
-class IMonikerService: public IMoniker { UNSTABLE_INTERFACE
+class IMonikerService: public IMoniker {
+  UNSTABLE_INTERFACE
 public:
-  static const UUID IID;
   virtual void registerObject(const char*, const UUID&) = 0;
 };
 
-DEFINE_UUID(IMonikerService::IID) = {0x0ee2cc09, 0xd7d5, 0x44ee,
-                                     {0xbc, 0x63, 0xf2, 0xb9,
-                                      0x03, 0x7d, 0xb9, 0x82}};
+DEFINE_IID(IMonikerService, {0x0ee2cc09, 0xd7d5, 0x44ee,
+  {0xbc, 0x63, 0xf2, 0xb9, 0x03, 0x7d, 0xb9, 0x82}});
 
 #endif /* __XPLC_IMONIKERSERVICE_H__ */

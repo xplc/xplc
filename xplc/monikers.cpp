@@ -20,7 +20,7 @@
  * USA
  */
 
-#include <xplc/xplc.h>
+#include <xplc/core.h>
 #include <xplc/utils.h>
 #include "monikers.h"
 

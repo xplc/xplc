@@ -25,14 +25,13 @@
 
 #include <xplc/IServiceHandler.h>
 
-class IModuleLoader: public IServiceHandler { UNSTABLE_INTERFACE
+class IModuleLoader: public IServiceHandler {
+  UNSTABLE_INTERFACE
 public:
-  static const UUID IID;
   virtual void setModuleDirectory(const char* directory) = 0;
 };
 
-DEFINE_UUID(IModuleLoader::IID) = {0xd482c148, 0x6cc0, 0x4e57,
-				   {0x90, 0x49, 0x7d, 0xbc,
-				    0xa1, 0x47, 0x79, 0xb6}};
+DEFINE_IID(IModuleLoader, {0xd482c148, 0x6cc0, 0x4e57,
+  {0x90, 0x49, 0x7d, 0xbc, 0xa1, 0x47, 0x79, 0xb6}});
 
 #endif /* __XPLC_IMODULELOADER_H__ */

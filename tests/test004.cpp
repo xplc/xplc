@@ -23,7 +23,6 @@
 
 #include "test.h"
 #include <xplc/config.h>
-#include <xplc/xplc.h>
 #include <xplc/utils.h>
 #include <xplc/ISingleModuleLoader.h>
 #include "testobj.h"
@@ -35,7 +34,7 @@
  */
 
 void test004() {
-#ifdef HAVE_DYNAMIC_LOADING
+#ifdef ENABLE_LOADER
   IServiceManager* servmgr;
   IFactory* loaderfactory;
   IObject* obj;
@@ -46,7 +45,7 @@ void test004() {
   servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");
 
-  obj = servmgr->getObject(XPLC::singleModuleLoader);
+  obj = servmgr->getObject(XPLC_singleModuleLoader);
   ASSERT(obj != 0, "could not obtain single module loader component");
 
   loaderfactory = mutate<IFactory>(obj);

@@ -24,9 +24,9 @@
 #include <cstdlib>
 #include "test.h"
 
-unsigned int passed;
-unsigned int failed;
-char* prog;
+static unsigned int passed;
+static unsigned int failed;
+static char* prog;
 
 void test_assert(const char* file,
                  unsigned int line,

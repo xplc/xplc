@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -26,15 +27,15 @@
 #include <xplc/IServiceManager.h>
 #include "handlernode.h"
 
-extern "C" IServiceManager* XPLC_getCoreServiceManager();
-
 class ServiceManager: public IServiceManager {
 private:
   HandlerNode* handlers;
-public:
+protected:
   ServiceManager(): handlers(0) {
   }
   virtual ~ServiceManager();
+public:
+  static ServiceManager* obtain();
   /* IServiceManager */
   virtual void addHandler(IServiceHandler*);
   virtual void addFirstHandler(IServiceHandler*);

@@ -1,3 +1,17 @@
+New in 0.1.7
+------------
+
+ * We now support the dyld found on Mac OS X/Darwin.
+ * Optimized IID storage for space and time as best as humanly
+   possible and usable.
+ * Enabled generation of position-independent code (allows for more
+   sharing between processes, but is almost 20% bigger, can be
+   disabled).
+ * Added an XPLC helper class, that provides shortcuts to many often
+   used operations and also takes care of proper lifetime of the
+   service manager reference.
+ * Some bugs fixed.
+
 New in 0.1.6
 ------------
 

@@ -21,7 +21,6 @@
  */
 
 #include "test.h"
-#include <xplc/xplc.h>
 #include <xplc/utils.h>
 #include <xplc/IStaticServiceHandler.h>
 #include <xplc/IMonikerService.h>
@@ -42,7 +41,7 @@ void test006() {
   servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");
 
-  obj = servmgr->getObject(XPLC::staticServiceHandler);
+  obj = servmgr->getObject(XPLC_staticServiceHandler);
   ASSERT(obj != 0, "could not obtain static service handler");
 
   handler = mutate<IStaticServiceHandler>(obj);
@@ -56,12 +55,12 @@ void test006() {
   VERIFY(servmgr->getObject(TestObject_CID) == testobj, "adding the test object did not work");
   VERIFY(testobj->release() == 2, "incorrect refcount on test object");
 
-  obj = servmgr->getObject(XPLC::monikers);
+  obj = servmgr->getObject(XPLC_monikers);
   ASSERT(obj != 0, "could not obtain moniker component");
   
   monikers = mutate<IMonikerService>(obj);
   ASSERT(monikers != 0, "moniker service does not have the IMoniker interface");
-  monikers->registerObject("moniker", XPLC::monikers);
+  monikers->registerObject("moniker", XPLC_monikers);
   monikers->registerObject("testobject", TestObject_CID);
 
   obj = monikers->resolve("testobject");

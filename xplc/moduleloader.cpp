@@ -46,7 +46,7 @@
 # endif
 #endif
 
-#include <xplc/xplc.h>
+#include <xplc/core.h>
 #include <xplc/module.h>
 #include <xplc/utils.h>
 #include "loader.h"
@@ -167,7 +167,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
   IServiceManager* servmgr;
 
   fname = static_cast<char*>(malloc(len));
-  servmgr = XPLC::getServiceManager();
+  servmgr = XPLC_getServiceManager();
 
   bool first = true;
   while(fname && servmgr) {

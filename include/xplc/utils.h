@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -27,15 +28,15 @@
 #include <xplc/IFactory.h>
 
 struct UUID_Info {
-  const UUID* const iid;
-  const ptrdiff_t delta;
+  const UUID* iid;
+  ptrdiff_t delta;
 };
 
 #define UUID_MAP_BEGIN(component) const UUID_Info GenericComponent<component>::uuids[] = {
 
-#define UUID_MAP_ENTRY(iface) { &iface::IID, reinterpret_cast<ptrdiff_t>(static_cast<iface*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
+#define UUID_MAP_ENTRY(iface) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
 
-#define UUID_MAP_ENTRY_2(iface, iface2) { &iface::IID, reinterpret_cast<ptrdiff_t>(static_cast<iface2*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
+#define UUID_MAP_ENTRY_2(iface, iface2) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface2*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
 
 #define UUID_MAP_END { 0, 0 } };
 
@@ -84,7 +85,7 @@ Interface* get(IObject* aObj) {
   if(!aObj)
     return 0;
 
-  return static_cast<Interface*>(aObj->getInterface(Interface::IID));
+  return static_cast<Interface*>(aObj->getInterface(IID<Interface>::get()));
 }
 
 /*
@@ -99,7 +100,7 @@ Interface* mutate(IObject* aObj) {
   if(!aObj)
     return 0;
 
-  rv = static_cast<Interface*>(aObj->getInterface(Interface::IID));
+  rv = static_cast<Interface*>(aObj->getInterface(IID<Interface>::get()));
 
   aObj->release();
 
@@ -116,7 +117,7 @@ Interface* create(const UUID& cid) {
   IFactory* factory;
   Interface* rv;
 
-  servmgr = XPLC_getCoreServiceManager();
+  servmgr = XPLC_getServiceManager();
   if(!servmgr)
     return 0;
 

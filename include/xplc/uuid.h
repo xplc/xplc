@@ -43,11 +43,16 @@ struct UUID {
   char* toString(char* str) const;
 };
 
-#ifdef __GNUC__
-#define DEFINE_UUID(symbol) const UUID symbol __attribute__((weak))
-#endif
-#ifdef _MSC_VER
-#define DEFINE_UUID(symbol) __declspec(selectany) const UUID symbol
-#endif
+template<class T>
+struct IID {
+};
+
+#define DEFINE_IID(iface, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11) \
+static const UUID iface##_IID = u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11; \
+struct IID<iface> { \
+  static const UUID& get() { \
+    return iface##_IID; \
+  } \
+}
 
 #endif /* __XPLC_UUID_H__ */

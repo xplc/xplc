@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.27 2002/11/30 10:56:49 pphaneuf Exp $
+# $Id: rules.mk,v 1.29 2002/12/05 08:19:39 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall
 
@@ -35,13 +35,11 @@ lib%_s.a: lib%.a
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
-SONAMEFLAGS:=-Wl,-soname,
-
 %.so:
-	$(LINK.cc) -shared $(if $(SONAME),$(SONAMEFLAGS)$(SONAME)) $^ -o $@
+	$(LINK.cc) $(SHARED) $^ -o $@
 
 %.dll:
-	$(LINK.cc) -shared -o $@ $^
+	$(LINK.cc) $(SHARED) $^ -o $@
 
 dist: ChangeLog README xplc.spec distclean
 	autoconf

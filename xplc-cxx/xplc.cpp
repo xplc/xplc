@@ -1,7 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,18 +19,24 @@
  * USA
  */
 
-#ifndef __XPLC_IGENERICFACTORY_H__
-#define __XPLC_IGENERICFACTORY_H__
+#include <xplc/xplc.h>
+#include <xplc/ptr.h>
 
-#include <xplc/IFactory.h>
+IObject* XPLC::create(const UUID& cid) {
+  xplc_ptr<IFactory> factory;
 
-class IGenericFactory: public IFactory {
-  UNSTABLE_INTERFACE
-public:
-  virtual void setFactory(IObject*(*)()) = 0;
-};
+  if(!servmgr)
+    return 0;
 
-DEFINE_IID(IGenericFactory, {0x11e2d782, 0x065a, 0x47f8,
-  {0xb4, 0xb3, 0x8e, 0xb4, 0x24, 0x62, 0xc9, 0xff}});
+  factory = servmgr->getObject(cid);
+  if(!factory)
+    return 0;
 
-#endif /* __XPLC_IGENERICFACTORY_H__ */
+  return factory->createObject();
+}
+
+XPLC::~XPLC() {
+  if(servmgr)
+    servmgr->release();
+}
+

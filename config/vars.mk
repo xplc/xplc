@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: vars.mk,v 1.21 2002/11/23 20:00:27 pphaneuf Exp $
+# $Id: vars.mk,v 1.25 2002/12/05 17:37:29 pphaneuf Exp $
 
 DEPFILES:=$(shell find . -name '.*.d')
 
@@ -74,7 +74,10 @@ CXXFLAGS+=-O2
 endif
 
 ifneq ("$(enable_warnings)", "no")
-CXXFLAGS+=-pedantic -Wall -Wold-style-cast -Woverloaded-virtual
+CXXFLAGS+=-pedantic -Wall -Woverloaded-virtual
+ifeq ("$(enable_warnings)", "yes")
+CXXFLAGS+=-Wold-style-cast
+endif
 endif
 
 ifneq ("$(enable_rtti)", "yes")
@@ -83,5 +86,18 @@ endif
 
 ifneq ("$(enable_exceptions)", "yes")
 CXXFLAGS+=-fno-exceptions
+endif
+
+ifneq ("$(enable_pic)", "no")
+CXXFLAGS+=-fPIC
+endif
+
+ifeq ("$(so_style)", "darwin")
+SHARED=-bundle
+endif
+
+ifeq ("$(so_style)", "sysv")
+SONAMEOPT=-Wl,-h
+SHARED=-shared $(if $(SONAME),$(SONAMEOPT)$(SONAME))
 endif
 

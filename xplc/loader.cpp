@@ -21,6 +21,9 @@
  * USA
  */
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <xplc/config.h>
 #include "loader.h"
 
@@ -28,7 +31,11 @@
 #include <dlfcn.h>
 #endif
 
-#ifdef WITH_DLOPEN
+#ifdef HAVE_MACH_O_DYLD_H
+#include <mach-o/dyld.h>
+#endif
+
+#if defined(WITH_DLOPEN) && defined(ENABLE_LOADER)
 const char* loaderOpen(const char* aFilename,
 		       void** aHandle) {
   const char* rv = 0;
@@ -57,6 +64,70 @@ const char* loaderSymbol(void* aHandle,
 
 bool loaderClose(void* aHandle) {
   return dlclose(aHandle) == 0;
+}
+
+#elif defined(WITH_DYLD) && defined(ENABLE_LOADER)
+
+const char* loaderOpen(const char* aFilename,
+                       void** aHandle) {
+  NSObjectFileImage ofi = 0;
+  NSObjectFileImageReturnCode ofirc;
+
+  ofirc = NSCreateObjectFileImageFromFile(aFilename, &ofi);
+  switch(ofirc) {
+  case NSObjectFileImageSuccess:
+    *aHandle = NSLinkModule(ofi, aFilename,
+                            NSLINKMODULE_OPTION_RETURN_ON_ERROR
+                            | NSLINKMODULE_OPTION_PRIVATE
+                            | NSLINKMODULE_OPTION_BINDNOW);
+    NSDestroyObjectFileImage(ofi);
+    break;
+  case NSObjectFileImageInappropriateFile:
+    *aHandle =
+      const_cast<void*>(reinterpret_cast<const void*>(NSAddImage(aFilename, NSADDIMAGE_OPTION_RETURN_ON_ERROR)));
+    break;
+  default:
+    return "could not open dynamic library";
+    break;
+  }
+
+  return 0;
+}
+
+const char* loaderSymbol(void* aHandle,
+                         const char* aSymbol,
+                         void** aPointer) {
+  int len = strlen(aSymbol);
+  char* sym = static_cast<char*>(malloc(len + 2));
+  NSSymbol* nssym = 0;
+
+  snprintf(sym, len + 2, "_%s", aSymbol);
+
+  /* Check for both possible magic numbers depending on x86/ppc byte order */
+  if ((((struct mach_header *)aHandle)->magic == MH_MAGIC) ||
+      (((struct mach_header *)aHandle)->magic == MH_CIGAM)) {
+    if (NSIsSymbolNameDefinedInImage((struct mach_header *)aHandle, sym)) {
+      nssym = NSLookupSymbolInImage((struct mach_header *)aHandle,
+                                    sym,
+                                    NSLOOKUPSYMBOLINIMAGE_OPTION_BIND
+                                    | NSLOOKUPSYMBOLINIMAGE_OPTION_RETURN_ON_ERROR);
+    }
+  } else {
+    nssym = NSLookupSymbolInModule(aHandle, sym);
+  }
+
+  free(sym);
+
+  if(!nssym) {
+    *aPointer = 0;
+    return "symbol not found";
+  }
+
+  return 0;
+}
+
+bool loaderClose(void* aHandle) {
+  return false;
 }
 
 #elif defined(WIN32)

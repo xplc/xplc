@@ -28,14 +28,13 @@
  */
 #if !defined(WIN32)
 #include <xplc/autoconf.h>
-#endif
+#else
 
 #ifdef WIN32
 #define UNSTABLE
+#define ENABLE_LOADER
 #endif
 
-#if defined(WITH_DLOPEN) || defined(WIN32)
-#define HAVE_DYNAMIC_LOADING
 #endif
 
 #endif /* __XPLC_CONFIG_H__ */

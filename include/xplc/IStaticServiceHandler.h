@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -25,15 +25,14 @@
 
 #include <xplc/IServiceHandler.h>
 
-class IStaticServiceHandler: public IServiceHandler { UNSTABLE_INTERFACE
+class IStaticServiceHandler: public IServiceHandler {
+  UNSTABLE_INTERFACE
 public:
-  static const UUID IID;
   virtual void addObject(const UUID&, IObject*) = 0;
   virtual void removeObject(const UUID&) = 0;
 };
 
-DEFINE_UUID(IStaticServiceHandler::IID) = {0x0a599d64, 0x0684, 0x4c44,
-                                           {0x8a, 0xbc, 0xab, 0xfd,
-                                            0x5d, 0xe0, 0x22, 0x59}};
+DEFINE_IID(IStaticServiceHandler, {0x0a599d64, 0x0684, 0x4c44,
+  {0x8a, 0xbc, 0xab, 0xfd, 0x5d, 0xe0, 0x22, 0x59}});
 
 #endif /* __XPLC_ISTATICSERVICEHANDLER_H__ */

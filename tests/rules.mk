@@ -17,15 +17,19 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.17 2002/11/30 08:12:37 pphaneuf Exp $
+# $Id: rules.mk,v 1.19 2002/12/11 15:54:51 pphaneuf Exp $
 
 .PHONY: tests
 
+ifeq ("$(enable_loader)", "no")
+tests: tests/testmain
+else
 tests: tests/testmain tests/testobj.dll
+endif
 	@echo "Running tests:"
 	@cd tests && ./testmain
 
-tests/testmain: tests/testmain.o $(patsubst %.cpp,%.o,$(wildcard tests/test[0-9][0-9][0-9].cpp)) libxplc.a $(LIBS)
+tests/testmain: tests/testmain.o $(patsubst %.cpp,%.o,$(wildcard tests/test[0-9][0-9][0-9].cpp)) libxplc.a libxplc-cxx.a $(LIBS)
 
 tests/testobj.dll: tests/testobj.o libxplc-cxx.a
 

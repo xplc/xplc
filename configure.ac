@@ -20,8 +20,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(xplc, 0.1.6, pp@ludusdesign.com)
-AC_REVISION($Id: configure.ac,v 1.7 2002/11/30 10:48:09 pphaneuf Exp $)
+AC_INIT(XPLC, 0.1.7, pp@ludusdesign.com)
+AC_REVISION($Id: configure.ac,v 1.13 2003/01/11 06:33:25 pphaneuf Exp $)
+
+AC_CANONICAL_HOST
 
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],
@@ -51,9 +53,21 @@ AC_ARG_ENABLE(exceptions,
               AC_HELP_STRING([--enable-exceptions],
                              [C++ exceptions (compiler)]))
 
+AC_ARG_ENABLE(pic,
+              AC_HELP_STRING([--disable-pic],
+                             [generation of position-independent code]))
+
+AC_ARG_ENABLE(loader,
+              AC_HELP_STRING([--disable-loader],
+                             [dynamic loading]))
+
 AC_ARG_WITH(dlopen,
             AC_HELP_STRING([--with-dlopen],
                            [dlopen]))
+
+AC_ARG_WITH(dyld,
+            AC_HELP_STRING([--with-dyld],
+                           [dyld]))
 
 AC_CONFIG_SRCDIR([include/xplc/xplc.h])
 
@@ -62,14 +76,40 @@ AC_LANG(C++)
 AC_PROG_CXX
 AC_PROG_INSTALL
 
+case "$host_os" in
+darwin*|rhapsody*)
+    so_style=darwin
+    ;;
+*)
+    so_style=sysv
+    ;;
+esac
+
 if test "$with_dlopen" != "no"; then
+    AC_CHECK_HEADERS(dlfcn.h)
     AC_SEARCH_LIBS(dlopen, dl, with_dlopen=$ac_cv_search_dlopen, with_dlopen=no)
     test "$with_dlopen" = "none required" && with_dlopen=
-    test "$with_dlopen" = "no" || AC_DEFINE(WITH_DLOPEN, 1, [Define if you want to use dlopen.])
+    test "$with_dlopen" = "no" || AC_DEFINE(WITH_DLOPEN, 1, [Define if you have dlopen.])
+fi
+
+if test "$with_dyld" != "no"; then
+    AC_CHECK_HEADERS(mach-o/dyld.h)
+    AC_SEARCH_LIBS(NSCreateObjectFileImageFromFile, System, with_dyld=$ac_cv_search_NSCreateObjectFileImageFromFile, with_dyld=no)
+    test "$with_dyld" = "none required" && with_dyld=
+    test "$with_dyld" = "no" || AC_DEFINE(WITH_DYLD, 1, [Define if you have dyld.])
+fi
+
+# dyld not really supported yet
+#if test "$with_dlopen" = "no" && test "$with_dyld" = "no"; then
+if test "$with_dlopen" = "no"; then
+    enable_loader=no
+fi
+
+if test "$enable_loader" != "no"; then
+    AC_DEFINE(ENABLE_LOADER, 1, [Define if you want to enable dynamic loading.])
 fi
 
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(dlfcn.h)
 
 AC_SUBST(enable_debug)
 AC_SUBST(enable_fatal_warnings)
@@ -78,14 +118,17 @@ AC_SUBST(enable_warnings)
 AC_SUBST(enable_unstable)
 AC_SUBST(enable_rtti)
 AC_SUBST(enable_exceptions)
+AC_SUBST(enable_pic)
+AC_SUBST(enable_loader)
 AC_SUBST(with_dlopen)
+AC_SUBST(so_style)
 
 AC_CONFIG_FILES([config/config.mk])
 AC_CONFIG_HEADERS([include/xplc/autoconf.h])
 
 AC_OUTPUT
 
-if test "$with_dlopen" = "no"; then
-    AC_MSG_WARN([dynamic loading is disabled.])
+if test "$enable_loader" = "no"; then
+    AC_MSG_WARN([Dynamic loading is disabled.])
 fi
 

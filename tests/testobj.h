@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,8 +20,8 @@
  * USA
  */
 
-#ifndef __TESTS_TEST004_TESTOBJ_H__
-#define __TESTS_TEST004_TESTOBJ_H__
+#ifndef __TESTS_TESTOBJ_H__
+#define __TESTS_TESTOBJ_H__
 
 #include <xplc/IObject.h>
 
@@ -30,6 +30,9 @@ public:
   virtual int getAnswer() = 0;
 };
 
-const UUID TestComponent_CID = {0x746d2ba8, 0x0a52, 0x4156, {0xb9, 0x20, 0x05, 0x85, 0x3f, 0xf1, 0x73, 0x43}};
+DEFINE_IID(ITestComponent, {0x1db2ab25, 0xc54f, 0x4374,
+  {0x8b, 0x52, 0xc1, 0x85, 0xe7, 0xeb, 0x83, 0x91}});
 
-#endif /* __TESTS_TEST004_TESTOBJ_H__ */
+static const UUID TestComponent_CID = {0x746d2ba8, 0x0a52, 0x4156, {0xb9, 0x20, 0x05, 0x85, 0x3f, 0xf1, 0x73, 0x43}};
+
+#endif /* __TESTS_TESTOBJ_H__ */

@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -24,9 +25,9 @@
 
 #include <xplc/IObject.h>
 
-class IModule: public IObject { UNSTABLE_INTERFACE
+class IModule: public IObject {
+  UNSTABLE_INTERFACE
 public:
-  static const UUID IID;
   /*
    * The object returned by IModule::getObject() is already
    * addRef()'d.
@@ -34,8 +35,7 @@ public:
   virtual IObject* getObject(const UUID&) = 0;
 };
 
-DEFINE_UUID(IModule::IID) = {0x772689d4, 0x7932, 0x448a,
-                             {0x80, 0x8a, 0x6e, 0xbf,
-                              0x1c, 0xe9, 0xf9, 0x4b}};
+DEFINE_IID(IModule, {0x772689d4, 0x7932, 0x448a,
+  {0x80, 0x8a, 0x6e, 0xbf, 0x1c, 0xe9, 0xf9, 0x4b}});
 
 #endif /* __XPLC_IMODULE_H__ */

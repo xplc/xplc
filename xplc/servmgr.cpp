@@ -21,8 +21,15 @@
  * USA
  */
 
+#include <xplc/core.h>
 #include <xplc/utils.h>
 #include "servmgr.h"
+#include "statichandler.h"
+#include "moduleloader.h"
+#include "singleloader.h"
+#include "factory.h"
+#include "monikers.h"
+#include "new.h"
 
 UUID_MAP_BEGIN(ServiceManager)
   UUID_MAP_ENTRY(IObject)
@@ -31,7 +38,99 @@ UUID_MAP_BEGIN(ServiceManager)
 
 static ServiceManager* singleton;
 
-extern "C" IServiceManager* XPLC_getCoreServiceManager() {
+IServiceManager* XPLC_getServiceManager() {
+  IServiceManager* servmgr;
+  IObject* obj;
+  IStaticServiceHandler* handler;
+  IStaticServiceHandler* handler2;
+  IGenericFactory* factory;
+  IFactory* factoryfactory;
+  IMonikerService* monikers;
+
+  /*
+   * The basic services have to be created.
+   */
+
+  servmgr = ServiceManager::obtain();
+  if(!servmgr)
+    return 0;
+
+  obj = servmgr->getObject(XPLC_staticServiceHandler);
+  if(obj) {
+    obj->release();
+    return servmgr;
+  }
+
+  handler = StaticServiceHandler::create();
+
+  if(!handler) {
+    servmgr->release();
+    return 0;
+  }
+
+  servmgr->addHandler(handler);
+
+  /*
+   * Populate the static service handler.
+   */
+
+  handler2 = StaticServiceHandler::create();
+  if(handler2) {
+    handler->addObject(XPLC_staticServiceHandler, handler2);
+    servmgr->addHandler(handler2);
+  } else {
+    servmgr->release();
+    return 0;
+  }
+
+  obj = GenericFactory::create();
+  if(obj)
+    obj->addRef();
+  factory = mutate<IGenericFactory>(obj);
+  if(factory) {
+    factory->setFactory(GenericFactory::create);
+    handler->addObject(XPLC_genericFactory, factory);
+  }
+
+  /* Create moniker service and register monikers. */
+  monikers = MonikerService::create();
+  if(monikers) {
+    monikers->addRef();
+
+    monikers->registerObject("new", XPLC_newMoniker);
+
+    handler->addObject(XPLC_monikers, monikers);
+
+    monikers->release();
+  }
+
+  /*
+   * We will use the factory to create the other factories.
+   */
+  factoryfactory = factory;
+
+  factory = mutate<IGenericFactory>(factoryfactory->createObject());
+  if(factory) {
+    factory->setFactory(SingleModuleLoader::create);
+    handler->addObject(XPLC_singleModuleLoader, factory);
+    factory->release();
+  }
+
+  factory = mutate<IGenericFactory>(factoryfactory->createObject());
+  if(factory) {
+    factory->setFactory(ModuleLoader::create);
+    handler->addObject(XPLC_moduleLoader, factory);
+    factory->release();
+  }
+
+  factoryfactory->release();
+
+  handler->addObject(XPLC_newMoniker, NewMoniker::create());
+
+  return servmgr;
+}
+
+ServiceManager* ServiceManager::obtain() {
   if(!singleton)
     singleton = new GenericComponent<ServiceManager>;
 

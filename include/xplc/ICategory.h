@@ -1,7 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,18 +19,17 @@
  * USA
  */
 
-#ifndef __XPLC_IGENERICFACTORY_H__
-#define __XPLC_IGENERICFACTORY_H__
+#ifndef __XPLC_ICATEGORY_H__
+#define __XPLC_ICATEGORY_H__
 
 #include <xplc/IFactory.h>
 
-class IGenericFactory: public IFactory {
+class ICategory: public IFactory {
   UNSTABLE_INTERFACE
 public:
-  virtual void setFactory(IObject*(*)()) = 0;
 };
 
-DEFINE_IID(IGenericFactory, {0x11e2d782, 0x065a, 0x47f8,
-  {0xb4, 0xb3, 0x8e, 0xb4, 0x24, 0x62, 0xc9, 0xff}});
+DEFINE_IID(ICategory, {0x90abfe8d, 0x50a9, 0x44d8,
+  {0x96, 0x03, 0x29, 0x9c, 0x8b, 0x21, 0x9e, 0x5d}});
 
-#endif /* __XPLC_IGENERICFACTORY_H__ */
+#endif /* __XPLC_ICATEGORYMANAGER_H__ */
