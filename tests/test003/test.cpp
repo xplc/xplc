@@ -27,7 +27,7 @@
 /*
  * test003
  *
- * Verifies the static service handler;
+ * Verifies the static service handler.
  */
 
 void test() {
