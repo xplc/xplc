@@ -35,4 +35,6 @@ public:
   virtual IObject* getObjectByAlias(const char*) = 0;
 };
 
+const UUID IServiceManager::IID __attribute__((weak)) = {0x22bdabd9, 0xa63a, 0x4b5e, {0xb1, 0x61, 0xb6, 0x36, 0x52, 0x27, 0xd7, 0x8e}};
+
 #endif /* __XPLC_ISERVICEMANAGER_H__ */
