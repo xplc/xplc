@@ -23,7 +23,15 @@
 #include <xplc/xplc.h>
 #include "servmgr.h"
 
+static ServiceManager* servmgr;
+
 IServiceManager* XPLC::getServiceManager() {
-  return new ServiceManager;
+  if(!servmgr)
+    servmgr = new ServiceManager;
+
+  if(servmgr)
+    servmgr->addRef();
+
+  return servmgr;
 }
 
