@@ -23,6 +23,8 @@ GARBAGES+=$(shell find . -name '*.o' -print)
 GARBAGES+=$(shell find . -name '*~' -print)
 GARBAGES+=config/depends.mk
 
+DISTCLEAN+=config/config.mk
+
 ARFLAGS=rcS
 
 RANLIB=ranlib

@@ -24,6 +24,9 @@ default: all
 
 -include config/config.mk
 
+DISTCLEAN+=config.cache config.log config.status
+REALCLEAN+=configure
+
 include $(wildcard */vars.mk)
 
 include $(wildcard */rules.mk)

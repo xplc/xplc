@@ -18,10 +18,16 @@
 #
 # $Id$
 
-.PHONY: clean
+.PHONY: clean distclean realclean
 
 clean:
 	rm -f $(GARBAGES) $(TARGETS)
+
+distclean: clean
+	rm -f $(DISTCLEAN)
+
+realclean: distclean
+	rm -f $(REALCLEAN)
 
 config/config.mk: config/config.mk.in configure
 	@echo "Please run './configure'."
