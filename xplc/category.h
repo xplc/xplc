@@ -25,6 +25,7 @@
 #include <xplc/ICategory.h>
 
 class Category: public ICategory {
+  IMPLEMENT_IOBJECT(Category);
 public:
   /* IFactory */
   virtual IObject* createObject();

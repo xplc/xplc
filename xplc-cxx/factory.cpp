@@ -1,9 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2003, Pierre Phaneuf
- * Copyright (C) 2001, Stéphane Lajoie
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -21,27 +19,21 @@
  * USA
  */
 
-#include <stddef.h>
+#include <assert.h>
+#include <xplc/factory.h>
 #include <xplc/utils.h>
-#include "factory.h"
 
 UUID_MAP_BEGIN(GenericFactory)
   UUID_MAP_ENTRY(IObject)
   UUID_MAP_ENTRY(IFactory)
-  UUID_MAP_ENTRY(IGenericFactory)
   UUID_MAP_END
 
+GenericFactory::GenericFactory(FactoryFunc aFactory):
+  factory(aFactory) {
+  assert(factory);
+}
+
 IObject* GenericFactory::createObject() {
-  IObject* obj;
-
-  obj = factory();
-
-  if(obj)
-    obj->addRef();
-
-  return obj;
+  return factory();
 }
 
-void GenericFactory::setFactory(IObject*(*aFactory)()) {
-  factory = aFactory;
-}

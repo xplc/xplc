@@ -37,15 +37,12 @@ void test002() {
   IObject* obj;
   ITestInterface *itest;
 
-  handler = new GenericComponent<StaticServiceHandler>;
+  handler = new StaticServiceHandler;
   ASSERT(handler != 0, "could not instantiate static service handler");
-
-  handler->addRef();
 
   test = new TestObject;
   ASSERT(test != 0, "could not instantiate test object");
 
-  test->addRef();
   VERIFY(test->getRefCount() == 1, "the test object has an incorrect refcount");
 
   handler->addObject(TestObject_CID, test);

@@ -50,7 +50,7 @@ void CategoryManager::registerComponent(const UUID& aCatid,
   CategoryEntryNode* entry;
 
   for(cat = categories; cat; cat = cat->next) {
-    if(cat->category.equals(aCatid))
+    if(cat->category == aCatid)
       break;
   }
 
@@ -62,7 +62,7 @@ void CategoryManager::registerComponent(const UUID& aCatid,
   assert(cat);
 
   for(entry = cat->entries; entry; entry = entry->next) {
-    if(entry->entry.equals(aUuid))
+    if(entry->entry == aUuid)
       return;
   }
 

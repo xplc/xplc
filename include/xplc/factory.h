@@ -1,8 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -20,24 +19,31 @@
  * USA
  */
 
-#ifndef __XPLC_IGENERICFACTORY_H__
-#define __XPLC_IGENERICFACTORY_H__
+#ifndef __XPLC_FACTORY_H__
+#define __XPLC_FACTORY_H__
 
 #include <xplc/IFactory.h>
+#include <xplc/utils.h>
+
+typedef IObject*(*FactoryFunc)();
 
 /**
- * Used to configure the generic factory component.
+ * Generic factory class. Implements IFactory by calling the function
+ * pointer that its constructor takes.
  */
-class IGenericFactory: public IFactory {
-  UNSTABLE_INTERFACE
+class GenericFactory: public IFactory {
+  IMPLEMENT_IOBJECT(GenericFactory);
+private:
+  FactoryFunc factory;
 public:
   /**
-   * Set the factory function to use.
+   * Set up the generic factory. The generic factory will use the
+   * function that the specified pointer indicates to answer to
+   * IFactory::createObject requests.
    */
-  virtual void setFactory(IObject*(*)()) = 0;
+  GenericFactory(FactoryFunc aFactory);
+  /* IFactory */
+  virtual IObject* createObject();
 };
 
-DEFINE_IID(IGenericFactory, {0x11e2d782, 0x065a, 0x47f8,
-  {0xb4, 0xb3, 0x8e, 0xb4, 0x24, 0x62, 0xc9, 0xff}});
-
-#endif /* __XPLC_IGENERICFACTORY_H__ */
+#endif /* __XPLC_FACTORY_H__ */

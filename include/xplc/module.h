@@ -24,25 +24,58 @@
 #ifndef __XPLC_MODULE_H__
 #define __XPLC_MODULE_H__
 
-#include <xplc/IModule.h>
-#include <xplc/IServiceManager.h>
+/** \file
+ *
+ * Structures and definitions related to the XPLC module ABI
+ * (Application Binary Interface).
+ */
 
+#include <xplc/IModule.h>
+
+/**
+ * The current XPLC module ABI version.
+ */
+#define XPLC_MODULE_VERSION 0
+
+/**
+ * Defines attributes required for exported symbols.
+ */
 #ifdef WIN32
 #define ENTRYPOINT extern "C" __declspec(dllexport)
 #else
 #define ENTRYPOINT extern "C"
 #endif
 
-/*
- * The IModule returned by XPLC_GetModule should be already addRef'd.
+/**
+ * Information for an XPLC module.
  */
+struct XPLC_ModuleInfo {
+  /**
+   * The XPLC module ABI version that this module conforms to. This
+   * should always be the first member of the XPLC_ModuleInfo
+   * structure, as the meaning of the following members depend on it.
+   */
+  unsigned int version;
+  /**
+   * A pointer to this module's IModule component.
+   */
+  IModule* module;
 
-ENTRYPOINT IModule* XPLC_GetModule(IServiceManager*,
-				   const unsigned int);
+  /*
+   * FIXME: My vision for ModuleInfo is for it to have a function
+   * pointer called when loading the module, another when an object is
+   * needed and another when unloading the module (maybe with the
+   * possibility o vetoeing the unload). The only required one would
+   * be the one to obtain objects. The structure could also contain
+   * other information when we get around to it, like pointers to
+   * interface information, for example.
+   */
+};
 
-typedef IModule*(*XPLC_GetModuleFunc)(IServiceManager*,
-				      const unsigned int);
-
-#define XPLC_MODULE_VERSION 0
+/**
+ * Definition of the XPLC module information structure. This structure
+ * should be initialized appropriately in a loadable XPLC module.
+ */
+ENTRYPOINT const XPLC_ModuleInfo XPLC_Module;
 
 #endif /* __XPLC_MODULE_H__ */

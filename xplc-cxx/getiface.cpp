@@ -26,12 +26,13 @@ UUID_MAP_BEGIN(WeakRef)
   UUID_MAP_ENTRY(IWeakRef)
   UUID_MAP_END
 
-IObject* XPLC_getInterface_real(void* self, const UUID& uuid,
-                           const UUID_Info* uuidlist) {
+IObject* IObjectImplInternal::getInterface(void* self,
+                                           const UUID& uuid,
+                                           const UUID_Info* uuidlist) {
   IObject* rv;
 
   while(uuidlist->iid) {
-    if(uuidlist->iid->equals(uuid)) {
+    if(*(uuidlist->iid) == uuid) {
       rv = reinterpret_cast<IObject*>
         (reinterpret_cast<ptrdiff_t>(self) + uuidlist->delta);
       rv->addRef();

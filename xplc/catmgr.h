@@ -27,6 +27,7 @@
 #include "categorynode.h"
 
 class CategoryManager: public ICategoryManager {
+  IMPLEMENT_IOBJECT(CategoryManager);
 private:
   CategoryNode* categories;
 public:

@@ -51,7 +51,7 @@ IObject* StaticServiceHandler::getObject(const UUID& aUuid) {
   node = objects;
 
   while(node) {
-    if(node->uuid.equals(aUuid)) {
+    if(node->uuid == aUuid) {
       node->obj->addRef();
       return node->obj;
     }
@@ -75,7 +75,7 @@ void StaticServiceHandler::addObject(const UUID& aUuid, IObject* aObj) {
   node = objects;
 
   while(node) {
-    if(node->uuid.equals(aUuid))
+    if(node->uuid == aUuid)
       break;
 
     node = node->next;
@@ -100,7 +100,7 @@ void StaticServiceHandler::removeObject(const UUID& aUuid) {
   ptr = &objects;
 
   while(node) {
-    if(node->uuid.equals(aUuid)) {
+    if(node->uuid == aUuid) {
       *ptr = node->next;
       delete node;
       break;

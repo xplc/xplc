@@ -14,3 +14,4 @@ Tags.WW
 libxplc.so.*
 autom4te.cache
 xplc.spec
+xplc-[0-9]*

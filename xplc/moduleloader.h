@@ -32,6 +32,7 @@ struct ModuleNode {
   void* dlh;
   ModuleNode(IModule* aModule, void* aDlh, ModuleNode* aNext):
     next(aNext), module(aModule), dlh(aDlh) {
+    module->addRef();
   }
   ~ModuleNode() {
     module->release();
@@ -39,13 +40,18 @@ struct ModuleNode {
 };
 
 class ModuleLoader: public IModuleLoader {
+  IMPLEMENT_IOBJECT(ModuleLoader);
 private:
   ModuleNode* modules;
 protected:
-  ModuleLoader(): modules(0) {
+  ModuleLoader():
+    modules(0) {
   }
   virtual ~ModuleLoader();
 public:
+  static IObject* create() {
+    return new ModuleLoader;
+  }
   /* IServiceHandler */
   virtual IObject* getObject(const UUID&);
   /* IModuleLoader */

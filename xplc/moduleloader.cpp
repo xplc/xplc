@@ -107,8 +107,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
   while((ent = readdir(dir)) && fname && servmgr) {
     const char* err;
     void* dlh;
-    XPLC_GetModuleFunc getmodule = 0;
-    IModule* module;
+    XPLC_ModuleInfo* moduleinfo = 0;
     ModuleNode* newmodule;
 
     snprintf(fname, len, "%s/%s", directory, ent->d_name);
@@ -117,20 +116,17 @@ void ModuleLoader::setModuleDirectory(const char* directory)
     if(err)
       continue;
 
-    err = loaderSymbol(dlh, "XPLC_GetModule",
-		       reinterpret_cast<void**>(&getmodule));
-    if(err || !getmodule) {
+    err = loaderSymbol(dlh, "XPLC_Module",
+		       reinterpret_cast<void**>(&moduleinfo));
+    if(err
+       || !moduleinfo
+       || moduleinfo->version != XPLC_MODULE_VERSION
+       || !moduleinfo->module) {
       loaderClose(dlh);
       continue;
     }
 
-    module = getmodule(servmgr, XPLC_MODULE_VERSION);
-    if(!module) {
-      loaderClose(dlh);
-      continue;
-    }
-
-    newmodule = new ModuleNode(module, dlh, modules);
+    newmodule = new ModuleNode(moduleinfo->module, dlh, modules);
     if(newmodule)
       modules = newmodule;
   }
@@ -172,8 +168,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
     first = false;
     const char* err;
     void* dlh;
-    XPLC_GetModuleFunc getmodule = 0;
-    IModule* module;
+    XPLC_ModuleInfo* moduleinfo = 0;
     ModuleNode* newmodule;
 
     _snprintf(fname, len, "%s/%s", directory, data.name);
@@ -182,20 +177,17 @@ void ModuleLoader::setModuleDirectory(const char* directory)
     if(err)
       continue;
 
-    err = loaderSymbol(dlh, "XPLC_GetModule",
-		       reinterpret_cast<void**>(&getmodule));
-    if(err || !getmodule) {
+    err = loaderSymbol(dlh, "XPLC_Module",
+		       reinterpret_cast<void**>(&moduleinfo));
+    if(err
+       || !moduleinfo
+       || moduleinfo->version != XPLC_MODULE_VERSION
+       || !moduleinfo->module) {
       loaderClose(dlh);
       continue;
     }
 
-    module = getmodule(servmgr, XPLC_MODULE_VERSION);
-    if(!module) {
-      loaderClose(dlh);
-      continue;
-    }
-
-    newmodule = new ModuleNode(module, dlh, modules);
+    newmodule = new ModuleNode(moduleinfo->module, dlh, modules);
     if(newmodule)
       modules = newmodule;
   }

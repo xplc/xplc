@@ -23,7 +23,8 @@
 #include <string.h>
 #include <xplc/uuid.h>
 
-void UUID::fromString(const char* str) {
+const UUID UuidFromString(const char* str) {
+  UUID rv;
   char tmp[3];
   char* end;
   bool format1 = false;
@@ -35,7 +36,7 @@ void UUID::fromString(const char* str) {
       ++str;
     }
 
-    data0 = strtoul(str, &end, 16);
+    rv.Data1 = strtoul(str, &end, 16);
     if(end != str + 8)
       break;
     str = end;
@@ -44,7 +45,7 @@ void UUID::fromString(const char* str) {
       break;
     ++str;
 
-    data1 = static_cast<unsigned short>(strtoul(str, &end, 16));
+    rv.Data2 = static_cast<unsigned short>(strtoul(str, &end, 16));
     if(end != str + 4)
       break;
     str = end;
@@ -53,7 +54,7 @@ void UUID::fromString(const char* str) {
       break;
     ++str;
 
-    data2 = static_cast<unsigned short>(strtoul(str, &end, 16));
+    rv.Data3 = static_cast<unsigned short>(strtoul(str, &end, 16));
     if(end != str + 4)
       break;
     str = end;
@@ -65,13 +66,13 @@ void UUID::fromString(const char* str) {
     tmp[2] = 0;
 
     strncpy(tmp, str, 2);
-    data3[0] = static_cast<unsigned char>(strtoul(tmp, &end, 16));
+    rv.Data4[0] = static_cast<unsigned char>(strtoul(tmp, &end, 16));
     if(end != tmp + 2)
       break;
     str += 2;
 
     strncpy(tmp, str, 2);
-    data3[1] = static_cast<unsigned char>(strtoul(tmp, &end, 16));
+    rv.Data4[1] = static_cast<unsigned char>(strtoul(tmp, &end, 16));
     if(end != tmp + 2)
       break;
     str += 2;
@@ -82,7 +83,7 @@ void UUID::fromString(const char* str) {
 
     for(int i = 2; i < 8; ++i) {
       strncpy(tmp, str, 2);
-      data3[i] = static_cast<unsigned char>(strtoul(tmp, &end, 16));
+      rv.Data4[i] = static_cast<unsigned char>(strtoul(tmp, &end, 16));
       if(end != tmp + 2)
 	break;
       str += 2;
@@ -101,6 +102,8 @@ void UUID::fromString(const char* str) {
   } while(0);
 
   if(!ok)
-    *this = UUID_null;
+    rv = UUID_null;
+
+  return rv;
 }
 

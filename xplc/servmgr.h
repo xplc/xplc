@@ -28,13 +28,15 @@
 #include "handlernode.h"
 
 class ServiceManager: public IServiceManager {
+  IMPLEMENT_IOBJECT(ServiceManager);
 private:
   HandlerNode* handlers;
 protected:
-  ServiceManager(): handlers(0) {
-  }
   virtual ~ServiceManager();
 public:
+  ServiceManager():
+    handlers(0) {
+  }
   /* IServiceManager */
   virtual void addHandler(IServiceHandler*);
   virtual void addFirstHandler(IServiceHandler*);

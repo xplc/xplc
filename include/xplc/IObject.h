@@ -54,9 +54,9 @@ class IWeakRef;
  * from the object.
  * 
  * Usually you will not implement these functions yourself; use
- * GenericComponent instead.
+ * the IMPLEMENT_IOBJECT macro instead.
  * 
- * \sa GenericComponent, mutate(), get(), xplc_ptr, XPLC
+ * \sa IMPLEMENT_IOBJECT, mutate(), get(), xplc_ptr, XPLC
  */
 class IObject {
   UNSTABLE_INTERFACE

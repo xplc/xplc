@@ -19,11 +19,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: config.mk.in,v 1.30 2002/12/05 17:37:28 pphaneuf Exp $
-
-CLEAN:=
-DISTCLEAN:=
-REALCLEAN:=
+# $Id: config.mk.in,v 1.31 2004/01/08 16:10:47 pphaneuf Exp $
 
 # set variables from the configure script
 CXX=@CXX@
@@ -46,6 +42,7 @@ libdir:=@libdir@
 INSTALL:=@INSTALL@
 INSTALL_PROGRAM:=@INSTALL_PROGRAM@
 INSTALL_DATA:=@INSTALL_DATA@
+PACKAGE_TARNAME:=@PACKAGE_TARNAME@
 PACKAGE_VERSION:=@PACKAGE_VERSION@
 LIBS:=@LIBS@
 

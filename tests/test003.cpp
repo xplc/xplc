@@ -23,7 +23,7 @@
 
 #include "test.h"
 #include <xplc/utils.h>
-#include "../xplc/factory.h"
+#include <xplc/factory.h>
 
 /*
  * test003
@@ -36,19 +36,15 @@ IObject* testfactory() {
 }
 
 void test003() {
-  IGenericFactory* factory;
+  IFactory* factory;
   IObject* obj;
   ITestInterface* test;
 
-  obj = new GenericComponent<GenericFactory>;
+  obj = new GenericFactory(testfactory);
   ASSERT(obj != 0, "could not instantiate generic factory");
 
-  obj->addRef();
-
-  factory = mutate<IGenericFactory>(obj);
+  factory = mutate<IFactory>(obj);
   ASSERT(factory != 0, "factory does not have expected interface");
-
-  factory->setFactory(testfactory);
 
   obj = factory->createObject();
   ASSERT(obj != 0, "factory did not create test object");

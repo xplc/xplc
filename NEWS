@@ -1,3 +1,15 @@
+New in 0.3.2
+------------
+
+ * Made the UUID structure compatible with the one in Windows.
+ * Improved the Doxygen documentation.
+ * Changed the way loadable modules are defined.
+ * Moved the generic factory to the C++ binding, making it feel more
+   natural to use in C++ in the process.
+ * Replaced the GenericComponent macro with a more efficient and
+   easier to use IMPLEMENT_IOBJECT macro.
+ * Fixed a leak when using weak reference.
+
 New in 0.3.1
 ------------
 

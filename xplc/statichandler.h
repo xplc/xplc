@@ -26,10 +26,12 @@
 #include "objectnode.h"
 
 class StaticServiceHandler: public IStaticServiceHandler {
+  IMPLEMENT_IOBJECT(StaticServiceHandler);
 private:
   ObjectNode* objects;
 public:
-  StaticServiceHandler(): objects(0) {
+  StaticServiceHandler():
+    objects(0) {
   }
   virtual ~StaticServiceHandler();
   /* IServiceHandler */

@@ -23,13 +23,13 @@
 #include <stdio.h>
 #include <xplc/uuid.h>
 
-char* UUID::toString(char* str) const {
+char* UuidToString(const UUID& uuid, char* str) {
   assert(str);
 
-  sprintf(str, "{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
-          data0, data1, data2,
-          data3[0], data3[1], data3[2], data3[3],
-          data3[4], data3[5], data3[6], data3[7]);
+  sprintf(str, "{%08lx-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
+          uuid.Data1, uuid.Data2, uuid.Data3,
+          uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
+          uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
 
   return str;
 }

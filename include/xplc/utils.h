@@ -46,30 +46,95 @@ struct UUID_Info {
 /**
  * Start the interface map for "component".
  */
-#define UUID_MAP_BEGIN(component) const UUID_Info GenericComponent<component>::uuids[] = {
+#define UUID_MAP_BEGIN(component) const UUID_Info component::xplc_iobject_uuids[] = {
 
 /**
  * Add an entry to an interface map.
  */
-#define UUID_MAP_ENTRY(iface) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
+#define UUID_MAP_ENTRY(iface) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface*>(reinterpret_cast<ThisXPLCComponent*>(1))) - 1 },
 
 /**
  * Add an entry to an interface map for an ambiguous interface. The
  * second parameter is the interface that should be used to
  * disambiguate.
  */
-#define UUID_MAP_ENTRY_2(iface, iface2) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface2*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
+#define UUID_MAP_ENTRY_2(iface, iface2) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface2*>(reinterpret_cast<ThisXPLCComponent*>(1))) - 1 },
 
 /**
  * Marks the end of an interface map.
  */
 #define UUID_MAP_END { 0, 0 } };
 
+class WeakRef;
+
+/**
+ * Helper internal structure. Used for implementing IMPLEMENT_IOBJECT.
+ */
+struct IObjectImplInternal {
+  /**
+   * Holds the reference count.
+   */
+  unsigned int refcount;
+  /**
+   * Pointer to a weak reference object. This object is lazily
+   * instantiated, so the pointer is NULL until a weak reference is
+   * needed.
+   */
+  WeakRef* weakref;
+  IObjectImplInternal(): refcount(1), weakref(0) {
+  }
+  /**
+   * Used to implement IObject::getInterface().
+   */
+  IObject* getInterface(void* self, const UUID& uuid,
+                        const UUID_Info* uuidlist);
+};
+
+/**
+ * Helper macro to implement the IObject methods automatically. Put
+ * this at the beginning of your class, specifiying the class name as
+ * the parameter, and it will automatically implement all the IObject
+ * methods. You also need to define an interface map.
+ *
+ * \sa UUID_MAP_BEGIN, UUID_MAP_ENTRY, UUID_MAP_ENTRY_2, UUID_MAP_END
+ */
+#define IMPLEMENT_IOBJECT(component) \
+private: \
+  IObjectImplInternal xplc_iobject_internal; \
+  static const UUID_Info xplc_iobject_uuids[]; \
+  typedef component ThisXPLCComponent; \
+public: \
+  virtual unsigned int addRef() { \
+    return ++xplc_iobject_internal.refcount; \
+  } \
+  virtual unsigned int release() { \
+    if(--xplc_iobject_internal.refcount) \
+      return xplc_iobject_internal.refcount; \
+    /* protect against re-entering the destructor */ \
+    xplc_iobject_internal.refcount = 1; \
+    if(xplc_iobject_internal.weakref) { \
+      xplc_iobject_internal.weakref->release(); \
+      xplc_iobject_internal.weakref->object = 0; \
+    } \
+    delete this; \
+    return 0; \
+  } \
+  virtual IObject* getInterface(const UUID& uuid) { \
+    return xplc_iobject_internal.getInterface(this, uuid, xplc_iobject_uuids); \
+  } \
+  virtual IWeakRef* getWeakRef() { \
+    if(!xplc_iobject_internal.weakref) \
+      xplc_iobject_internal.weakref = new WeakRef(reinterpret_cast<IObject*>(reinterpret_cast<ptrdiff_t>(this) + xplc_iobject_uuids->delta)); \
+    xplc_iobject_internal.weakref->addRef(); \
+    return xplc_iobject_internal.weakref; \
+  }
+
 /** \class WeakRef
  *
  * Common implementation of a weak reference.
  */
 class WeakRef: public IWeakRef {
+  IMPLEMENT_IOBJECT(WeakRef);
 public:
   /** The object that the weak reference is pointing at. */
   IObject* object;
@@ -79,70 +144,13 @@ public:
 
     return object;
   }
-};
-
-/** \class GenericComponent
- *
- * Mix-in template that contains an implementation of methods a basic
- * component will need to implement.
- */
-template<class Component>
-class GenericComponent: public Component {
-private:
-  typedef GenericComponent ThisComponent;
-  static const UUID_Info uuids[];
-  unsigned int refcount;
-  WeakRef* weakref;
-public:
-  /** Provides a static function that can be passed to
-   *  IGenericFactory::setFactory(). */
-  static IObject* create() {
-    return new GenericComponent;
-  }
-  GenericComponent(): refcount(0), weakref(0) {
-  }
-  /** Implements IObject::addRef(). */
-  virtual unsigned int addRef() {
-    return ++refcount;
-  }
-  /** Implements IObject::release(). */
-  virtual unsigned int release() {
-    if(--refcount)
-      return refcount;
-
-    /* protect against re-entering the destructor */
-    refcount = 1;
-
-    if(weakref)
-      weakref->object = 0;
-
-    delete this;
-
-    return 0;
-  }
-  /** Implements IObject::getInterface(). */
-  virtual IObject* getInterface(const UUID& uuid) {
-    return XPLC_getInterface_real(this, uuid, uuids);
-  }
-  /** Implements IObject::getWeakRef(). */
-  virtual IWeakRef* getWeakRef() {
-    if(!weakref) {
-      weakref = new GenericComponent<WeakRef>;
-      weakref->addRef();
-      weakref->object = this->getInterface(IObject_IID);
-      this->release();
-    }
-
-    return weakref;
+  /**
+   * Initialize a weak reference.
+   */
+  WeakRef(IObject* aObj):
+    object(aObj) {
   }
 };
-
-/**
- * Internal function used by GenericComponent to implement
- * IObject::getInterface().
- */
-IObject* XPLC_getInterface_real(void* self, const UUID& uuid,
-                                const UUID_Info* uuidlist);
 
 /**
  * %XPLC equivalent to dynamic_cast.  This templated function is a

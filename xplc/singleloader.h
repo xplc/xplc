@@ -28,14 +28,20 @@
 #include <xplc/ISingleModuleLoader.h>
 
 class SingleModuleLoader: public ISingleModuleLoader {
+  IMPLEMENT_IOBJECT(SingleModuleLoader);
 private:
   void* dlh;
   IModule* module;
 protected:
-  SingleModuleLoader(): dlh(0), module(0) {
+  SingleModuleLoader():
+    dlh(0),
+    module(0) {
   }
   virtual ~SingleModuleLoader();
 public:
+  static IObject* create() {
+    return new SingleModuleLoader;
+  }
   /* IServiceHandler */
   virtual IObject* getObject(const UUID&);
   /* ISingleModuleLoader */

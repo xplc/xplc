@@ -37,12 +37,13 @@ const UUID obj2 = {0x862adfe4, 0x0821, 0x4f88, {0x85, 0x4a, 0xb9, 0xbf, 0xb9, 0x
 const UUID obj3 = {0xe1eabacb, 0x0795, 0x4c6d, {0x81, 0x8e, 0x7a, 0xab, 0x2c, 0x5a, 0x82, 0x25}};
 
 class Handler1: public IServiceHandler {
+  IMPLEMENT_IOBJECT(Handler1);
 public:
   static Handler1* create() {
-    return new GenericComponent<Handler1>;
+    return new Handler1;
   }
   virtual IObject* getObject(const UUID& uuid) {
-    if(uuid.equals(obj1)) {
+    if(uuid == obj1) {
       return reinterpret_cast<IObject*>(1);
     }
 
@@ -51,14 +52,15 @@ public:
 };
 
 class Handler2: public IServiceHandler {
+  IMPLEMENT_IOBJECT(Handler2);
 public:
   static Handler2* create() {
-    return new GenericComponent<Handler2>;
+    return new Handler2;
   }
   virtual IObject* getObject(const UUID& uuid) {
-    VERIFY(!uuid.equals(obj1), "request for the first object reached second handler");
+    VERIFY(uuid != obj1, "request for the first object reached second handler");
 
-    if(uuid.equals(obj2)) {
+    if(uuid == obj2) {
       return reinterpret_cast<IObject*>(2);
     }
 
@@ -67,14 +69,15 @@ public:
 };
 
 class Handler3: public IServiceHandler {
+  IMPLEMENT_IOBJECT(Handler3);
 public:
   static Handler3* create() {
-    return new GenericComponent<Handler3>;
+    return new Handler3;
   }
   virtual IObject* getObject(const UUID& uuid) {
-    VERIFY(!uuid.equals(obj1), "request for the first object reached third handler");
-    VERIFY(!uuid.equals(obj2), "request for the second object reached third handler");
-    if(uuid.equals(obj3)) {
+    VERIFY(uuid != obj1, "request for the first object reached third handler");
+    VERIFY(uuid != obj2, "request for the second object reached third handler");
+    if(uuid == obj3) {
       return reinterpret_cast<IObject*>(3);
     }
 
@@ -110,17 +113,14 @@ void test001() {
 
   handler1 = Handler1::create();
   ASSERT(handler1 != 0, "could not instantiate test handler 1");
-  handler1->addRef();
   serv->addFirstHandler(handler1);
 
   handler2 = Handler2::create();
   ASSERT(handler2 != 0, "could not instantiate test handler 2");
-  handler2->addRef();
   serv->addHandler(handler2);
 
   handler3 = Handler3::create();
   ASSERT(handler3 != 0, "could not instantiate test handler 2");
-  handler3->addRef();
   serv->addLastHandler(handler3);
 
   obj = serv->getObject(obj1);

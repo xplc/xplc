@@ -25,6 +25,7 @@
 #include <xplc/IMoniker.h>
 
 class NewMoniker: public IMoniker {
+  IMPLEMENT_IOBJECT(NewMoniker);
 protected:
   virtual ~NewMoniker();
 public:

@@ -49,47 +49,47 @@ void test007() {
   ASSERT(sizeof(u2) == 37, "u2 is of unexpected size");
 
   u1 = UUID_null;
-  u1.fromString(u2);
-  VERIFY(u1.equals(u0), "u2 was not parsed properly into u1");
+  u1 = UuidFromString(u2);
+  VERIFY(u1 == u0, "u2 was not parsed properly into u1");
 
   rv = snprintf(u3, 39, "{%s}", u2);
   ASSERT(rv == 38, "copying u2 into u3 with curly braces failed");
 
   u1 = UUID_null;
-  VERIFY(u1.equals(UUID_null), "u1 is not equal to UUID_null after resetting");
+  VERIFY(u1 == UUID_null, "u1 is not equal to UUID_null after resetting");
 
-  u1.fromString(u3);
-  VERIFY(u1.equals(u0), "u3 was not parsed properly into u1");
+  u1 = UuidFromString(u3);
+  VERIFY(u1 == u0, "u3 was not parsed properly into u1");
 
-  rv = snprintf(u4, 39, "{%x-%x-%x-%x%x-%x%x%x%x%x%x}",
-		u0.data0, u0.data1, u0.data2,
-		u0.data3[0],
-		u0.data3[1],
-		u0.data3[2],
-		u0.data3[3],
-		u0.data3[4],
-		u0.data3[5],
-		u0.data3[6],
-		u0.data3[7]);
+  rv = snprintf(u4, 39, "{%lx-%x-%x-%x%x-%x%x%x%x%x%x}",
+		u0.Data1, u0.Data2, u0.Data3,
+		u0.Data4[0],
+		u0.Data4[1],
+		u0.Data4[2],
+		u0.Data4[3],
+		u0.Data4[4],
+		u0.Data4[5],
+		u0.Data4[6],
+		u0.Data4[7]);
   ASSERT(rv == 38, "formatting u0 into u4 (with snprintf) failed");
 
   VERIFY(strncmp(u3, u4, 39) == 0, "result of formatting u0 into u4 was different from u3");
 
-  u0.toString(u5);
+  UuidToString(u0, u5);
   VERIFY(strncmp(u3, u5, 39) == 0, "result of using toString on u0 was different from u3");
 
   rv = snprintf(u6, 38, "{%s", u2);
   ASSERT(rv == 37, "copying u2 into u6 with starting curly brace failed");
 
   u1 = u0;
-  u1.fromString(u6);
-  VERIFY(u1.equals(UUID_null), "fromString wrongfully accepted u6 into u1");
+  u1 = UuidFromString(u6);
+  VERIFY(u1 == UUID_null, "fromString wrongfully accepted u6 into u1");
 
   rv = snprintf(u6, 38, "%s}", u2);
   ASSERT(rv == 37, "copying u2 into u6 with ending curly brace failed");
 
   u1 = u0;
-  u1.fromString(u6);
-  VERIFY(u1.equals(UUID_null), "fromString wrongfully accepted u6 into u1");
+  u1 = UuidFromString(u6);
+  VERIFY(u1 == UUID_null, "fromString wrongfully accepted u6 into u1");
 }
 

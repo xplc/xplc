@@ -17,13 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: vars.mk,v 1.32 2003/12/12 21:28:33 pphaneuf Exp $
+# $Id: vars.mk,v 1.34 2004/01/09 07:18:13 pphaneuf Exp $
 
 DEPFILES:=$(shell find . -name '.*.d')
 
-CLEAN+=$(shell find . -name '*.o' -print) libxplc.so* $(DEPFILES) $(addprefix debian/,$(shell cat debian/.cvsignore))
+DUSTCLEAN+=$(shell find . -name '*~' -o -name '.\#*')
+CLEAN+=$(shell find . -name '*.o') libxplc.so* $(DEPFILES) $(addprefix debian/,$(shell cat debian/.cvsignore)) autom4te.cache xplc-[0-9]*
 DISTCLEAN+=config/config.mk include/xplc/autoconf.h ChangeLog.bak
-REALCLEAN+=ChangeLog autom4te.cache include/xplc/autoconf.h.in
+REALCLEAN+=ChangeLog include/xplc/autoconf.h.in
 
 SIMPLETARGETS+=ChangeLog clean dustclean realclean distclean doxygen clean-doxygen
 
@@ -33,6 +34,8 @@ oddeven = $(filter even odd,$(foreach d,0 2 4 6 8,$(1:%$d=even)) $(foreach d,1 3
 VERSION_MAJOR:=$(word 1,$(subst ., ,$(PACKAGE_VERSION)))
 VERSION_MINOR:=$(word 2,$(subst ., ,$(PACKAGE_VERSION)))
 VERSION_PATCH:=$(word 3,$(subst ., ,$(PACKAGE_VERSION)))
+
+DIST=$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 # The 'S' option to 'ar' seems to cause problem on Solaris?
 #ARFLAGS=rcS

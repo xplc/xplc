@@ -49,6 +49,7 @@ DEFINE_IID(IBar, {0xa1520c1d, 0xcf44, 0x4830,
   {0xa9, 0xb2, 0xb1, 0x80, 0x9b, 0x1e, 0xe7, 0xa2}});
 
 class MyTestObject: public IFoo, public IBar {
+  IMPLEMENT_IOBJECT(MyTestObject);
 private:
   bool destroyed;
   unsigned int foo;
@@ -85,7 +86,7 @@ UUID_MAP_BEGIN(MyTestObject)
   UUID_MAP_END
 
 MyTestObject* MyTestObject::create() {
-  return new GenericComponent<MyTestObject>;
+  return new MyTestObject;
 }
 
 void test005() {
@@ -93,7 +94,8 @@ void test005() {
   IObject* iobj = 0;
   IFoo* ifoo = 0;
   IBar* ibar = 0;
-  IWeakRef* weak = 0;
+  IWeakRef* weak1 = 0;
+  IWeakRef* weak2 = 0;
   IObject* itest = 0;
 
   test = MyTestObject::create();
@@ -104,8 +106,13 @@ void test005() {
 
   VERIFY(reinterpret_cast<void*>(iobj) == reinterpret_cast<void*>(test), "identity test failed");
 
-  weak = iobj->getWeakRef();
-  ASSERT(weak, "could not obtain weak reference");
+  weak1 = iobj->getWeakRef();
+  ASSERT(weak1, "could not obtain first weak reference");
+
+  weak2 = iobj->getWeakRef();
+  ASSERT(weak2, "could not obtain second weak reference");
+
+  VERIFY(weak1 == weak2, "the two weak references are different");
 
   ifoo = get<IFoo>(iobj);
   VERIFY(ifoo, "get<IFoo> failed on test object");
@@ -116,28 +123,31 @@ void test005() {
   ifoo->setFoo(10);
   ibar->setBar(20);
 
-  itest = weak->getObject();
+  itest = weak1->getObject();
   ASSERT(itest, "could not strengthen the weak reference");
-  VERIFY(itest->release() == 3, "incorrect refcount");
+  VERIFY(itest->release() == 4, "incorrect refcount");
 
   VERIFY(ifoo->getFoo() == 10, "test object has unexpected behavior");
   VERIFY(ibar->getBar() == 20, "test object has unexpected behavior");
 
-  VERIFY(iobj->addRef() == 4, "incorrect refcount");
-  VERIFY(ifoo->addRef() == 5, "incorrect refcount");
-  VERIFY(ibar->addRef() == 6, "incorrect refcount");
+  VERIFY(iobj->addRef() == 5, "incorrect refcount");
+  VERIFY(ifoo->addRef() == 6, "incorrect refcount");
+  VERIFY(ibar->addRef() == 7, "incorrect refcount");
 
-  VERIFY(iobj->release() == 5, "incorrect refcount");
-  VERIFY(ifoo->release() == 4, "incorrect refcount");
-  VERIFY(ibar->release() == 3, "incorrect refcount");
+  VERIFY(iobj->release() == 6, "incorrect refcount");
+  VERIFY(ifoo->release() == 5, "incorrect refcount");
+  VERIFY(ibar->release() == 4, "incorrect refcount");
 
-  VERIFY(iobj->release() == 2, "incorrect refcount");
-  VERIFY(ifoo->release() == 1, "incorrect refcount");
-  VERIFY(ibar->release() == 0, "incorrect refcount");
+  VERIFY(iobj->release() == 3, "incorrect refcount");
+  VERIFY(ifoo->release() == 2, "incorrect refcount");
+  VERIFY(ibar->release() == 1, "incorrect refcount");
 
-  itest = weak->getObject();
+  VERIFY(static_cast<IFoo*>(test)->release() == 0, "incorrect refcount");
+
+  itest = weak1->getObject();
   VERIFY(!itest, "weak->getObject gave us something when it shouldn't");
 
-  VERIFY(weak->release() == 0, "incorrect refcount");
+  VERIFY(weak1->release() == 1, "incorrect refcount");
+  VERIFY(weak2->release() == 0, "incorrect refcount");
 }
 

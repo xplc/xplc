@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.31 2003/11/15 05:34:38 pphaneuf Exp $
+# $Id: rules.mk,v 1.35 2004/01/13 07:03:58 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen
 
@@ -45,10 +45,25 @@ lib%_s.a: lib%.a
 %.dll:
 	$(LINK.cc) $(SHARED) $^ -o $@
 
-dist: ChangeLog README xplc.spec distclean
-	autoconf
-	autoheader
-	rm -rf autom4te.cache
+%.tar: %
+	tar cf $@ $^
+
+%.gz: %
+	gzip -c9 $< > $@
+
+%.bz2: %
+	bzip2 -c9 $< > $@
+
+.PHONY: $(DIST)
+$(DIST): ChangeLog README xplc.spec configure
+	rm -rf $(DIST)
+	tar cf - . | (mkdir $(DIST) && cd $(DIST) && tar xf -)
+	$(MAKE) -C $(DIST) distclean
+	for FILE in $$(find $(DIST) -name Root | grep CVS); do \
+		echo ':pserver:anonymous@cvs.sourceforge.net:/cvsroot/xplc' >$$FILE; \
+	done
+
+dist: default tests $(DIST).tar.gz
 
 ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
@@ -57,19 +72,16 @@ ChangeLog:
 doxygen: clean-doxygen
 	doxygen
 
-clean-doxygen:
-	rm -rf doxygen
-
-README: dist/README.in
+README: dist/README.in configure.ac
 	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
-xplc.spec: dist/xplc.spec.in
+xplc.spec: dist/xplc.spec.in configure.ac
 	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
 dustclean:
-	-rm -rf $(shell find . -name '*~' -print) $(shell find . -name '.#*' -print)
+	-rm -rf $(wildcard $(DUSTCLEAN))
 
-clean: dustclean clean-doxygen
+clean: dustclean
 	-rm -rf $(wildcard $(CLEAN))
 
 distclean: clean
@@ -101,7 +113,7 @@ config/config.mk: config/config.mk.in configure
 	@echo "Please run './configure'."
 	@exit 1
 
-configure: configure.ac
+configure include/xplc/autoconf.h.in: configure.ac
 	autoconf
 	autoheader
 

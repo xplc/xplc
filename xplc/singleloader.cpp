@@ -51,8 +51,7 @@ IObject* SingleModuleLoader::getObject(const UUID& uuid) {
 
 const char* SingleModuleLoader::loadModule(const char* filename) {
   const char* err;
-  XPLC_GetModuleFunc getmodule = 0;
-  IServiceManager* servmgr;
+  XPLC_ModuleInfo* moduleinfo = 0;
 
   if(module) {
     module->release();
@@ -66,31 +65,28 @@ const char* SingleModuleLoader::loadModule(const char* filename) {
   if(err)
     return err;
 
-  err = loaderSymbol(dlh, "XPLC_GetModule",
-                     reinterpret_cast<void**>(&getmodule));
+  err = loaderSymbol(dlh, "XPLC_Module",
+                     reinterpret_cast<void**>(&moduleinfo));
   if(err) {
     loaderClose(dlh);
     dlh = 0;
     return err;
   }
 
-  if(!getmodule) {
+  if(!moduleinfo) {
     loaderClose(dlh);
     dlh = 0;
-    return "could not find XPLC_GetModule entry point";
+    return "could not find XPLC_Module entry point";
   }
 
-  servmgr = XPLC_getServiceManager();
-
-  module = getmodule(servmgr, XPLC_MODULE_VERSION);
-  if(!module) {
+  if(!moduleinfo->module) {
     loaderClose(dlh);
     dlh = 0;
     return "could not obtain module";
   }
 
-  if(servmgr)
-    servmgr->release();
+  module = moduleinfo->module;
+  module->addRef();
 
   return 0;
 }

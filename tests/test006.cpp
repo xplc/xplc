@@ -49,7 +49,6 @@ void test006() {
 
   testobj = new TestObject;
   ASSERT(testobj != 0, "could not create TestObject");
-  testobj->addRef();
 
   handler->addObject(TestObject_CID, testobj);
   VERIFY(servmgr->getObject(TestObject_CID) == testobj, "adding the test object did not work");

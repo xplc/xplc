@@ -27,14 +27,15 @@
 #include "monikernode.h"
 
 class MonikerService: public IMonikerService {
+  IMPLEMENT_IOBJECT(MonikerService);
 private:
   MonikerNode* monikers;
 protected:
-  MonikerService():
-  monikers(0) {
-  }
   virtual ~MonikerService();
 public:
+  MonikerService():
+    monikers(0) {
+  }
   /* IMoniker */
   virtual IObject* resolve(const char*);
   /* IMonikerService */

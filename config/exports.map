@@ -1,6 +1,6 @@
 {
     global:
-	XPLC_GetModule;
+	XPLC_Module;
 	XPLC_getServiceManager;
     local:
 	*;

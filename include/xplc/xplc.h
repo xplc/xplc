@@ -42,16 +42,30 @@ private:
   IServiceManager* servmgr;
 public:
   XPLC(): servmgr(XPLC_getServiceManager()) {}
-  /** Create an XPLC object using an existing service manager
-   *  reference. */
+  /**
+   * Create an XPLC object using an existing service manager
+   * reference.
+   */
   XPLC(IServiceManager* _servmgr): servmgr(_servmgr) {
     servmgr->addRef();
   }
   ~XPLC();
 
-  /* FIXME: there should be a set of get() methods too, as well as a
-   * way to get the service manager.
+  /**
+   * Obtain an XPLC object. Obtains an object with the provided UUID
+   * from the service manager.
    */
+  IObject* get(const UUID& uuid) {
+    return servmgr->getObject(uuid);
+  }
+  /**
+   * Templated variant of XPLC::get() that will do a getInterface()
+   * for you.
+   */
+  template<class Interface>
+  Interface* get(const UUID& uuid) {
+    return mutate<Interface>(servmgr->getObject(uuid));
+  }
 
   /**
    * Object creation helper.  Obtains an object with the provided UUID

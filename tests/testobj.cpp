@@ -32,6 +32,7 @@
  */
 
 class TestComponent: public ITestComponent {
+  IMPLEMENT_IOBJECT(TestComponent);
 public:
   static TestComponent* create();
   /* ITestComponent */
@@ -39,7 +40,7 @@ public:
 };
 
 TestComponent* TestComponent::create() {
-  return new GenericComponent<TestComponent>;
+  return new TestComponent;
 }
 
 int TestComponent::getAnswer() {
@@ -52,6 +53,7 @@ int TestComponent::getAnswer() {
 static IModule* module = 0;
 
 class TestModule: public IModule {
+  IMPLEMENT_IOBJECT(TestModule);
 private:
   TestComponent* component;
 public:
@@ -62,12 +64,10 @@ public:
       component->release();
   }
   virtual IObject* getObject(const UUID& uuid) {
-    if(!component) {
+    if(!component)
       component = TestComponent::create();
-      component->addRef();
-    }
 
-    if(uuid.equals(TestComponent_CID)) {
+    if(uuid == TestComponent_CID) {
       component->addRef();
       return component;
     }
@@ -86,15 +86,8 @@ UUID_MAP_BEGIN(TestModule)
   UUID_MAP_ENTRY(IModule)
   UUID_MAP_END
 
-ENTRYPOINT IModule* XPLC_GetModule(IServiceManager*,
-                                   const unsigned int version) {
-  if(!module)
-    module = new GenericComponent<TestModule>;
+const XPLC_ModuleInfo XPLC_Module = {
+  XPLC_MODULE_VERSION,
+  new TestModule
+};
 
-  if(version == 0 && module) {
-    module->addRef();
-    return module;
-  }
-
-  return 0;
-}

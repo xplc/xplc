@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: Makefile,v 1.11 2002/11/22 23:03:36 pphaneuf Exp $
+# $Id: Makefile,v 1.12 2004/01/08 16:10:47 pphaneuf Exp $
 
 .PHONY: default
 
@@ -25,7 +25,7 @@ default:
 
 -include config/config.mk
 
-CLEAN+=$(wildcard libxplc*.a libxplc.so.*)
+CLEAN+=$(wildcard libxplc*.a libxplc.so.* doxygen)
 DISTCLEAN+=config.cache config.log config.status
 REALCLEAN+=configure README xplc.spec
 

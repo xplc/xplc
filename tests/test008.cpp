@@ -50,7 +50,6 @@ void test008() {
 
   factory = new TestObjectFactory;
   ASSERT(factory != 0, "could not instantiate test object factory");
-  factory->addRef();
 
   handler->addObject(TestObjectFactory_CID, factory);
   VERIFY(servmgr->getObject(TestObjectFactory_CID) == factory, "adding the test object factory did not work");

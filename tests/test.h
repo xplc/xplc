@@ -69,7 +69,7 @@ private:
   TestWeakRef* weakref;
 public:
   IObject* object;
-  TestWeakRef(IObject* aObject): refcount(0), destroyed(false),
+  TestWeakRef(IObject* aObject): refcount(1), destroyed(false),
                                  weakref(0), object(aObject) {
   }
   virtual ~TestWeakRef() {
@@ -96,12 +96,12 @@ public:
   virtual IObject* getInterface(const UUID& uuid) {
     ASSERT(!destroyed, "using destroyed test object");
 
-    if(uuid.equals(IID<IObject>::get())) {
+    if(uuid == IID<IObject>::get()) {
       addRef();
       return static_cast<IObject*>(this);
     }
 
-    if(uuid.equals(IID<IWeakRef>::get())) {
+    if(uuid == IID<IWeakRef>::get()) {
       addRef();
       return static_cast<IWeakRef*>(this);
     }
@@ -111,7 +111,6 @@ public:
   virtual IWeakRef* getWeakRef() {
     if(!weakref) {
       weakref = new TestWeakRef(this);
-      weakref->addRef();
     }
 
     return weakref;
@@ -131,7 +130,7 @@ private:
   bool deletethis;
   TestWeakRef* weakref;
 public:
-  TestObject(const bool _deletethis = false): refcount(0), destroyed(false),
+  TestObject(const bool _deletethis = false): refcount(1), destroyed(false),
                                       deletethis(_deletethis), weakref(0) {
   }
   virtual ~TestObject() {
@@ -140,12 +139,12 @@ public:
     ::operator delete(self);
   }
   virtual unsigned int addRef() {
-    ASSERT(!destroyed, "test object destroyed more than once");
+    ASSERT(!destroyed, "using destroyed test object");
 
     return ++refcount;
   }
   virtual unsigned int release() {
-    ASSERT(!destroyed, "using destroyed test object");
+    ASSERT(!destroyed, "test object destroyed more than once");
 
     if(--refcount)
       return refcount;
@@ -160,12 +159,12 @@ public:
   virtual IObject* getInterface(const UUID& uuid) {
     ASSERT(!destroyed, "using destroyed test object");
 
-    if(uuid.equals(IID<IObject>::get())) {
+    if(uuid == IID<IObject>::get()) {
       addRef();
       return static_cast<IObject*>(this);
     }
 
-    if(uuid.equals(IID<ITestInterface>::get())) {
+    if(uuid == IID<ITestInterface>::get()) {
       addRef();
       return static_cast<ITestInterface*>(this);
     }
@@ -175,7 +174,6 @@ public:
   virtual IWeakRef* getWeakRef() {
     if(!weakref) {
       weakref = new TestWeakRef(this);
-      weakref->addRef();
     }
 
     return weakref;
@@ -205,7 +203,7 @@ private:
   bool destroyed;
   TestWeakRef* weakref;
 public:
-  TestObjectFactory(): refcount(0), destroyed(false), weakref(0) {
+  TestObjectFactory(): refcount(1), destroyed(false), weakref(0) {
   }
   virtual ~TestObjectFactory() {
   }
@@ -226,12 +224,12 @@ public:
     return 0;
   }
   virtual IObject* getInterface(const UUID& uuid) {
-    if(uuid.equals(IID<IObject>::get())) {
+    if(uuid == IID<IObject>::get()) {
       addRef();
       return static_cast<IObject*>(this);
     }
 
-    if(uuid.equals(IID<IFactory>::get())) {
+    if(uuid == IID<IFactory>::get()) {
       addRef();
       return static_cast<IFactory*>(this);
     }
@@ -247,12 +245,7 @@ public:
     return weakref;
   }
   virtual IObject* createObject() {
-    IObject* obj = new TestObject(true);
-
-    if(obj)
-      obj->addRef();
-
-    return obj;
+    return new TestObject(true);
   }
 };
 
