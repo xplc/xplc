@@ -25,10 +25,16 @@
 
 #include <xplc/IServiceHandler.h>
 
+/**
+ * Service handler for statically linked components.
+ */
+
 class IStaticServiceHandler: public IServiceHandler {
   UNSTABLE_INTERFACE
 public:
+  /** Adds an object to the static service handler. */
   virtual void addObject(const UUID&, IObject*) = 0;
+  /** Removes an object from the static service handler. */
   virtual void removeObject(const UUID&) = 0;
 };
 

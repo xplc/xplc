@@ -25,10 +25,18 @@
 
 #include <xplc/IObject.h>
 
+/** \interface IModule IModule.h xplc/IModule.h
+ *
+ * The interface that a module should provide.
+ */
+
 class IModule: public IObject {
   UNSTABLE_INTERFACE
 public:
-  /*
+  /**
+   * Returns the object associated with the specified UUID. If the
+   * module doesn't have the object, returns NULL.
+   *
    * The object returned by IModule::getObject() is already
    * addRef()'d.
    */

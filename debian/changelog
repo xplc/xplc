@@ -1,0 +1,12 @@
+xplc (0.3.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Made the libxplc-dev package depend on the libxplc package.
+
+ -- Pierre Phaneuf <pp@ludusdesign.com>  Fri, 12 Dec 2003 16:18:23 -0500
+
+xplc (0.3.0-1) unstable; urgency=low
+
+  * Package xplc.
+
+ -- James Morrison <phython@debian.org>  Fri, 24 Oct 2003 17:48:36 -0400

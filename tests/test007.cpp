@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Pierre Phaneuf
+ * Copyright (C) 2002-2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -48,15 +48,15 @@ void test007() {
 
   ASSERT(sizeof(u2) == 37, "u2 is of unexpected size");
 
-  u1 = UUID::null;
+  u1 = UUID_null;
   u1.fromString(u2);
   VERIFY(u1.equals(u0), "u2 was not parsed properly into u1");
 
   rv = snprintf(u3, 39, "{%s}", u2);
   ASSERT(rv == 38, "copying u2 into u3 with curly braces failed");
 
-  u1 = UUID::null;
-  VERIFY(u1.equals(UUID::null), "u1 is not equal to UUID::null after resetting");
+  u1 = UUID_null;
+  VERIFY(u1.equals(UUID_null), "u1 is not equal to UUID_null after resetting");
 
   u1.fromString(u3);
   VERIFY(u1.equals(u0), "u3 was not parsed properly into u1");
@@ -83,13 +83,13 @@ void test007() {
 
   u1 = u0;
   u1.fromString(u6);
-  VERIFY(u1.equals(UUID::null), "fromString wrongfully accepted u6 into u1");
+  VERIFY(u1.equals(UUID_null), "fromString wrongfully accepted u6 into u1");
 
   rv = snprintf(u6, 38, "%s}", u2);
   ASSERT(rv == 37, "copying u2 into u6 with ending curly brace failed");
 
   u1 = u0;
   u1.fromString(u6);
-  VERIFY(u1.equals(UUID::null), "fromString wrongfully accepted u6 into u1");
+  VERIFY(u1.equals(UUID_null), "fromString wrongfully accepted u6 into u1");
 }
 

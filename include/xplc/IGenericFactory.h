@@ -25,9 +25,15 @@
 
 #include <xplc/IFactory.h>
 
+/**
+ * Used to configure the generic factory component.
+ */
 class IGenericFactory: public IFactory {
   UNSTABLE_INTERFACE
 public:
+  /**
+   * Set the factory function to use.
+   */
   virtual void setFactory(IObject*(*)()) = 0;
 };
 

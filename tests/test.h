@@ -38,6 +38,7 @@ void test006();
 void test007();
 void test008();
 void test009();
+void test010();
 
 void test_assert(const char* file,
                  unsigned int line,
@@ -80,7 +81,7 @@ public:
     if(--refcount)
       return refcount;
 
-    ASSERT(!destroyed, "test object factory destroyed more than once");
+    ASSERT(!destroyed, "test object destroyed more than once");
 
     refcount = 1;
     destroyed = true;

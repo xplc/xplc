@@ -50,4 +50,8 @@ static const UUID XPLC_moduleLoader = {0x1bff121f, 0x9bd0, 0x412f,
                                        {0xa4, 0x16, 0x98, 0x1e,
                                         0x3e, 0xf5, 0xe1, 0x2b}};
 
+static const UUID XPLC_categoryManager = {0xa7b3c486, 0x3725, 0x4500,
+                                          {0xa4, 0x4c, 0x59, 0x13,
+                                           0x1d, 0x65, 0x9e, 0x20}};
+
 #endif /* __XPLC_CORE_H__ */

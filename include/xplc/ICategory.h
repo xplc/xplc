@@ -23,10 +23,19 @@
 #define __XPLC_ICATEGORY_H__
 
 #include <xplc/IFactory.h>
+#include <xplc/ICategoryEntry.h>
+
+/**
+ * Represents a category.
+ */
 
 class ICategory: public IFactory {
   UNSTABLE_INTERFACE
 public:
+  /** Returns the number of entries in the category. */
+  virtual unsigned int numEntries() = 0;
+  /** Gets the category entry at a given index. */
+  virtual ICategoryEntry* getEntry(unsigned int aIndex) = 0;
 };
 
 DEFINE_IID(ICategory, {0x90abfe8d, 0x50a9, 0x44d8,

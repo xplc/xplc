@@ -23,18 +23,30 @@
 #ifndef __XPLC_ISERVICEHANDLER_H__
 #define __XPLC_ISERVICEHANDLER_H__
 
+/** \file
+ *
+ * The service handler interface.
+ */
+
 #include <xplc/IObject.h>
 
+/** \interface IServiceHandler IServiceHandler.h xplc/IServiceHandler.h
+ *
+ * Interface to an object which can be used to find other objects,
+ * given their UUIDs.  This is the most basic way to find objects in
+ * %XPLC, no matter where they are.
+ */
 class IServiceHandler: public IObject {
   UNSTABLE_INTERFACE
 public:
-  /*
-   * The object returned by IServiceHandler::getObject() is
-   * already addRef()'d.
+  /**
+   * Get the object corresponding to the given UUID.  The returned object
+   * is already addRef()ed.  Returns NULL if there is no matching object.
    */
   virtual IObject* getObject(const UUID&) = 0;
 };
 
+/// IServiceHandler's IID
 DEFINE_IID(IServiceHandler, {0xe897384f, 0x3ba6, 0x46e3,
   {0xad, 0x06, 0x53, 0x76, 0x21, 0xa6, 0x0a, 0x03}});
 

@@ -25,9 +25,18 @@
 
 #include <xplc/IServiceHandler.h>
 
+/** \interface IModuleLoader IModuleLoader.h xplc/IModuleLoader.h
+ *
+ * The interface to control the module loader.
+ */
+
 class IModuleLoader: public IServiceHandler {
   UNSTABLE_INTERFACE
 public:
+  /**
+   * Set the name of the directory that will be searched for loadable
+   * %XPLC modules.
+   */
   virtual void setModuleDirectory(const char* directory) = 0;
 };
 

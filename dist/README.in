@@ -21,8 +21,8 @@ License
 -------
 
 All files included in this package are covered by the Lesser General
-Public License, unless noted otherwise. Refer to the 'LICENSE' for
-terms and conditions.
+Public License, unless noted otherwise. Refer to the 'LICENSE' file
+for terms and conditions.
 
 Releases
 --------
@@ -33,7 +33,7 @@ the major, minor and patchlevel numbers (like this: 3.4.31).
 
 The minor number has a special signification depending on whether it
 is even or odd. If it is even, it means that this is a stable release,
-suitable for use in production environment. If it is odd, it means
+suitable for use in a production environment. If it is odd, it means
 that this is a development release, intended for people willing to
 test XPLC, report bugs and/or work on its development.
 

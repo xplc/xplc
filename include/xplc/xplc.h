@@ -23,24 +23,61 @@
 #ifndef __XPLC_XPLC_H__
 #define __XPLC_XPLC_H__
 
+/** \file
+ *
+ * The XPLC helper class for the C++ binding.
+ */
+
 #include <xplc/core.h>
 #include <xplc/utils.h>
+
+/** \class XPLC xplc.h xplc/xplc.h
+ *
+ * The XPLC helper class.  This class is part of the XPLC C++ binding
+ * in order to provide a more natural C++ feel to the use of XPLC.
+ */
 
 class XPLC {
 private:
   IServiceManager* servmgr;
 public:
   XPLC(): servmgr(XPLC_getServiceManager()) {}
-  XPLC(IServiceManager* _servmgr): servmgr(_servmgr) {}
+  /** Create an XPLC object using an existing service manager
+   *  reference. */
+  XPLC(IServiceManager* _servmgr): servmgr(_servmgr) {
+    servmgr->addRef();
+  }
   ~XPLC();
 
+  /* FIXME: there should be a set of get() methods too, as well as a
+   * way to get the service manager.
+   */
+
+  /**
+   * Object creation helper.  Obtains an object with the provided UUID
+   * from the service manager, tries to get the IFactory interface
+   * from the object and calls its createObject() method.
+   */
   IObject* create(const UUID& cid);
+  /**
+   * Templated variant of XPLC::create() that will do a getInterface()
+   * for you.
+   */
   template<class Interface>
   Interface* create(const UUID& cid) {
     return mutate<Interface>(create(cid));
   }
 
+  /**
+   * Object creation helper that operates from a moniker. Works like
+   * XPLC::create(const UUID&), but finds the object using a moniker
+   * instead.
+   */
   IObject* create(const char*);
+  /**
+   * Templated variant of XPLC::create(const char*) that will do a
+   * getInterface() for you.
+   */
   template<class Interface>
   Interface* create(const char* aMoniker) {
     return mutate<Interface>(create(aMoniker));

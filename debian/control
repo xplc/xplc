@@ -1,0 +1,27 @@
+Source: xplc
+Priority: optional
+Maintainer: James Morrison <phython@debian.org> 
+Build-Depends: cdbs
+Standards-Version: 3.6.1.0
+
+Package: libxplc
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Light weight component system
+ XPLC ("Cross-Platform Lightweight Components") is a component system that
+ will provide extensibility and reusability both inside and between
+ applications, while being portable across platforms (and languages) and
+ having the lowest possible overhead (both in machine resources and
+ programming effort).
+
+Package: libxplc-dev
+Section: libdevel
+Architecture: any
+Depends: libxplc (= ${Source-Version}) ${shlibs:Depends}
+Description: Light weight component system (Development libraries and headers)
+ XPLC ("Cross-Platform Lightweight Components") is a component system that
+ will provide extensibility and reusability both inside and between
+ applications, while being portable across platforms (and languages) and
+ having the lowest possible overhead (both in machine resources and
+ programming effort).

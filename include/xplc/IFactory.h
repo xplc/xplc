@@ -25,10 +25,17 @@
 
 #include <xplc/IObject.h>
 
+/** \interface IFactory IFactory.h xplc/IFactory.h
+ *
+ * Common object creation interface.
+ */
+
 class IFactory: public IObject {
   UNSTABLE_INTERFACE
 public:
-  /*
+  /**
+   * Creates an object.
+   *
    * The object returned by IFactory::createObject() is already
    * addRef()'d.
    */

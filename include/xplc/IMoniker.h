@@ -25,14 +25,32 @@
 
 #include <xplc/IObject.h>
 
+/** \interface IMoniker IMoniker.h xplc/IMoniker.h
+ *
+ * An interface for obtaining an IObject given a moniker string.
+ *
+ * A moniker can be used to obtain a particular object using a
+ * human-readable string to describe it, rather than having to know
+ * the object's UUID.  Human-readable strings are, unfortunately, not
+ * guaranteed to be universally unique, so you might (theoretically)
+ * not get the object you want.
+ * 
+ * You can retrieve the standard %XPLC moniker service from the service
+ * manager using the XPLC_monikers UUID, which can then be used to
+ * resolve monikers and register your own using the IMonikerService
+ * interface it provides.
+ *
+ * Note that XPLC::get() and XPLC::create() are a convenient interface
+ * to the %XPLC moniker system.
+ */
 class IMoniker: public IObject {
   UNSTABLE_INTERFACE
 public:
-  /*
-   * The object returned by IMoniker::resolve() is already
-   * addRef()'d.
+  /**
+   * Given a moniker string, return the IObject it refers to, or NULL if
+   * no objects match.  The returned object is already addRef()'d.
    */
-  virtual IObject* resolve(const char*) = 0;
+  virtual IObject* resolve(const char* moniker) = 0;
 };
 
 DEFINE_IID(IMoniker, {0x6c0bb432, 0x7c32, 0x4614,

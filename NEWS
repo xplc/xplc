@@ -1,4 +1,17 @@
-New in 0.1.8
+New in 0.3.1
+------------
+
+ * Added a good deal of Doxygen documentation.
+ * Fixed a bug where some symbols where missing from libxplc.so.
+ * Added a Debian package setup.
+ * Restricted exported symbols, made libxplc.so resistant to changes
+   in libxplc-cxx.a.
+ * Various optimizations to decrease the size of libxplc.so.
+ * Fixed build system for Visual C++.NET.
+ * Started the category support.
+ * Improved testing suite.
+
+New in 0.3.0
 ------------
 
  * Added weak references and appropriate tests.

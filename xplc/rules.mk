@@ -17,9 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.17 2002/11/26 02:40:58 pphaneuf Exp $
+# $Id: rules.mk,v 1.18 2003/07/25 18:21:44 pphaneuf Exp $
 
 default: libxplc.a libxplc_s.a libxplc.so
 
 libxplc.a libxplc.so: $(patsubst %.cpp,%.o,$(wildcard xplc/*.cpp))
+
+libxplc.so: libxplc-cxx.a
 

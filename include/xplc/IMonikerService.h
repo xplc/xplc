@@ -25,10 +25,21 @@
 
 #include <xplc/IMoniker.h>
 
+/** \interface IMonikerService IMonikerService.h xplc/IMonikerService.h
+ *
+ * An interface for registering objects so they can be retrieved using
+ * a moniker.
+ * 
+ * You can obtain the %XPLC standard moniker service by getting the
+ * XPLC_monikers UUID from the service manager.
+ */
 class IMonikerService: public IMoniker {
   UNSTABLE_INTERFACE
 public:
-  virtual void registerObject(const char*, const UUID&) = 0;
+  /**
+   * Register an object to be retrieved with a moniker.
+   */
+  virtual void registerObject(const char* prefix, const UUID& uuid) = 0;
 };
 
 DEFINE_IID(IMonikerService, {0x0ee2cc09, 0xd7d5, 0x44ee,

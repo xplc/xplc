@@ -105,44 +105,44 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="test000.cpp">
+				RelativePath="..\tests\test000.cpp">
 			</File>
 			<File
-				RelativePath="test001.cpp">
+				RelativePath="..\tests\test001.cpp">
 			</File>
 			<File
-				RelativePath="test002.cpp">
+				RelativePath="..\tests\test002.cpp">
 			</File>
 			<File
-				RelativePath="test003.cpp">
+				RelativePath="..\tests\test003.cpp">
 			</File>
 			<File
-				RelativePath="test004.cpp">
+				RelativePath="..\tests\test004.cpp">
 			</File>
 			<File
-				RelativePath="test005.cpp">
+				RelativePath="..\tests\test005.cpp">
 			</File>
 			<File
-				RelativePath="test006.cpp">
+				RelativePath="..\tests\test006.cpp">
 			</File>
 			<File
-				RelativePath="test007.cpp">
+				RelativePath="..\tests\test007.cpp">
 			</File>
 			<File
-				RelativePath="test008.cpp">
+				RelativePath="..\tests\test008.cpp">
 			</File>
 			<File
-				RelativePath="test009.cpp">
+				RelativePath="..\tests\test009.cpp">
 			</File>
 			<File
-				RelativePath="testmain.cpp">
+				RelativePath="..\tests\testmain.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
-				RelativePath="test.h">
+				RelativePath="..\tests\test.h">
 			</File>
 		</Filter>
 		<Filter

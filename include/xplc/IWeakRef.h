@@ -24,9 +24,20 @@
 
 #include <xplc/IObject.h>
 
+/** \interface IWeakRef IWeakRef.h xplc/IWeakRef.h
+ *
+ * Represents a weak reference to another object.
+ */
+
 class IWeakRef: public IObject {
   UNSTABLE_INTERFACE
 public:
+  /**
+   * Obtains an addRef()'d strong reference to the referenced
+   * object. If the object has been destroyed, this will return
+   * NULL. Do not forget to release() the strong reference when you
+   * are done with it.
+   */
   virtual IObject* getObject() = 0;
 };
 

@@ -1,5 +1,5 @@
 # XPLC - Cross-Platform Lightweight Components
-# Copyright (C) 2000-2002, Pierre Phaneuf
+# Copyright (C) 2000-2003, Pierre Phaneuf
 # Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
@@ -17,13 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.29 2002/12/05 08:19:39 pphaneuf Exp $
+# $Id: rules.mk,v 1.31 2003/11/15 05:34:38 pphaneuf Exp $
 
-.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall
+.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen
 
 %.o: %.cpp
 	@$(COMPILE.cpp) -M -E $< | sed -e 's|^.*:|$@:|' > $(dir $@).$(notdir $(@:.o=.d))
 	$(COMPILE.cpp) $(OUTPUT_OPTION) $<
+
+%.s: %.cpp
+	@$(COMPILE.cpp) -M -E $< | sed -e 's|^.*:|$@:|' > $(dir $@).$(notdir $(@:.s=.d))
+	$(COMPILE.cpp) $(OUTPUT_OPTION) -S $<
 
 %: %.o
 	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -50,6 +54,12 @@ ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
 	cvs2cl.pl --utc -U config/cvs-users
 
+doxygen: clean-doxygen
+	doxygen
+
+clean-doxygen:
+	rm -rf doxygen
+
 README: dist/README.in
 	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
@@ -59,7 +69,7 @@ xplc.spec: dist/xplc.spec.in
 dustclean:
 	-rm -rf $(shell find . -name '*~' -print) $(shell find . -name '.#*' -print)
 
-clean: dustclean
+clean: dustclean clean-doxygen
 	-rm -rf $(wildcard $(CLEAN))
 
 distclean: clean

@@ -35,7 +35,6 @@ protected:
   }
   virtual ~ServiceManager();
 public:
-  static ServiceManager* obtain();
   /* IServiceManager */
   virtual void addHandler(IServiceHandler*);
   virtual void addFirstHandler(IServiceHandler*);

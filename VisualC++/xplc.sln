@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xplc", "xplc.vcproj", "{B815FC75-59A0-44CD-A9AD-F13838091045}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testobj", "tests\testobj.vcproj", "{579912D1-047C-4A7A-9532-5E31FC7A812F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testobj", "testobj.vcproj", "{579912D1-047C-4A7A-9532-5E31FC7A812F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcproj", "{45151968-D0DD-4275-AD6B-66DE04B28F19}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests.vcproj", "{45151968-D0DD-4275-AD6B-66DE04B28F19}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
@@ -11,6 +11,7 @@ Global
 		ConfigName.1 = Release
 	EndGlobalSection
 	GlobalSection(ProjectDependencies) = postSolution
+		{579912D1-047C-4A7A-9532-5E31FC7A812F}.0 = {B815FC75-59A0-44CD-A9AD-F13838091045}
 		{45151968-D0DD-4275-AD6B-66DE04B28F19}.0 = {B815FC75-59A0-44CD-A9AD-F13838091045}
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution

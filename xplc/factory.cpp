@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
@@ -30,10 +30,6 @@ UUID_MAP_BEGIN(GenericFactory)
   UUID_MAP_ENTRY(IFactory)
   UUID_MAP_ENTRY(IGenericFactory)
   UUID_MAP_END
-
-IObject* GenericFactory::create() {
-  return new GenericComponent<GenericFactory>;
-}
 
 IObject* GenericFactory::createObject() {
   IObject* obj;

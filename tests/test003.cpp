@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
@@ -40,7 +40,7 @@ void test003() {
   IObject* obj;
   ITestInterface* test;
 
-  obj = GenericFactory::create();
+  obj = new GenericComponent<GenericFactory>;
   ASSERT(obj != 0, "could not instantiate generic factory");
 
   obj->addRef();

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
@@ -36,7 +36,6 @@ protected:
   }
   virtual ~SingleModuleLoader();
 public:
-  static IObject* create();
   /* IServiceHandler */
   virtual IObject* getObject(const UUID&);
   /* ISingleModuleLoader */

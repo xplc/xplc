@@ -1,0 +1,7 @@
+{
+    global:
+	XPLC_GetModule;
+	XPLC_getServiceManager;
+    local:
+	*;
+};

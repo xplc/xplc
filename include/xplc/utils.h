@@ -24,28 +24,54 @@
 #ifndef __XPLC_UTILS_H__
 #define __XPLC_UTILS_H__
 
+/** \file
+ *
+ * Various utility functions, macros and templates.
+ */
+
 #include <stddef.h>
 #include <xplc/IWeakRef.h>
 #include <xplc/IFactory.h>
 
+/**
+ * Utility structure used for the interface map.
+ */
 struct UUID_Info {
+  //@{
   const UUID* iid;
   ptrdiff_t delta;
+  //@}
 };
 
+/**
+ * Start the interface map for "component".
+ */
 #define UUID_MAP_BEGIN(component) const UUID_Info GenericComponent<component>::uuids[] = {
 
+/**
+ * Add an entry to an interface map.
+ */
 #define UUID_MAP_ENTRY(iface) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
 
+/**
+ * Add an entry to an interface map for an ambiguous interface. The
+ * second parameter is the interface that should be used to
+ * disambiguate.
+ */
 #define UUID_MAP_ENTRY_2(iface, iface2) { &iface##_IID, reinterpret_cast<ptrdiff_t>(static_cast<iface2*>(reinterpret_cast<ThisComponent*>(1))) - 1 },
 
+/**
+ * Marks the end of an interface map.
+ */
 #define UUID_MAP_END { 0, 0 } };
 
-/*
+/** \class WeakRef
+ *
  * Common implementation of a weak reference.
  */
 class WeakRef: public IWeakRef {
 public:
+  /** The object that the weak reference is pointing at. */
   IObject* object;
   virtual IObject* getObject() {
     if(object)
@@ -55,7 +81,8 @@ public:
   }
 };
 
-/*
+/** \class GenericComponent
+ *
  * Mix-in template that contains an implementation of methods a basic
  * component will need to implement.
  */
@@ -67,11 +94,18 @@ private:
   unsigned int refcount;
   WeakRef* weakref;
 public:
+  /** Provides a static function that can be passed to
+   *  IGenericFactory::setFactory(). */
+  static IObject* create() {
+    return new GenericComponent;
+  }
   GenericComponent(): refcount(0), weakref(0) {
   }
+  /** Implements IObject::addRef(). */
   virtual unsigned int addRef() {
     return ++refcount;
   }
+  /** Implements IObject::release(). */
   virtual unsigned int release() {
     if(--refcount)
       return refcount;
@@ -86,9 +120,11 @@ public:
 
     return 0;
   }
+  /** Implements IObject::getInterface(). */
   virtual IObject* getInterface(const UUID& uuid) {
     return XPLC_getInterface_real(this, uuid, uuids);
   }
+  /** Implements IObject::getWeakRef(). */
   virtual IWeakRef* getWeakRef() {
     if(!weakref) {
       weakref = new GenericComponent<WeakRef>;
@@ -101,13 +137,18 @@ public:
   }
 };
 
+/**
+ * Internal function used by GenericComponent to implement
+ * IObject::getInterface().
+ */
 IObject* XPLC_getInterface_real(void* self, const UUID& uuid,
                                 const UUID_Info* uuidlist);
 
-/*
- * This templated function is a typesafe way to call the getInterface
- * method of a component and cast it properly. If the component does
- * not support the interface, a NULL pointer will be returned.
+/**
+ * %XPLC equivalent to dynamic_cast.  This templated function is a
+ * typesafe way to call the getInterface method of a component and
+ * cast it properly.  If the component does not support the interface,
+ * a NULL pointer will be returned.
  */
 template<class Interface>
 Interface* get(IObject* aObj) {
@@ -117,10 +158,11 @@ Interface* get(IObject* aObj) {
   return static_cast<Interface*>(aObj->getInterface(IID<Interface>::get()));
 }
 
-/*
- * This templated function is very similar to the "get" one, except
- * that it automatically releases the inbound reference, without
- * regard whether the getInterface actually yielded something.
+/**
+ * A version of get() that releases its parameter.  This templated
+ * function is very similar to the "get" one, except that it
+ * automatically releases the inbound reference, without regard
+ * whether the getInterface actually yielded something.
  */
 template<class Interface>
 Interface* mutate(IObject* aObj) {
@@ -136,9 +178,8 @@ Interface* mutate(IObject* aObj) {
   return rv;
 }
 
-/*
- * This templated function is a shorthand to get a factory, create an
- * object a get an interface.
+/**
+ * Shorthand to get a factory, create an object and get an interface.
  */
 template<class Interface>
 Interface* create(const UUID& cid) {

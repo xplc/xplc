@@ -54,6 +54,12 @@ rm -rf %{buildroot}
 %attr(-,root,root) /usr/lib/libxplc.so
 
 %changelog
-* Fri Sep 27 2002  Pierre Phaneuf <pp@ludusdesign.com>
-- Initial RPM release.
+ * Fri Jan 17 2003  Pierre Phaneuf <pp@ludusdesign.com>
+ - Minor fix to the permission of the header files.
+
+ * Sat Nov 30 2002  Pierre Phaneuf <pp@ludusdesign.com>
+ - Added libxplc-cxx.a to the devel package.
+
+ * Fri Sep 27 2002  Pierre Phaneuf <pp@ludusdesign.com>
+ - Initial RPM release.
 

@@ -23,7 +23,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;TESTOBJ_EXPORTS;UNSTABLE;snprintf=_snprintf"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="5"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -43,7 +43,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(OutDir)\testobj.dll ."/>
+				CommandLine="copy $(OutDir)\testobj.dll ..\tests"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -69,7 +69,7 @@
 				AdditionalIncludeDirectories="&quot;..\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;TESTOBJ_EXPORTS;UNSTABLE;snprintf=_snprintf"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -91,7 +91,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(OutDir)\testobj.dll ."/>
+				CommandLine="copy $(OutDir)\testobj.dll ..\tests"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -109,14 +109,14 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="testobj.cpp">
+				RelativePath="..\tests\testobj.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
-				RelativePath="testobj.h">
+				RelativePath="..\tests\testobj.h">
 			</File>
 		</Filter>
 		<Filter

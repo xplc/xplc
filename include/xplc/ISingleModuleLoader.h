@@ -26,10 +26,16 @@
 
 #include <xplc/IServiceHandler.h>
 
+/**
+ * Service handler that uses a single specified module rather than
+ * searching a directory.
+ */
 class ISingleModuleLoader: public IServiceHandler {
   UNSTABLE_INTERFACE
 public:
-  /*
+  /**
+   * Loads the specified module.
+   *
    * Loading a library while the component already has another library
    * open will result in the first library to be unloaded. Returns
    * error message on error, or NULL if the module was loaded

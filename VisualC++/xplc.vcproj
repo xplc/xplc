@@ -22,7 +22,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="include"
+				AdditionalIncludeDirectories="..\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;UNSTABLE;snprintf=_snprintf"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
@@ -68,7 +68,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="include"
+				AdditionalIncludeDirectories="..\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;UNSTABLE;snprintf=_snprintf"
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
@@ -109,116 +109,137 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="xplc\factory.cpp">
+				RelativePath="..\xplc\factory.cpp">
 			</File>
 			<File
-				RelativePath="xplc\loader.cpp">
+				RelativePath="..\xplc-cxx\getiface.cpp">
 			</File>
 			<File
-				RelativePath="xplc\moduleloader.cpp">
+				RelativePath="..\xplc\loader.cpp">
 			</File>
 			<File
-				RelativePath="xplc\monikers.cpp">
+				RelativePath="..\xplc\moduleloader.cpp">
 			</File>
 			<File
-				RelativePath="xplc\new.cpp">
+				RelativePath="..\xplc\monikers.cpp">
 			</File>
 			<File
-				RelativePath="xplc\servmgr.cpp">
+				RelativePath="..\xplc\new.cpp">
 			</File>
 			<File
-				RelativePath="xplc\singleloader.cpp">
+				RelativePath="..\xplc\servmgr.cpp">
 			</File>
 			<File
-				RelativePath="xplc\statichandler.cpp">
+				RelativePath="..\xplc\singleloader.cpp">
 			</File>
 			<File
-				RelativePath="xplc\xplc.cpp">
+				RelativePath="..\xplc\statichandler.cpp">
+			</File>
+			<File
+				RelativePath="..\xplc-cxx\strtouuid.cpp">
+			</File>
+			<File
+				RelativePath="..\xplc-cxx\uuidtostr.cpp">
+			</File>
+			<File
+				RelativePath="..\xplc-cxx\xplc.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="include\xplc\IFactory.h">
+				RelativePath="..\include\xplc\IFactory.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IGenericFactory.h">
+				RelativePath="..\include\xplc\IGenericFactory.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IModule.h">
+				RelativePath="..\include\xplc\IModule.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IModuleLoader.h">
+				RelativePath="..\include\xplc\IModuleLoader.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IMoniker.h">
+				RelativePath="..\include\xplc\IMoniker.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IMonikerService.h">
+				RelativePath="..\include\xplc\IMonikerService.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IObject.h">
+				RelativePath="..\include\xplc\IObject.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IServiceHandler.h">
+				RelativePath="..\include\xplc\IServiceHandler.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IServiceManager.h">
+				RelativePath="..\include\xplc\IServiceManager.h">
 			</File>
 			<File
-				RelativePath="include\xplc\ISingleModuleLoader.h">
+				RelativePath="..\include\xplc\ISingleModuleLoader.h">
 			</File>
 			<File
-				RelativePath="include\xplc\IStaticServiceHandler.h">
+				RelativePath="..\include\xplc\IStaticServiceHandler.h">
 			</File>
 			<File
-				RelativePath="xplc\factory.h">
+				RelativePath="..\xplc\factory.h">
 			</File>
 			<File
-				RelativePath="xplc\handlernode.h">
+				RelativePath="..\xplc\handlernode.h">
 			</File>
 			<File
-				RelativePath="xplc\loader.h">
+				RelativePath="..\xplc\loader.h">
 			</File>
 			<File
-				RelativePath="include\xplc\module.h">
+				RelativePath="..\include\xplc\module.h">
 			</File>
 			<File
-				RelativePath="xplc\moduleloader.h">
+				RelativePath="..\xplc\moduleloader.h">
 			</File>
 			<File
-				RelativePath="xplc\monikernode.h">
+				RelativePath="..\xplc\monikernode.h">
 			</File>
 			<File
-				RelativePath="xplc\monikers.h">
+				RelativePath="..\xplc\monikers.h">
 			</File>
 			<File
-				RelativePath="xplc\new.h">
+				RelativePath="..\xplc\new.h">
 			</File>
 			<File
-				RelativePath="xplc\objectnode.h">
+				RelativePath="..\xplc\objectnode.h">
 			</File>
 			<File
-				RelativePath="xplc\servmgr.h">
+				RelativePath="..\xplc\servmgr.h">
 			</File>
 			<File
-				RelativePath="xplc\singleloader.h">
+				RelativePath="..\xplc\singleloader.h">
 			</File>
 			<File
-				RelativePath="xplc\statichandler.h">
+				RelativePath="..\xplc\statichandler.h">
 			</File>
 			<File
-				RelativePath="include\xplc\trace.h">
+				RelativePath="..\include\xplc\trace.h">
 			</File>
 			<File
-				RelativePath="include\xplc\utils.h">
+				RelativePath="..\include\xplc\utils.h">
 			</File>
 			<File
-				RelativePath="include\xplc\uuid.h">
+				RelativePath="..\include\xplc\uuid.h">
 			</File>
 			<File
-				RelativePath="include\xplc\xplc.h">
+				RelativePath="..\include\xplc\xplc.h">
 			</File>
 		</Filter>
 	</Files>

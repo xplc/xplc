@@ -31,7 +31,6 @@
 #else
 
 #ifdef WIN32
-#define UNSTABLE
 #define ENABLE_LOADER
 #endif
 

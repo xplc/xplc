@@ -24,11 +24,6 @@
 #include <xplc/xplc.h>
 #include <xplc/ptr.h>
 
-UUID_MAP_BEGIN(WeakRef)
-  UUID_MAP_ENTRY(IObject)
-  UUID_MAP_ENTRY(IWeakRef)
-  UUID_MAP_END
-
 IObject* XPLC::create(const UUID& cid) {
   xplc_ptr<IFactory> factory;
 

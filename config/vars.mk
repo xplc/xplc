@@ -17,15 +17,15 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: vars.mk,v 1.25 2002/12/05 17:37:29 pphaneuf Exp $
+# $Id: vars.mk,v 1.32 2003/12/12 21:28:33 pphaneuf Exp $
 
 DEPFILES:=$(shell find . -name '.*.d')
 
-CLEAN+=$(shell find . -name '*.o' -print) $(DEPFILES)
+CLEAN+=$(shell find . -name '*.o' -print) libxplc.so* $(DEPFILES) $(addprefix debian/,$(shell cat debian/.cvsignore))
 DISTCLEAN+=config/config.mk include/xplc/autoconf.h ChangeLog.bak
 REALCLEAN+=ChangeLog autom4te.cache include/xplc/autoconf.h.in
 
-SIMPLETARGETS+=ChangeLog clean dustclean realclean distclean
+SIMPLETARGETS+=ChangeLog clean dustclean realclean distclean doxygen clean-doxygen
 
 # Function that returns "even" or "odd", depending on the value passed.
 oddeven = $(filter even odd,$(foreach d,0 2 4 6 8,$(1:%$d=even)) $(foreach d,1 3 5 7 9,$(1:%$d=odd)))
@@ -89,7 +89,7 @@ CXXFLAGS+=-fno-exceptions
 endif
 
 ifneq ("$(enable_pic)", "no")
-CXXFLAGS+=-fPIC
+CXXFLAGS+=-fpic
 endif
 
 ifeq ("$(so_style)", "darwin")
@@ -98,6 +98,6 @@ endif
 
 ifeq ("$(so_style)", "sysv")
 SONAMEOPT=-Wl,-h
-SHARED=-shared $(if $(SONAME),$(SONAMEOPT)$(SONAME))
+SHARED=-shared $(if $(SONAME),$(SONAMEOPT)$(SONAME)) -Wl,-z,defs,--version-script=config/exports.map
 endif
 

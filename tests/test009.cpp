@@ -2,7 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2003, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -52,7 +52,7 @@ void test009() {
   obj = loaderfactory->createObject();
   ASSERT(obj != 0, "could not create module loader component");
 
-  ASSERT(loaderfactory->release() == 1, "factory has wrong refcount");
+  VERIFY(loaderfactory->release() == 1, "factory has wrong refcount");
 
   loader = mutate<IModuleLoader>(obj);
   ASSERT(loader != 0, "module loader does not have expected interface");

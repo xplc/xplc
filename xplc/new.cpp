@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Pierre Phaneuf
+ * Copyright (C) 2002-2003, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -29,10 +29,6 @@ UUID_MAP_BEGIN(NewMoniker)
   UUID_MAP_ENTRY(IObject)
   UUID_MAP_ENTRY(IMoniker)
   UUID_MAP_END
-
-NewMoniker* NewMoniker::create() {
-  return new GenericComponent<NewMoniker>;
-}
 
 NewMoniker::~NewMoniker() {
 }

@@ -3,6 +3,7 @@ configure
 config.cache
 config.log
 config.status
+doxygen
 Debug
 Release
 README

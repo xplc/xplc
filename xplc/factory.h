@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2000-2003, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -28,7 +28,6 @@ class GenericFactory: public IGenericFactory {
 private:
   IObject* (*factory)();
 public:
-  static IObject* create();
   /* IFactory */
   virtual IObject* createObject();
   /* IGenericFactory */
