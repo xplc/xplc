@@ -41,7 +41,9 @@ DEFINE_UUID(ISimpleDynamicLoader::IID) = {0x0f8eb75a, 0x0b47, 0x494f, {0xb2, 0xa
 
 /*
  * This is the prototype of the entry point that must be provided by
- * the dynamically loaded library.
+ * the dynamically loaded library. This should create and return a
+ * NON-addRef'd new instance of the component in the module, in a
+ * manner similar to the factory function required by IGenericFactory.
  */
 extern "C" IObject* XPLC_SimpleModule();
 
