@@ -18,6 +18,7 @@
 #
 # $Id$
 
+GARBAGES+=$(shell find . -name 'core' -print)
 GARBAGES+=$(shell find . -name '*.o' -print)
 GARBAGES+=$(shell find . -name '*~' -print)
 GARBAGES+=config/depends.mk
