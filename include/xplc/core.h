@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -19,18 +19,11 @@
  * USA
  */
 
-#ifndef __XPLC_NEW_H__
-#define __XPLC_NEW_H__
+#ifndef __XPLC_CORE_H__
+#define __XPLC_CORE_H__
 
-#include <xplc/IMoniker.h>
+#include <xplc/IServiceManager.h>
 
-class NewMoniker: public IMoniker {
-protected:
-  virtual ~NewMoniker();
-public:
-  static NewMoniker* create();
-  /* IMoniker */
-  virtual IObject* resolve(const char*);
-};
+extern "C" IServiceManager* XPLC_getCoreServiceManager();
 
-#endif /* __XPLC_NEW_H__ */
+#endif /* __XPLC_CORE_H__ */

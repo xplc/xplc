@@ -5,55 +5,53 @@
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include <xplc/xplc.h>
 #include <xplc/utils.h>
-#include "servmgr.h"
 #include "statichandler.h"
 #include "moduleloader.h"
 #include "singleloader.h"
 #include "factory.h"
 #include "monikers.h"
 #include "new.h"
+#include "servmgr.h"
 
-static ServiceManager* servmgr = 0;
-
-IServiceManager* XPLC::getServiceManager() {
+IServiceManager* XPLC_getServiceManager() {
+  IServiceManager* servmgr;
   IObject* obj;
   IStaticServiceHandler* handler;
+  IStaticServiceHandler* handler2;
   IGenericFactory* factory;
   IFactory* factoryfactory;
   IMonikerService* monikers;
-
-  if(servmgr) {
-    servmgr->addRef();
-    return servmgr;
-  }
 
   /*
    * The basic services have to be created.
    */
 
-  ServiceManager::create(&servmgr);
-
-  if(servmgr)
-    servmgr->addRef();
-  else
+  servmgr = XPLC_getCoreServiceManager();
+  if(!servmgr)
     return 0;
+
+  obj = servmgr->getObject(XPLC::staticServiceHandler);
+  if(obj) {
+    obj->release();
+    return servmgr;
+  }
 
   handler = StaticServiceHandler::create();
 
@@ -68,7 +66,14 @@ IServiceManager* XPLC::getServiceManager() {
    * Populate the static service handler.
    */
 
-  handler->addObject(XPLC::staticServiceHandler, handler);
+  handler2 = StaticServiceHandler::create();
+  if(handler2) {
+    handler->addObject(XPLC::staticServiceHandler, handler2);
+    servmgr->addHandler(handler2);
+  } else {
+    servmgr->release();
+    return 0;
+  }
 
   obj = GenericFactory::create();
   if(obj)
@@ -112,7 +117,7 @@ IServiceManager* XPLC::getServiceManager() {
 
   factoryfactory->release();
 
-  handler->addObject(XPLC::newMoniker, NewMoniker::obtain());
+  handler->addObject(XPLC::newMoniker, NewMoniker::create());
 
   return servmgr;
 }

@@ -5,19 +5,19 @@
  * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #ifndef __TESTS_TEST_H__
@@ -65,8 +65,10 @@ class TestObject: public ITestInterface {
 private:
   unsigned int refcount;
   bool destroyed;
+  bool deletethis;
 public:
-  TestObject(): refcount(0), destroyed(false) {
+  TestObject(const bool _deletethis = false): refcount(0), destroyed(false),
+                                      deletethis(_deletethis) {
   }
   virtual ~TestObject() {
   }
@@ -86,6 +88,8 @@ public:
 
     refcount = 1;
     destroyed = true;
+    if(deletethis)
+      delete this;
 
     return 0;
   }
@@ -165,7 +169,7 @@ public:
     return 0;
   }
   virtual IObject* createObject() {
-    IObject* obj = new TestObject;
+    IObject* obj = new TestObject(true);
 
     if(obj)
       obj->addRef();

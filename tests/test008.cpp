@@ -5,25 +5,26 @@
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include "test.h"
+#include <xplc/xplc.h>
+#include <xplc/utils.h>
 #include <xplc/IStaticServiceHandler.h>
 #include <xplc/IMonikerService.h>
-#include <xplc/utils.h>
 
 /*
  * test008
@@ -39,7 +40,7 @@ void test008() {
   TestObjectFactory* factory;
   IObject* obj;
 
-  servmgr = XPLC::getServiceManager();
+  servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");
 
   obj = servmgr->getObject(XPLC::staticServiceHandler);
@@ -55,6 +56,7 @@ void test008() {
   handler->addObject(TestObjectFactory_CID, factory);
   VERIFY(servmgr->getObject(TestObjectFactory_CID) == factory, "adding the test object factory did not work");
   VERIFY(factory->release() == 2, "incorrect refcount on test object factory");
+  VERIFY(handler->release() == 2, "incorrect refcount on static service handler");
 
   monikers = mutate<IMonikerService>(servmgr->getObject(XPLC::monikers));
   ASSERT(monikers != 0, "could not obtain correct moniker service");
@@ -64,14 +66,15 @@ void test008() {
   obj = monikers->resolve("new:testobject");
   ASSERT(obj != 0, "could not obtain test object");
 
+  VERIFY(monikers->release() == 1, "incorrect refcount on moniker service");
+
   test = get<ITestInterface>(obj);
   VERIFY(test != 0, "test object does not have ITestInterface");
   VERIFY(test->release() == 1, "incorrect refcount on test object");
 
   VERIFY(obj->release() == 0, "incorrect refcount on test object");
 
-  servmgr->shutdown();
-  VERIFY(servmgr->release() == 0, "service manager has non-zero refcount after shutdown/release");
+  VERIFY(servmgr->release() == 0, "service manager has non-zero refcount after release");
 
   VERIFY(factory->release() == 0, "incorrect refcount on test object factory");
 }

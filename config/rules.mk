@@ -3,25 +3,47 @@
 # Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
-# it under the terms of the GNU Library General Public License as
-# published by the Free Software Foundation; either version 2 of the
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 2.1 of the
 # License, or (at your option) any later version.
 #
 # This library is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Library General Public License for more details.
+# Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU Library General Public
+# You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+# USA
 #
-# $Id: rules.mk,v 1.17 2002/09/27 21:10:27 pphaneuf Exp $
+# $Id: rules.mk,v 1.27 2002/11/30 10:56:49 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall
 
-dist: distclean ChangeLog README xplc.spec
+%.o: %.cpp
+	@$(COMPILE.cpp) -M -E $< | sed -e 's|^.*:|$@:|' > $(dir $@).$(notdir $(@:.o=.d))
+	$(COMPILE.cpp) $(OUTPUT_OPTION) $<
+
+%: %.o
+	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+lib%_s.a: lib%.a
+	ln -sf $^ $@
+
+%.a:
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@
+
+SONAMEFLAGS:=-Wl,-soname,
+
+%.so:
+	$(LINK.cc) -shared $(if $(SONAME),$(SONAMEFLAGS)$(SONAME)) $^ -o $@
+
+%.dll:
+	$(LINK.cc) -shared -o $@ $^
+
+dist: ChangeLog README xplc.spec distclean
 	autoconf
 	autoheader
 	rm -rf autom4te.cache
@@ -30,40 +52,38 @@ ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
 	cvs2cl.pl --utc -U config/cvs-users
 
-README: dist/README.in config/version.mk
-	sed $< -e 's%@VERSION@%$(VERSION)%g' > $@
+README: dist/README.in
+	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
-xplc.spec: dist/xplc.spec.in config/version.mk
-	sed $< -e 's%@VERSION@%$(VERSION)%g' > $@
+xplc.spec: dist/xplc.spec.in
+	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
 dustclean:
-	rm -f $(shell find . -name 'core' -print)
-	rm -f $(shell find . -name '*~' -print)
-	rm -f $(shell find . -name '.#*' -print)
+	-rm -rf $(shell find . -name '*~' -print) $(shell find . -name '.#*' -print)
 
 clean: dustclean
-	rm -f $(shell find . -name '*.o' -print)
-	rm -f $(wildcard $(GARBAGES) $(TARGETS))
+	-rm -rf $(wildcard $(CLEAN))
 
 distclean: clean
-	rm -f $(wildcard $(DISTCLEAN))
+	-rm -rf $(wildcard $(DISTCLEAN))
 
 realclean: distclean
-	rm -f $(wildcard $(REALCLEAN))
+	-rm -rf $(wildcard $(REALCLEAN))
 
 installdirs:
 	mkdir -p $(DESTDIR)$(libdir)
 	mkdir -p $(DESTDIR)$(includedir)/xplc
 
-install: $(TARGETS) installdirs
-	$(INSTALL_PROGRAM) libxplc.so.$(VERSION) $(DESTDIR)$(libdir)
+install: default installdirs
+	$(INSTALL_PROGRAM) libxplc.so $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION)
 	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) libxplc-cxx.a $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(DESTDIR)$(includedir)/xplc
-	ln -s libxplc.so.$(VERSION) $(DESTDIR)$(libdir)/libxplc.so
+	ln -s libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/libxplc.so
 	ln -s libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
 
 uninstall:
-	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(VERSION) $(DESTDIR)$(libdir)/libxplc.so
+	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/libxplc.so
 	rm -f $(DESTDIR)$(libdir)/libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
 	rm -rf $(DESTDIR)$(includedir)/xplc
 
@@ -73,15 +93,11 @@ config/config.mk: config/config.mk.in configure
 	@echo "Please run './configure'."
 	@exit 1
 
-configure: configure.in
+configure: configure.ac
 	autoconf
 	autoheader
 
-config/depends.mk: config/config.mk
-	@echo "Building dependencies file ($@)"
-	@$(foreach DEP,$(CXXDEPS),$(COMPILE.cc) -M $(DEP) | sed -e 's|^.*:|$(dir $(DEP))&|' >> $@;)
-
--include config/depends.mk
+-include $(DEPFILES) /dev/null
 
 endif
 

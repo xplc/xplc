@@ -6,19 +6,19 @@
  * Copyright (C) 2002, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include <xplc/config.h>
@@ -26,14 +26,16 @@
 
 #ifdef HAVE_DLFCN_H
 #include <dlfcn.h>
+#endif
 
+#ifdef WITH_DLOPEN
 const char* loaderOpen(const char* aFilename,
 		       void** aHandle) {
   const char* rv = 0;
 
   /* clear out dl error */
   static_cast<void>(dlerror());
-  
+
   *aHandle = dlopen(aFilename, RTLD_NOW);
 
   if(!*aHandle)
@@ -57,9 +59,8 @@ bool loaderClose(void* aHandle) {
   return dlclose(aHandle) == 0;
 }
 
-#endif
+#elif defined(WIN32)
 
-#ifdef WIN32
 #include <windows.h>
 
 const char* getErrorMessage() {
@@ -98,6 +99,25 @@ const char* loaderSymbol(void* aHandle,
 
 bool loaderClose(void* aHandle) {
   return FreeLibrary(static_cast<HMODULE>(aHandle)) != 0;
+}
+
+#else
+
+const char* loaderOpen(const char* aFilename,
+                       void** aHandle) {
+  *aHandle = 0;
+  return "dynamic loading not supported on this platform";
+}
+
+const char* loaderSymbol(void* aHandle,
+                         const char* aSymbol,
+                         void** aPointer) {
+  *aPointer = 0;
+  return "dynamic loading not supported on this platform";
+}
+
+bool loaderClose(void* aHandle) {
+  return false;
 }
 
 #endif

@@ -5,32 +5,35 @@
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #ifndef __XPLC_XPLC_H__
 #define __XPLC_XPLC_H__
 
+#include <xplc/ptr.h>
+#include <xplc/utils.h>
 #include <xplc/IServiceManager.h>
+#include <xplc/IFactory.h>
+
+extern "C" IServiceManager* XPLC_getServiceManager();
 
 class XPLC {
+private:
+  IServiceManager* servmgr;
 public:
-  /*
-   * Global methods
-   */
-  static IServiceManager* getServiceManager();
   /*
    * XPLC components
    */
@@ -40,6 +43,27 @@ public:
   static const UUID monikers;
   static const UUID newMoniker;
   static const UUID moduleLoader;
+
+  XPLC(): servmgr(XPLC_getServiceManager()) {}
+
+  template<class Interface>
+  Interface* create(const UUID& cid) {
+    xplc_ptr<IFactory> factory;
+
+    if(!servmgr)
+      return 0;
+
+    factory = servmgr->getObject(cid);
+    if(!factory)
+      return 0;
+
+    return mutate<Interface>(factory->createObject());
+  }
+
+  virtual ~XPLC() {
+    if(servmgr)
+      servmgr->release();
+  }
 };
 
 DEFINE_UUID(XPLC::staticServiceHandler) = {0xf8c76062, 0xf241, 0x4f38,

@@ -19,18 +19,18 @@
  * USA
  */
 
-#ifndef __XPLC_NEW_H__
-#define __XPLC_NEW_H__
+#include <assert.h>
+#include <stdio.h>
+#include <xplc/uuid.h>
 
-#include <xplc/IMoniker.h>
+char* UUID::toString(char* str) const {
+  assert(str);
 
-class NewMoniker: public IMoniker {
-protected:
-  virtual ~NewMoniker();
-public:
-  static NewMoniker* create();
-  /* IMoniker */
-  virtual IObject* resolve(const char*);
-};
+  sprintf(str, "{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
+          data0, data1, data2,
+          data3[0], data3[1], data3[2], data3[3],
+          data3[4], data3[5], data3[6], data3[7]);
 
-#endif /* __XPLC_NEW_H__ */
+  return str;
+}
+

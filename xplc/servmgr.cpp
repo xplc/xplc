@@ -1,52 +1,57 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2001, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
  * Copyright (C) 2000, Stéphane Lajoie
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include <xplc/utils.h>
 #include "servmgr.h"
 
-void ServiceManager::create(ServiceManager** aReference) {
-  *aReference = new GenericComponent<ServiceManager>;
+UUID_MAP_BEGIN(ServiceManager)
+  UUID_MAP_ENTRY(IObject)
+  UUID_MAP_ENTRY(IServiceManager)
+  UUID_MAP_END
 
-  (*aReference)->reference = aReference;
+static ServiceManager* singleton;
+
+extern "C" IServiceManager* XPLC_getCoreServiceManager() {
+  if(!singleton)
+    singleton = new GenericComponent<ServiceManager>;
+
+  if(singleton)
+    singleton->addRef();
+
+  return singleton;
 }
 
 ServiceManager::~ServiceManager() {
-  *reference = 0;
-}
+  HandlerNode* next;
 
-IObject* ServiceManager::getInterface(const UUID& uuid) {
-  for(;;) {
-    if(uuid.equals(IObject::IID))
-      break;
-
-    if(uuid.equals(IServiceManager::IID))
-      break;
-
-    return 0;
+  while(handlers) {
+    next = handlers->next;
+    delete handlers;
+    handlers = next;
   }
 
-  addRef();
-  return this;
+  if(singleton == this)
+    singleton = 0;
 }
 
 void ServiceManager::addHandler(IServiceHandler* aHandler) {
@@ -158,12 +163,3 @@ IObject* ServiceManager::getObject(const UUID& aUuid) {
   return 0;
 }
 
-void ServiceManager::shutdown() {
-  HandlerNode* next;
-
-  while(handlers) {
-    next = handlers->next;
-    delete handlers;
-    handlers = next;
-  }
-}

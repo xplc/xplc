@@ -6,21 +6,23 @@
  * Copyright (C) 2002, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 #include <xplc/config.h>
@@ -50,31 +52,27 @@
 #include "loader.h"
 #include "moduleloader.h"
 
+UUID_MAP_BEGIN(ModuleLoader)
+  UUID_MAP_ENTRY(IObject)
+  UUID_MAP_ENTRY(IServiceHandler)
+  UUID_MAP_ENTRY(IModuleLoader)
+  UUID_MAP_END
+
 IObject* ModuleLoader::create() {
   return new GenericComponent<ModuleLoader>;
 }
 
 ModuleLoader::~ModuleLoader() {
-  shutdown();
-}
+  ModuleNode* next;
+  void* dlh;
 
-IObject* ModuleLoader::getInterface(const UUID& aUuid) {
-  if(aUuid.equals(IObject::IID)) {
-    addRef();
-    return static_cast<IObject*>(this);
+  while(modules) {
+    dlh = modules->dlh;
+    next = modules->next;
+    delete modules;
+    loaderClose(dlh);
+    modules = next;
   }
-
-  if(aUuid.equals(IServiceHandler::IID)) {
-    addRef();
-    return static_cast<IServiceHandler*>(this);
-  }
-
-  if(aUuid.equals(IModuleLoader::IID)) {
-    addRef();
-    return static_cast<IModuleLoader*>(this);
-  }
-
-  return 0;
 }
 
 IObject* ModuleLoader::getObject(const UUID& uuid)
@@ -93,18 +91,6 @@ IObject* ModuleLoader::getObject(const UUID& uuid)
   return 0;
 }
 
-void ModuleLoader::shutdown()
-{
-  ModuleNode* next;
-
-  while(modules) {
-    loaderClose(modules->dlh);
-    next = modules->next;
-    delete modules;
-    modules = next;
-  }
-}
-
 #if !defined(WIN32)
 void ModuleLoader::setModuleDirectory(const char* directory)
 {
@@ -119,7 +105,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
     return;
 
   fname = static_cast<char*>(malloc(len));
-  servmgr = XPLC::getServiceManager();
+  servmgr = XPLC_getServiceManager();
 
   rewinddir(dir);
   while((ent = readdir(dir)) && fname && servmgr) {
@@ -194,7 +180,7 @@ void ModuleLoader::setModuleDirectory(const char* directory)
     IModule* module;
     ModuleNode* newmodule;
 
-    snprintf(fname, len, "%s/%s", directory, data.name);
+    _snprintf(fname, len, "%s/%s", directory, data.name);
 
     err = loaderOpen(fname, &dlh);
     if(err)

@@ -5,19 +5,19 @@
  * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include "test.h"
@@ -48,21 +48,6 @@ public:
 
     return 0;
   }
-  virtual void shutdown() {
-  }
-  virtual IObject* getInterface(const UUID& uuid) {
-    if(uuid.equals(IObject::IID)) {
-      addRef();
-      return static_cast<IObject*>(this);
-    }
-
-    if(uuid.equals(IServiceHandler::IID)) {
-      addRef();
-      return static_cast<IServiceHandler*>(this);
-    }
-
-    return 0;
-  }
 };
 
 class Handler2: public IServiceHandler {
@@ -75,21 +60,6 @@ public:
 
     if(uuid.equals(obj2)) {
       return reinterpret_cast<IObject*>(2);
-    }
-
-    return 0;
-  }
-  virtual void shutdown() {
-  }
-  virtual IObject* getInterface(const UUID& uuid) {
-    if(uuid.equals(IObject::IID)) {
-      addRef();
-      return static_cast<IObject*>(this);
-    }
-
-    if(uuid.equals(IServiceHandler::IID)) {
-      addRef();
-      return static_cast<IServiceHandler*>(this);
     }
 
     return 0;
@@ -110,22 +80,22 @@ public:
 
     return 0;
   }
-  virtual void shutdown() {
-  }
-  virtual IObject* getInterface(const UUID& uuid) {
-    if(uuid.equals(IObject::IID)) {
-      addRef();
-      return static_cast<IObject*>(this);
-    }
-
-    if(uuid.equals(IServiceHandler::IID)) {
-      addRef();
-      return static_cast<IServiceHandler*>(this);
-    }
-
-    return 0;
-  }
 };
+
+UUID_MAP_BEGIN(Handler1)
+  UUID_MAP_ENTRY(IObject)
+  UUID_MAP_ENTRY(IServiceHandler)
+  UUID_MAP_END
+
+UUID_MAP_BEGIN(Handler2)
+  UUID_MAP_ENTRY(IObject)
+  UUID_MAP_ENTRY(IServiceHandler)
+  UUID_MAP_END
+
+UUID_MAP_BEGIN(Handler3)
+  UUID_MAP_ENTRY(IObject)
+  UUID_MAP_ENTRY(IServiceHandler)
+  UUID_MAP_END
 
 void test001() {
   IServiceManager* serv;
@@ -134,7 +104,7 @@ void test001() {
   IServiceHandler* handler3;
   IObject* obj;
 
-  serv = XPLC::getServiceManager();
+  serv = XPLC_getServiceManager();
 
   ASSERT(serv != 0, "could not obtain service manager");
 
@@ -178,7 +148,9 @@ void test001() {
   obj = serv->getObject(obj3);
   VERIFY(!obj, "object 3 still returned after removing handler 3");
 
-  serv->shutdown();
+  VERIFY(handler1->release() == 0, "incorrect refcount on handler 1");
+  VERIFY(handler2->release() == 0, "incorrect refcount on handler 2");
+  VERIFY(handler3->release() == 0, "incorrect refcount on handler 3");
 
-  VERIFY(serv->release() == 0, "service manager has non-zero refcount after shutdown/release");
+  VERIFY(serv->release() == 0, "service manager has non-zero refcount after release");
 }

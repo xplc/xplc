@@ -1,3 +1,25 @@
+New in 0.1.6
+------------
+
+ * Added a (still experimental) smart pointer templated class.
+ * Fixed a large number of leaks, thanks to Valgrind.
+ * Simplified building on Windows.
+ * Added support for number of new platforms.
+ * Switched to autoconf 2.5x.
+ * Added support for building without dynamic loading support.
+ * Code cleanups.
+ * Improved Standard C++ correctness.
+ * Created a new libxplc-cxx.a library that contains the code for the
+   C++ bindings.
+ * Added a "create" templated helper function to create instances of
+   components quickly and easily.
+ * Improved GenericComponent to also automate getInterface
+   implementation.
+ * Added a Perl script to convert the output of "uuidgen" to a C
+   definition.
+ * Improved the dependencies generation (now compatible with gcc 3).
+ * Fixed various small bugs and warnings.
+
 New in 0.1.5
 ------------
 

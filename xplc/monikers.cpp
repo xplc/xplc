@@ -5,19 +5,19 @@
  * Copyright (C) 2002, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include <xplc/xplc.h>
@@ -25,6 +25,12 @@
 #include "monikers.h"
 
 #define MONIKER_SEPARATOR_CHAR ':'
+
+UUID_MAP_BEGIN(MonikerService)
+  UUID_MAP_ENTRY(IObject)
+  UUID_MAP_ENTRY(IMoniker)
+  UUID_MAP_ENTRY(IMonikerService)
+  UUID_MAP_END
 
 MonikerService* MonikerService::create() {
   return new GenericComponent<MonikerService>;
@@ -45,24 +51,6 @@ MonikerService::~MonikerService() {
   monikers = 0;
 }
 
-IObject* MonikerService::getInterface(const UUID& uuid) {
-  for(;;) {
-    if(uuid.equals(IObject::IID))
-      break;
-
-    if(uuid.equals(IMoniker::IID))
-      break;
-
-    if(uuid.equals(IMonikerService::IID))
-      break;
-
-    return 0;
-  }
-
-  addRef();
-  return this;
-}
-
 IObject* MonikerService::resolve(const char* aName) {
   MonikerNode* node;
   IServiceManager* servmgr;
@@ -80,7 +68,7 @@ IObject* MonikerService::resolve(const char* aName) {
 
   while(node) {
     if(strcmp(name, node->name) == 0) {
-      servmgr = XPLC::getServiceManager();
+      servmgr = XPLC_getServiceManager();
       if(!servmgr)
         break;
 

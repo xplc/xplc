@@ -19,18 +19,22 @@
  * USA
  */
 
-#ifndef __XPLC_NEW_H__
-#define __XPLC_NEW_H__
+#include <xplc/utils.h>
 
-#include <xplc/IMoniker.h>
+IObject* XPLC_getInterface_real(void* self, const UUID& uuid,
+                           const UUID_Info* uuidlist) {
+  IObject* rv;
 
-class NewMoniker: public IMoniker {
-protected:
-  virtual ~NewMoniker();
-public:
-  static NewMoniker* create();
-  /* IMoniker */
-  virtual IObject* resolve(const char*);
-};
+  while(uuidlist->iid) {
+    if(uuidlist->iid->equals(uuid)) {
+      rv = reinterpret_cast<IObject*>
+        (reinterpret_cast<ptrdiff_t>(self) + uuidlist->delta);
+      rv->addRef();
+      return rv;
+    }
+    uuidlist++;
+  }
 
-#endif /* __XPLC_NEW_H__ */
+  return 0;
+}
+

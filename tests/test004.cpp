@@ -6,22 +6,23 @@
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
  */
 
 #include "test.h"
+#include <xplc/config.h>
 #include <xplc/xplc.h>
 #include <xplc/utils.h>
 #include <xplc/ISingleModuleLoader.h>
@@ -34,6 +35,7 @@
  */
 
 void test004() {
+#ifdef HAVE_DYNAMIC_LOADING
   IServiceManager* servmgr;
   IFactory* loaderfactory;
   IObject* obj;
@@ -41,7 +43,7 @@ void test004() {
   ITestComponent* test;
   const char* err;
 
-  servmgr = XPLC::getServiceManager();
+  servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");
 
   obj = servmgr->getObject(XPLC::singleModuleLoader);
@@ -73,7 +75,6 @@ void test004() {
 
   VERIFY(loader->release() == 0, "single module loader has wrong refcount");
 
-  servmgr->shutdown();
-
-  VERIFY(servmgr->release() == 0, "service manager has non-zero refcount after shutdown/release");
+  VERIFY(servmgr->release() == 0, "service manager has non-zero refcount after release");
+#endif
 }
