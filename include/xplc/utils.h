@@ -24,10 +24,16 @@
 
 /*
  * Define this if you want to debug components using the
- * GenericComponent template.  #undef GENERICDEBUG
+ * GenericComponent template.
  */
+#undef GENERICDEBUG
 
-#ifdef GENERICDEBUG
+/*
+ * Define this if you want to debug addRef()s and release()s.
+ */
+#undef GENERICDEBUG_REFS
+
+#if defined(GENERICDEBUG) || defined(GENERICDEBUG_REFS)
 #include <stdio.h>
 #endif
 
@@ -55,14 +61,14 @@ public:
     ::delete self;
   }
   virtual unsigned int addRef() {
-#ifdef GENERICDEBUG
+#ifdef GENERICDEBUG_REFS
     fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount + 1);
 #endif
 
     return ++refcount;
   }
   virtual unsigned int release() {
-#ifdef GENERICDEBUG
+#ifdef GENERICDEBUG_REFS
     fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount - 1);
 #endif
 
