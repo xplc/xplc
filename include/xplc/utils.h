@@ -59,9 +59,6 @@ public:
     fprintf(stderr, "%s: destroyed\n", __PRETTY_FUNCTION__);
   }
 #endif
-  void operator delete(void* self) {
-    ::operator delete(self);
-  }
   virtual unsigned int addRef() {
 #ifdef GENERICDEBUG_REFS
     fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount + 1);

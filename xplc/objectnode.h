@@ -19,16 +19,27 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_XPLC_H__
-#define __XPLC_XPLC_H__
+#ifndef __XPLC_OBJECTNODE_H__
+#define __XPLC_OBJECTNODE_H__
 
-#include <xplc/IServiceManager.h>
+#include <xplc/IObject.h>
 
-class XPLC {
+class ObjectNode {
 public:
-  static IServiceManager* getServiceManager();
-  static void addObject(const UUID&, IObject*);
-  static void removeObject(const UUID&);
+  ObjectNode* next;
+  UUID uuid;
+  IObject* obj;
+  ObjectNode(const UUID& aUuid,
+             IObject* aObj,
+             ObjectNode* aNext): next(aNext),
+                                 uuid(aUuid),
+                                 obj(aObj) {
+    obj->addRef();
+  }
+
+  ~ObjectNode() {
+    obj->release();
+  }
 };
 
-#endif /* __XPLC_XPLC_H__ */
+#endif /* __XPLC_OBJECTNODE_H__ */

@@ -25,8 +25,19 @@
 #include <xplc/uuid.h>
 
 class IObject {
-private:
-  void operator delete(void*);
+protected:
+  /*
+   * FIXME: This is so that only the component itself can "delete"
+   * itself, preventing user code from invoking delete on an interface
+   * (which is forbidden). But I am not sure if this will work
+   * everywhere (Visual C++ is rather braindead). A protected
+   * destructor works, but generates spurious warnings about it not
+   * being virtual, and making it virtual would change the layout of
+   * the virtual method table, which must not happen.
+   */
+  void operator delete(void* ptr) {
+    ::operator delete(ptr);
+  }
 public:
   static const UUID IID;
   virtual unsigned int addRef() = 0;

@@ -35,6 +35,9 @@ const UUID obj2 = {0x862adfe4, 0x0821, 0x4f88, {0x85, 0x4a, 0xb9, 0xbf, 0xb9, 0x
 
 class Handler1: public IServiceHandler {
 public:
+  static Handler1* create() {
+    return new GenericComponent<Handler1>;
+  }
   virtual IObject* getObject(const UUID& uuid) {
     if(uuid.equals(obj1)) {
       return reinterpret_cast<IObject*>(1);
@@ -43,11 +46,15 @@ public:
     return NULL;
   }
   virtual IObject* getInterface(const UUID& uuid) {
-    if(uuid.equals(IObject::IID))
+    if(uuid.equals(IObject::IID)) {
+      addRef();
       return static_cast<IObject*>(this);
+    }
 
-    if(uuid.equals(IServiceHandler::IID))
+    if(uuid.equals(IServiceHandler::IID)) {
+      addRef();
       return static_cast<IServiceHandler*>(this);
+    }
 
     return NULL;
   }
@@ -55,6 +62,9 @@ public:
 
 class Handler2: public IServiceHandler {
 public:
+  static Handler2* create() {
+    return new GenericComponent<Handler2>;
+  }
   virtual IObject* getObject(const UUID& uuid) {
     if(uuid.equals(obj2)) {
       return reinterpret_cast<IObject*>(2);
@@ -63,11 +73,15 @@ public:
     return NULL;
   }
   virtual IObject* getInterface(const UUID& uuid) {
-    if(uuid.equals(IObject::IID))
+    if(uuid.equals(IObject::IID)) {
+      addRef();
       return static_cast<IObject*>(this);
+    }
 
-    if(uuid.equals(IServiceHandler::IID))
+    if(uuid.equals(IServiceHandler::IID)) {
+      addRef();
       return static_cast<IServiceHandler*>(this);
+    }
 
     return NULL;
   }
@@ -83,12 +97,12 @@ void test() {
 
   ASSERT(serv, "could not obtain service manager");
 
-  handler1 = new GenericComponent<Handler1>;
+  handler1 = Handler1::create();
   ASSERT(handler1, "could not instantiate test handler 1");
   handler1->addRef();
   serv->addHandler(handler1);
 
-  handler2 = new GenericComponent<Handler2>;
+  handler2 = Handler2::create();
   ASSERT(handler2, "could not instantiate test handler 2");
   handler2->addRef();
   serv->addHandler(handler2);

@@ -19,16 +19,18 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_XPLC_H__
-#define __XPLC_XPLC_H__
+#ifndef __XPLC_ISTATICSERVICEHANDLER_H__
+#define __XPLC_ISTATICSERVICEHANDLER_H__
 
-#include <xplc/IServiceManager.h>
+#include <xplc/IServiceHandler.h>
 
-class XPLC {
+class IStaticServiceHandler: public IServiceHandler {
 public:
-  static IServiceManager* getServiceManager();
-  static void addObject(const UUID&, IObject*);
-  static void removeObject(const UUID&);
+  static const UUID IID;
+  virtual void addObject(const UUID&, IObject*) = 0;
+  virtual void removeObject(const UUID&) = 0;
 };
 
-#endif /* __XPLC_XPLC_H__ */
+const UUID IStaticServiceHandler::IID __attribute__((weak)) = {0x0a599d64, 0x0684, 0x4c44, {0x8a, 0xbc, 0xab, 0xfd, 0x5d, 0xe0, 0x22, 0x59}};
+
+#endif /* __XPLC_ISTATICSERVICEHANDLER_H__ */

@@ -22,16 +22,64 @@
 #include <stdlib.h>
 #include <xplc/xplc.h>
 #include "servmgr.h"
+#include "statichandler.h"
 
-static IServiceManager* servmgr;
+static IServiceManager* servmgr = NULL;
+static IStaticServiceHandler* handler = NULL;
 
 IServiceManager* XPLC::getServiceManager() {
-  if(!servmgr)
-    servmgr = ServiceManager::create();
+  if(servmgr) {
+    servmgr->addRef();
+    return servmgr;
+  }
+
+  /*
+   * The basic services have to be created.
+   */
+
+  servmgr = ServiceManager::create();
 
   if(servmgr)
     servmgr->addRef();
+  else
+    return NULL;
+
+  /*
+   * The static service handler could already have been created by a
+   * call to XPLC::addObject.
+   */
+  if(!handler)
+    handler = StaticServiceHandler::create();
+
+  if(!handler) {
+    servmgr->release();
+    return NULL;
+  }
+
+  servmgr->addHandler(handler);
+
+  /*
+   * Populate the static service handler.
+   */
+
+  /*
+   * ... but we have no component yet to put in the static service
+   * handler (yet).
+   */
 
   return servmgr;
+}
+
+void XPLC::addObject(const UUID& aUuid, IObject* aObj) {
+  if(!handler)
+    handler = StaticServiceHandler::create();
+
+  if(handler)
+    handler->addObject(aUuid, aObj);
+}
+
+void XPLC::removeObject(const UUID& aUuid) {
+  if(handler)
+    handler->removeObject(aUuid);
 }
 

@@ -19,16 +19,27 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_XPLC_H__
-#define __XPLC_XPLC_H__
+#ifndef __XPLC_STATICHANDLER_H__
+#define __XPLC_STATICHANDLER_H__
 
-#include <xplc/IServiceManager.h>
+#include <xplc/IStaticServiceHandler.h>
+#include "objectnode.h"
 
-class XPLC {
+class StaticServiceHandler: public IStaticServiceHandler {
+private:
+  ObjectNode* objects;
 public:
-  static IServiceManager* getServiceManager();
-  static void addObject(const UUID&, IObject*);
-  static void removeObject(const UUID&);
+  static StaticServiceHandler* create();
+  StaticServiceHandler(): objects(NULL) {
+  }
+  virtual ~StaticServiceHandler();
+  /* IObject */
+  virtual IObject* getInterface(const UUID&);
+  /* IServiceHandler */
+  virtual IObject* getObject(const UUID&);
+  /* IStaticServiceHandler */
+  virtual void addObject(const UUID&, IObject*);
+  virtual void removeObject(const UUID&);
 };
 
-#endif /* __XPLC_XPLC_H__ */
+#endif /* __XPLC_STATICHANDLER_H__ */
