@@ -30,6 +30,6 @@ public:
   /* FIXME: there should be something here! */
 };
 
-DEFINE_IID(IGenericFactory::IID) = {0x11e2d782, 0x065a, 0x47f8, {0xb4b38eb42462c9ff}};
+DEFINE_UUID(IGenericFactory::IID) = {0x11e2d782, 0x065a, 0x47f8, {0xb4b38eb42462c9ff}};
 
 #endif /* __XPLC_IGENERICFACTORY_H__ */

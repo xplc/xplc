@@ -35,6 +35,6 @@ struct UUID {
   };
 };
 
-#define DEFINE_IID(iface) const UUID iface __attribute__((weak))
+#define DEFINE_UUID(symbol) const UUID symbol __attribute__((weak))
 
 #endif /* __XPLC_UUID_H__ */
