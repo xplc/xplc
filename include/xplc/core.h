@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2004, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -30,9 +31,13 @@ static const UUID XPLC_staticServiceHandler = {0xf8c76062, 0xf241, 0x4f38,
                                                {0x80, 0x8d, 0x73, 0x88,
                                                 0x31, 0x22, 0x89, 0xd8}};
 
-static const UUID XPLC_singleModuleLoader = {0xc8c4d2c6, 0x76b8, 0x4f86,
-                                             {0x90, 0x7d, 0x05, 0x42,
-                                              0x9b, 0xc8, 0x62, 0xe8}};
+static const UUID XPLC_moduleLoader = {0x59e3fa68, 0x807c, 0x4ecb,
+                                       {0xbc, 0x26, 0xb8, 0x08,
+                                        0x37, 0xcb, 0x32, 0x7e}};
+
+static const UUID XPLC_moduleManagerFactory = {0x251c9dfc, 0xc76b, 0x454e,
+                                               {0xaa, 0xcb, 0x95, 0x8e,
+                                                0x06, 0x35, 0xe2, 0x72}};
 
 static const UUID XPLC_genericFactory = {0x414a69c6, 0x3c9e, 0x49f7,
                                          {0xab, 0x08, 0xe5, 0x5c,
@@ -45,10 +50,6 @@ static const UUID XPLC_monikers = {0x5ed8cb8f, 0x6938, 0x40f2,
 static const UUID XPLC_newMoniker = {0x9ec8028c, 0x45e3, 0x40ff,
                                      {0x97, 0xfc, 0x0b, 0x35,
                                       0xca, 0x6e, 0xdc, 0xb5}};
-
-static const UUID XPLC_moduleLoader = {0x1bff121f, 0x9bd0, 0x412f,
-                                       {0xa4, 0x16, 0x98, 0x1e,
-                                        0x3e, 0xf5, 0xe1, 0x2b}};
 
 static const UUID XPLC_categoryManager = {0xa7b3c486, 0x3725, 0x4500,
                                           {0xa4, 0x4c, 0x59, 0x13,

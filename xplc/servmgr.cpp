@@ -1,9 +1,9 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2003, Pierre Phaneuf
+ * Copyright (C) 2000-2004, Pierre Phaneuf
  * Copyright (C) 2000, Stéphane Lajoie
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -28,9 +28,9 @@
 #include "catmgr.h"
 #include "statichandler.h"
 #include "moduleloader.h"
-#include "singleloader.h"
 #include "monikers.h"
 #include "new.h"
+#include "modulemgr.h"
 
 UUID_MAP_BEGIN(ServiceManager)
   UUID_MAP_ENTRY(IObject)
@@ -38,17 +38,6 @@ UUID_MAP_BEGIN(ServiceManager)
   UUID_MAP_END
 
 static ServiceManager* singleton;
-
-static void add_factory(IStaticServiceHandler* handler,
-                        const UUID& uuid,
-                        IObject*(*factoryptr)()) {
-  GenericFactory* factory = new GenericFactory(factoryptr);
-
-  if(factory) {
-    handler->addObject(uuid, factory);
-    factory->release();
-  }
-}
 
 IServiceManager* XPLC_getServiceManager() {
   if(singleton)
@@ -96,18 +85,24 @@ IServiceManager* XPLC_getServiceManager() {
       obj->release();
     }
 
+    obj = new ModuleLoader;
+    if(obj) {
+      handler->addObject(XPLC_moduleLoader, obj);
+      obj->release();
+    }
+
+    obj = new ModuleManagerFactory;
+    if(obj) {
+      handler->addObject(XPLC_moduleManagerFactory, obj);
+      obj->release();
+    }
+
     monikers = new MonikerService;
     if(monikers) {
       monikers->registerObject("new", XPLC_newMoniker);
       handler->addObject(XPLC_monikers, monikers);
       monikers->release();
     }
-
-    add_factory(handler, XPLC_singleModuleLoader,
-                SingleModuleLoader::create);
-
-    add_factory(handler, XPLC_moduleLoader,
-                ModuleLoader::create);
 
     singleton->addHandler(handler);
 

@@ -15,3 +15,5 @@ clean:
 example: $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 	$(LINK.cc) $^ -lxplc -lxplc-cxx -o $@
 
+$(wildcard *.o): $(wildcard *.h ../simple-module/*.h)
+

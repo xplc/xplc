@@ -147,6 +147,9 @@
 				RelativePath="..\xplc\moduleloader.cpp">
 			</File>
 			<File
+				RelativePath="..\xplc\modulemgr.cpp">
+			</File>
+			<File
 				RelativePath="..\xplc\monikers.cpp">
 			</File>
 			<File
@@ -154,9 +157,6 @@
 			</File>
 			<File
 				RelativePath="..\xplc\servmgr.cpp">
-			</File>
-			<File
-				RelativePath="..\xplc\singleloader.cpp">
 			</File>
 			<File
 				RelativePath="..\xplc\statichandler.cpp">
@@ -214,6 +214,9 @@
 				RelativePath="..\include\xplc\IModuleLoader.h">
 			</File>
 			<File
+				RelativePath="..\include\xplc\IModuleManagerFactory.h">
+			</File>
+			<File
 				RelativePath="..\include\xplc\IMoniker.h">
 			</File>
 			<File
@@ -229,9 +232,6 @@
 				RelativePath="..\include\xplc\IServiceManager.h">
 			</File>
 			<File
-				RelativePath="..\include\xplc\ISingleModuleLoader.h">
-			</File>
-			<File
 				RelativePath="..\include\xplc\IStaticServiceHandler.h">
 			</File>
 			<File
@@ -245,6 +245,9 @@
 			</File>
 			<File
 				RelativePath="..\xplc\moduleloader.h">
+			</File>
+			<File
+				RelativePath="..\xplc\modulemgr.h">
 			</File>
 			<File
 				RelativePath="..\xplc\monikernode.h">
@@ -265,9 +268,6 @@
 				RelativePath="..\xplc\servmgr.h">
 			</File>
 			<File
-				RelativePath="..\xplc\singleloader.h">
-			</File>
-			<File
 				RelativePath="..\xplc\statichandler.h">
 			</File>
 			<File
@@ -278,6 +278,9 @@
 			</File>
 			<File
 				RelativePath="..\include\xplc\uuid.h">
+			</File>
+			<File
+				RelativePath="..\include\xplc\uuidops.h">
 			</File>
 			<File
 				RelativePath="..\include\xplc\xplc.h">

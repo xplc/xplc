@@ -20,26 +20,32 @@
  * USA
  */
 
-#ifndef __XPLC_IMODULE_H__
-#define __XPLC_IMODULE_H__
+#ifndef __XPLC_MODULEMGR_H__
+#define __XPLC_MODULEMGR_H__
 
-#include <xplc/IServiceHandler.h>
+#include <xplc/utils.h>
+#include <xplc/IModuleManagerFactory.h>
 
-/** \interface IModule IModule.h xplc/IModule.h
- *
- * The interface that a module should provide.
- */
-
-class IModule: public IServiceHandler {
-  UNSTABLE_INTERFACE
+class ModuleManagerFactory: public IModuleManagerFactory {
+  IMPLEMENT_IOBJECT(ModuleManagerFactory);
+private:
 public:
-  /*
-   * FIXME: There will be other methods here, for inspecting a
-   * module.
-   */
+  static ModuleManagerFactory* create() {
+    return new ModuleManagerFactory;
+  }
+  virtual IServiceHandler* createModuleManager(const char* directory);
 };
 
-DEFINE_IID(IModule, {0x772689d4, 0x7932, 0x448a,
-  {0x80, 0x8a, 0x6e, 0xbf, 0x1c, 0xe9, 0xf9, 0x4b}});
+struct ModuleNode;
 
-#endif /* __XPLC_IMODULE_H__ */
+class ModuleManager: public IServiceHandler {
+  IMPLEMENT_IOBJECT(ModuleManager);
+private:
+  ModuleNode* modules;
+public:
+  ModuleManager(ModuleNode* aModules);
+  virtual IObject* getObject(const UUID& cid);
+  virtual ~ModuleManager();
+};
+
+#endif /* __XPLC_MODULEMGR_H__ */

@@ -1,8 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Pierre Phaneuf
- * Copyright (C) 2002-2003, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Pierre Phaneuf
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -23,43 +23,39 @@
 #include "config.h"
 #include <xplc/utils.h>
 #include <xplc/IModuleLoader.h>
+#include <xplc/IModuleManagerFactory.h>
 #include "test.h"
 #include "testobj.h"
 
 /*
  * test009
  *
- * Verifies the module loader.
+ * Verifies the module manager.
  */
 
 void test009() {
 #ifdef ENABLE_LOADER
   IServiceManager* servmgr;
   IObject* obj;
-  IFactory* loaderfactory;
-  IModuleLoader* loader;
+  IModuleManagerFactory* mgrfactory;
+  IServiceHandler* modulemgr;
   ITestComponent* test;
 
   servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");
 
-  obj = servmgr->getObject(XPLC_moduleLoader);
-  ASSERT(obj != 0, "could not obtain module loader component");
+  obj = servmgr->getObject(XPLC_moduleManagerFactory);
+  ASSERT(obj != 0, "could not obtain module manager factory");
 
-  loaderfactory = mutate<IFactory>(obj);
-  ASSERT(loaderfactory != 0, "factory does not have expected interface");
+  mgrfactory = mutate<IModuleManagerFactory>(obj);
+  ASSERT(mgrfactory != 0, "factory does not have expected interface");
 
-  obj = loaderfactory->createObject();
-  ASSERT(obj != 0, "could not create module loader component");
+  modulemgr = mgrfactory->createModuleManager(".");
+  ASSERT(modulemgr, "could not create module manager");
 
-  VERIFY(loaderfactory->release() == 1, "factory has wrong refcount");
+  VERIFY(mgrfactory->release() == 1, "factory has wrong refcount");
 
-  loader = mutate<IModuleLoader>(obj);
-  ASSERT(loader != 0, "module loader does not have expected interface");
-
-  loader->setModuleDirectory(".");
-
-  obj = loader->getObject(TestComponent_CID);
+  obj = modulemgr->getObject(TestComponent_CID);
   ASSERT(obj != 0, "could not create test object");
 
   test = mutate<ITestComponent>(obj);
@@ -67,10 +63,11 @@ void test009() {
 
   ASSERT(test->getAnswer() == 42, "test object did not have expected behavior");
 
-  VERIFY(test->release() == 1, "test object has wrong refcount");
+  VERIFY(test->release() == 0, "test object has wrong refcount");
 
-  VERIFY(loader->release() == 0, "incorrect refcount on module loader");
+  VERIFY(modulemgr->release() == 0, "incorrect refcount on module loader");
 
   VERIFY(servmgr->release() == 0, "service manager has non-zero refcount after release");
 #endif
 }
+

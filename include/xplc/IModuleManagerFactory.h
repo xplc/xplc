@@ -1,9 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000-2003, Pierre Phaneuf
- * Copyright (C) 2001, Stéphane Lajoie
- * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
+ * Copyright (C) 2004, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -21,32 +19,18 @@
  * USA
  */
 
-#ifndef __XPLC_SINGLELOADER_H__
-#define __XPLC_SINGLELOADER_H__
+#ifndef __XPLC_IMODULEMANAGERFACTORY_H__
+#define __XPLC_IMODULEMANAGERFACTORY_H__
 
-#include <xplc/IModule.h>
-#include <xplc/ISingleModuleLoader.h>
-#include <xplc/module.h>
+#include <xplc/IServiceHandler.h>
 
-class SingleModuleLoader: public ISingleModuleLoader {
-  IMPLEMENT_IOBJECT(SingleModuleLoader);
-private:
-  void* dlh;
-  const XPLC_ModuleInfo* info;
-protected:
-  SingleModuleLoader():
-    dlh(0),
-    info(0) {
-  }
+class IModuleManagerFactory: public IObject {
+  UNSTABLE_INTERFACE
 public:
-  static IObject* create() {
-    return new SingleModuleLoader;
-  }
-  virtual ~SingleModuleLoader();
-  /* IServiceHandler */
-  virtual IObject* getObject(const UUID&);
-  /* ISingleModuleLoader */
-  virtual const char* loadModule(const char* filename);
+  virtual IServiceHandler* createModuleManager(const char* directory) = 0;
 };
 
-#endif /* __XPLC_SINGLELOADER_H__ */
+DEFINE_IID(IModuleManagerFactory,{0x9c88d2d0, 0xc61f, 0x41b7,
+  {0x9d, 0x4d, 0xd2, 0xc6, 0xc0, 0x97, 0x94, 0x55}});
+
+#endif /* __XPLC_IMODULEMANAGERFACTORY_H__ */

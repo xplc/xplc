@@ -17,3 +17,5 @@ clean:
 
 example.so: $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
+$(wildcard *.o): $(wildcard *.h)
+

@@ -34,14 +34,9 @@
 class TestComponent: public ITestComponent {
   IMPLEMENT_IOBJECT(TestComponent);
 public:
-  static TestComponent* create();
   /* ITestComponent */
   virtual int getAnswer();
 };
-
-TestComponent* TestComponent::create() {
-  return new TestComponent;
-}
 
 int TestComponent::getAnswer() {
   /*
@@ -54,10 +49,7 @@ static IObject* factory() {
   static TestComponent* component = 0;
 
   if(!component)
-    component = TestComponent::create();
-
-  if(component)
-    component->addRef();
+    component = new TestComponent;
 
   return component;
 }

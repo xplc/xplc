@@ -1,3 +1,11 @@
+New in 0.3.8
+------------
+
+ * Refactored the module loading mechanism, sharing more code and
+   making it simpler to use.
+ * Fixed some bugs in the unit tests.
+ * Improved the examples a bit to make lifting of code easier.
+
 New in 0.3.7
 ------------
 

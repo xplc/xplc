@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  * Copyright (C) 2003-2004, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
@@ -32,16 +32,22 @@
 
 #include <xplc/IMoniker.h>
 #include <xplc/IFactory.h>
-#include <xplc/IModuleLoader.h>
+#include <xplc/IModuleManagerFactory.h>
 #include <xplc/xplc.h>
 #include <xplc/ptr.h>
 
 void XPLC::addModuleDirectory(const char* directory) {
-  xplc_ptr<IModuleLoader> loader(create<IModuleLoader>(XPLC_moduleLoader));
+  xplc_ptr<IModuleManagerFactory> factory(get<IModuleManagerFactory>(XPLC_moduleManagerFactory));
 
-  loader->setModuleDirectory(directory);
+  if(!factory)
+    return;
 
-  servmgr->addHandler(loader);
+  xplc_ptr<IServiceHandler> modulemgr(factory->createModuleManager(directory));
+
+  if(!modulemgr)
+    return;
+
+  servmgr->addHandler(modulemgr);
 }
 
 IObject* XPLC::create(const UUID& cid) {

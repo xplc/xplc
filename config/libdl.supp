@@ -1,0 +1,17 @@
+{
+   loading_executable_error
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+}
+
+{
+   loading_nonelf_error
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_internal
+   fun:dl_open_worker
+   fun:_dl_catch_error_internal
+}

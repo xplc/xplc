@@ -1,8 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2002, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002-2004, Pierre Phaneuf
+ * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -23,24 +23,20 @@
 #ifndef __XPLC_IMODULELOADER_H__
 #define __XPLC_IMODULELOADER_H__
 
-#include <xplc/IServiceHandler.h>
+#include <xplc/IModule.h>
 
 /** \interface IModuleLoader IModuleLoader.h xplc/IModuleLoader.h
  *
  * The interface to control the module loader.
  */
 
-class IModuleLoader: public IServiceHandler {
+class IModuleLoader: public IObject {
   UNSTABLE_INTERFACE
 public:
-  /**
-   * Set the name of the directory that will be searched for loadable
-   * %XPLC modules.
-   */
-  virtual void setModuleDirectory(const char* directory) = 0;
+  virtual IModule* loadModule(const char* modulename) = 0;
 };
 
-DEFINE_IID(IModuleLoader, {0xd482c148, 0x6cc0, 0x4e57,
-  {0x90, 0x49, 0x7d, 0xbc, 0xa1, 0x47, 0x79, 0xb6}});
+DEFINE_IID(IModuleLoader, {0xa4143690, 0xfc54, 0x43f4,
+  {0x9d, 0x7e, 0x50, 0x3c, 0x71, 0xff, 0xa5, 0x01}});
 
 #endif /* __XPLC_IMODULELOADER_H__ */

@@ -2,7 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002-2004, Net Integration Technologies, Inc.
- * Copyright (C) 2002-2003, Pierre Phaneuf
+ * Copyright (C) 2002-2004, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -23,32 +23,26 @@
 #ifndef __XPLC_MODULELOADER_H__
 #define __XPLC_MODULELOADER_H__
 
-#include <xplc/IModule.h>
+#include <xplc/utils.h>
 #include <xplc/IModuleLoader.h>
 #include <xplc/module.h>
 
-IObject* getModuleObject(const XPLC_ComponentEntry*, const UUID&);
-
-struct ModuleNode;
-
 class ModuleLoader: public IModuleLoader {
   IMPLEMENT_IOBJECT(ModuleLoader);
-private:
-  ModuleNode* modules;
-  void loadModule(const char*);
-protected:
-  ModuleLoader():
-    modules(0) {
-  }
 public:
-  static IObject* create() {
-    return new ModuleLoader;
-  }
-  virtual ~ModuleLoader();
-  /* IServiceHandler */
-  virtual IObject* getObject(const UUID&);
-  /* IModuleLoader */
-  virtual void setModuleDirectory(const char* directory);
+  virtual IModule* loadModule(const char* modulename);
+};
+
+class Module: public IModule {
+  IMPLEMENT_IOBJECT(Module);
+private:
+  void *handle;
+  XPLC_ModuleInfo* moduleinfo;
+  Module(void* aHandle, XPLC_ModuleInfo* aModuleInfo);
+public:
+  static Module* loadModule(const char* modulename);
+  virtual IObject* getObject(const UUID& cid);
+  virtual ~Module();
 };
 
 #endif /* __XPLC_MODULELOADER_H__ */
