@@ -16,11 +16,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: version.mk,v 1.2 2002/06/07 20:29:55 pphaneuf Exp $
+# $Id: version.mk,v 1.3 2002/09/14 04:23:51 pphaneuf Exp $
 
 VERSION_MAJOR:=0
 VERSION_MINOR:=1
-VERSION_PATCH:=3
+VERSION_PATCH:=4
 
 VERSION:=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 

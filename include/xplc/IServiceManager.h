@@ -26,17 +26,17 @@
 #include <xplc/IObject.h>
 #include <xplc/IServiceHandler.h>
 
-class IServiceManager: public IObject { UNSTABLE_INTERFACE
+class IServiceManager: public IServiceHandler { UNSTABLE_INTERFACE
 public:
   static const UUID IID;
   virtual void addHandler(IServiceHandler*) = 0;
   virtual void addFirstHandler(IServiceHandler*) = 0;
   virtual void addLastHandler(IServiceHandler*) = 0;
   virtual void removeHandler(IServiceHandler*) = 0;
-  virtual IObject* getObject(const UUID&) = 0;
-  virtual void shutdown() = 0;
 };
 
-DEFINE_UUID(IServiceManager::IID) = {0x22bdabd9, 0xa63a, 0x4b5e, {0xb1, 0x61, 0xb6, 0x36, 0x52, 0x27, 0xd7, 0x8e}};
+DEFINE_UUID(IServiceManager::IID) = {0x22bdabd9, 0xa63a, 0x4b5e,
+                                     {0xb1, 0x61, 0xb6, 0x36,
+                                      0x52, 0x27, 0xd7, 0x8e}};
 
 #endif /* __XPLC_ISERVICEMANAGER_H__ */

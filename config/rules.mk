@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.14 2002/06/07 20:27:16 pphaneuf Exp $
+# $Id: rules.mk,v 1.15 2002/06/28 16:49:11 pphaneuf Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall
 
@@ -38,14 +38,13 @@ dustclean:
 
 clean: dustclean
 	rm -f $(shell find . -name '*.o' -print)
-	rm -f $(GARBAGES)
-	rm -f $(TARGETS)
+	rm -f $(wildcard $(GARBAGES) $(TARGETS))
 
 distclean: clean
-	rm -f $(DISTCLEAN)
+	rm -f $(wildcard $(DISTCLEAN))
 
 realclean: distclean
-	rm -f $(REALCLEAN)
+	rm -f $(wildcard $(REALCLEAN))
 
 installdirs:
 	mkdir -p $(libdir)

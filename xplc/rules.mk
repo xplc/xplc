@@ -1,5 +1,5 @@
 # XPLC - Cross-Platform Lightweight Components
-# Copyright (C) 2000, Pierre Phaneuf
+# Copyright (C) 2000-2002, Pierre Phaneuf
 # Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.9 2002/06/07 20:27:16 pphaneuf Exp $
-
-LIBXPLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard xplc/*.cpp))
+# $Id: rules.mk,v 1.11 2002/06/28 16:51:38 pphaneuf Exp $
 
 libxplc.a: $(LIBXPLC_OBJS)
 	$(AR) $(ARFLAGS) $@ $^
@@ -28,6 +26,6 @@ libxplc.a: $(LIBXPLC_OBJS)
 libxplc_s.a: libxplc.a
 	ln -sf $^ $@
 
-libxplc.so.$(VERSION): $(LIBXPLC_OBJS) -ldl
+libxplc.so.$(VERSION): $(LIBXPLC_OBJS) $(LIBDL)
 	$(LINK.cc) -shared -Wl,-soname,$(LIBXPLC_SONAME) $^ -o $@
 

@@ -35,19 +35,20 @@ public:
    * XPLC components
    */
   static const UUID staticServiceHandler;
-  static const UUID simpleDynamicLoader;
+  static const UUID singleModuleLoader;
   static const UUID genericFactory;
   static const UUID monikers;
   static const UUID newMoniker;
+  static const UUID moduleLoader;
 };
 
 DEFINE_UUID(XPLC::staticServiceHandler) = {0xf8c76062, 0xf241, 0x4f38,
                                            {0x80, 0x8d, 0x73, 0x88,
                                             0x31, 0x22, 0x89, 0xd8}};
 
-DEFINE_UUID(XPLC::simpleDynamicLoader) = {0xc8c4d2c6, 0x76b8, 0x4f86,
-                                          {0x90, 0x7d, 0x05, 0x42,
-                                           0x9b, 0xc8, 0x62, 0xe8}};
+DEFINE_UUID(XPLC::singleModuleLoader) = {0xc8c4d2c6, 0x76b8, 0x4f86,
+                                         {0x90, 0x7d, 0x05, 0x42,
+                                          0x9b, 0xc8, 0x62, 0xe8}};
 
 DEFINE_UUID(XPLC::genericFactory) = {0x414a69c6, 0x3c9e, 0x49f7,
                                      {0xab, 0x08, 0xe5, 0x5c,
@@ -60,5 +61,9 @@ DEFINE_UUID(XPLC::monikers) = {0x5ed8cb8f, 0x6938, 0x40f2,
 DEFINE_UUID(XPLC::newMoniker) = {0x9ec8028c, 0x45e3, 0x40ff,
                                  {0x97, 0xfc, 0x0b, 0x35,
                                   0xca, 0x6e, 0xdc, 0xb5}};
+
+DEFINE_UUID(XPLC::moduleLoader) = {0x1bff121f, 0x9bd0, 0x412f,
+                                   {0xa4, 0x16, 0x98, 0x1e,
+                                    0x3e, 0xf5, 0xe1, 0x2b}};
 
 #endif /* __XPLC_XPLC_H__ */

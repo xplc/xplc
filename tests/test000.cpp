@@ -2,7 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -20,23 +20,23 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_IFACTORY_H__
-#define __XPLC_IFACTORY_H__
+#include "test.h"
+#include <xplc/xplc.h>
 
-#include <xplc/IObject.h>
+/*
+ * test000
+ *
+ * Verifies that shutdown properly releases all the involved objects.
+ */
 
-class IFactory: public IObject { UNSTABLE_INTERFACE
-public:
-  static const UUID IID;
-  /*
-   * The object returned by IFactory::createObject() is already
-   * addRef()'d.
-   */
-  virtual IObject* createObject() = 0;
-};
+void test000() {
+  IServiceManager* serv;
 
-DEFINE_UUID(IFactory::IID) = {0xcd386b27, 0x0ea1, 0x4e1b,
-                              {0xba, 0x08, 0xb8, 0x5e,
-                               0xe4, 0xda, 0xad, 0x69}};
+  serv = XPLC::getServiceManager();
 
-#endif /* __XPLC_IFACTORY_H__ */
+  ASSERT(serv != 0, "could not obtain service manager");
+
+  serv->shutdown();
+
+  VERIFY(serv->release() == 0, "service manager has non-zero refcount after shutdown/release");
+}

@@ -1,7 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,23 +19,40 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_IFACTORY_H__
-#define __XPLC_IFACTORY_H__
+#ifndef __XPLC_MODULELOADER_H__
+#define __XPLC_MODULELOADER_H__
 
-#include <xplc/IObject.h>
+#include <xplc/IModule.h>
+#include <xplc/IModuleLoader.h>
 
-class IFactory: public IObject { UNSTABLE_INTERFACE
-public:
-  static const UUID IID;
-  /*
-   * The object returned by IFactory::createObject() is already
-   * addRef()'d.
-   */
-  virtual IObject* createObject() = 0;
+struct ModuleList {
+  ModuleList* next;
+  IModule* module;
+  void* dlh;
+  ModuleList(IModule* aModule, void* aDlh, ModuleList* aNext):
+    next(aNext), module(aModule), dlh(aDlh) {
+  }
+  ~ModuleList() {
+    module->release();
+  }
 };
 
-DEFINE_UUID(IFactory::IID) = {0xcd386b27, 0x0ea1, 0x4e1b,
-                              {0xba, 0x08, 0xb8, 0x5e,
-                               0xe4, 0xda, 0xad, 0x69}};
+class ModuleLoader: public IModuleLoader {
+private:
+  ModuleList* modules;
+protected:
+  ModuleLoader(): modules(0) {
+  }
+  virtual ~ModuleLoader();
+public:
+  static IObject* create();
+  /* IObject */
+  virtual IObject* getInterface(const UUID&);
+  /* IServiceHandler */
+  virtual IObject* getObject(const UUID&);
+  virtual void shutdown();
+  /* IModuleLoader */
+  virtual void setModuleDirectory(const char* directory);
+};
 
-#endif /* __XPLC_IFACTORY_H__ */
+#endif /* __XPLC_MODULELOADER_H__ */

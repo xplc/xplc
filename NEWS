@@ -1,3 +1,14 @@
+New in 0.1.4
+------------
+
+ * Added the long awaited module loader, that will load modules from a
+   given directory.
+ * Combined the unit tests into a single binary.
+ * Fixed a number of bugs, including a number of memory leaks found
+   using Valgrind.
+ * Various evolutive reorganizations and clarifications.
+ * Added support for FreeBSD.
+
 New in 0.1.3
 ------------
 

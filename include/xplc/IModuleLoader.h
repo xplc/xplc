@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2002, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,23 +20,19 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_IFACTORY_H__
-#define __XPLC_IFACTORY_H__
+#ifndef __XPLC_IMODULELOADER_H__
+#define __XPLC_IMODULELOADER_H__
 
-#include <xplc/IObject.h>
+#include <xplc/IServiceHandler.h>
 
-class IFactory: public IObject { UNSTABLE_INTERFACE
+class IModuleLoader: public IServiceHandler { UNSTABLE_INTERFACE
 public:
   static const UUID IID;
-  /*
-   * The object returned by IFactory::createObject() is already
-   * addRef()'d.
-   */
-  virtual IObject* createObject() = 0;
+  virtual void setModuleDirectory(const char* directory) = 0;
 };
 
-DEFINE_UUID(IFactory::IID) = {0xcd386b27, 0x0ea1, 0x4e1b,
-                              {0xba, 0x08, 0xb8, 0x5e,
-                               0xe4, 0xda, 0xad, 0x69}};
+DEFINE_UUID(IModuleLoader::IID) = {0xd482c148, 0x6cc0, 0x4e57,
+				   {0x90, 0x49, 0x7d, 0xbc,
+				    0xa1, 0x47, 0x79, 0xb6}};
 
-#endif /* __XPLC_IFACTORY_H__ */
+#endif /* __XPLC_IMODULELOADER_H__ */

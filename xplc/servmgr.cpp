@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2001, Pierre Phaneuf
  * Copyright (C) 2000, Stéphane Lajoie
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -23,8 +24,14 @@
 #include <xplc/utils.h>
 #include "servmgr.h"
 
-ServiceManager* ServiceManager::create() {
-  return new GenericComponent<ServiceManager>;
+void ServiceManager::create(ServiceManager** aReference) {
+  *aReference = new GenericComponent<ServiceManager>;
+
+  (*aReference)->reference = aReference;
+}
+
+ServiceManager::~ServiceManager() {
+  *reference = 0;
 }
 
 IObject* ServiceManager::getInterface(const UUID& uuid) {
@@ -152,15 +159,11 @@ IObject* ServiceManager::getObject(const UUID& aUuid) {
 }
 
 void ServiceManager::shutdown() {
-  HandlerNode* node;
-  HandlerNode* ptr;
+  HandlerNode* next;
 
-  node = handlers;
-  while(node) {
-    ptr = node;
-    node = node->next;
-    delete ptr;
+  while(handlers) {
+    next = handlers->next;
+    delete handlers;
+    handlers = next;
   }
-
-  handlers = 0;
 }

@@ -29,10 +29,12 @@
 class ServiceManager: public IServiceManager {
 private:
   HandlerNode* handlers;
+  ServiceManager** reference;
 public:
   ServiceManager(): handlers(0) {
   }
-  static ServiceManager* create();
+  virtual ~ServiceManager();
+  static void create(ServiceManager**);
   /* IObject */
   virtual IObject* getInterface(const UUID&);
   /* IServiceManager */

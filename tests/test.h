@@ -26,7 +26,16 @@
 #include <xplc/xplc.h>
 #include <xplc/IFactory.h>
 
-void test();
+void test000();
+void test001();
+void test002();
+void test003();
+void test004();
+void test005();
+void test006();
+void test007();
+void test008();
+void test009();
 
 void test_assert(const char* file,
                  unsigned int line,
@@ -48,7 +57,9 @@ public:
   virtual void setRefCount(unsigned int) = 0;
 };
 
-DEFINE_UUID(ITestInterface::IID) = {0x794e20af, 0x5d35, 0x4d7a, {0x8f, 0x23, 0xf8, 0x53, 0xd7, 0x34, 0xb3, 0xa7}};
+DEFINE_UUID(ITestInterface::IID) = {0x794e20af, 0x5d35, 0x4d7a,
+                                    {0x8f, 0x23, 0xf8, 0x53,
+                                     0xd7, 0x34, 0xb3, 0xa7}};
 
 class TestObject: public ITestInterface {
 private:

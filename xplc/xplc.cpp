@@ -24,12 +24,13 @@
 #include <xplc/utils.h>
 #include "servmgr.h"
 #include "statichandler.h"
-#include "simpledl.h"
+#include "moduleloader.h"
+#include "singleloader.h"
 #include "factory.h"
 #include "monikers.h"
 #include "new.h"
 
-static IServiceManager* servmgr = 0;
+static ServiceManager* servmgr = 0;
 
 IServiceManager* XPLC::getServiceManager() {
   IObject* obj;
@@ -47,7 +48,7 @@ IServiceManager* XPLC::getServiceManager() {
    * The basic services have to be created.
    */
 
-  servmgr = ServiceManager::create();
+  ServiceManager::create(&servmgr);
 
   if(servmgr)
     servmgr->addRef();
@@ -97,9 +98,19 @@ IServiceManager* XPLC::getServiceManager() {
 
   factory = mutate<IGenericFactory>(factoryfactory->createObject());
   if(factory) {
-    factory->setFactory(SimpleDynamicLoader::create);
-    handler->addObject(XPLC::simpleDynamicLoader, factory);
+    factory->setFactory(SingleModuleLoader::create);
+    handler->addObject(XPLC::singleModuleLoader, factory);
+    factory->release();
   }
+
+  factory = mutate<IGenericFactory>(factoryfactory->createObject());
+  if(factory) {
+    factory->setFactory(ModuleLoader::create);
+    handler->addObject(XPLC::moduleLoader, factory);
+    factory->release();
+  }
+
+  factoryfactory->release();
 
   handler->addObject(XPLC::newMoniker, NewMoniker::obtain());
 

@@ -17,13 +17,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: vars.mk,v 1.9 2002/03/29 19:57:22 pphaneuf Exp $
+# $Id: vars.mk,v 1.10 2002/06/28 16:56:00 pphaneuf Exp $
 
-CXXDEPS+=tests/testmain.cpp
+CXXDEPS+=$(wildcard tests/*.cpp)
 
-GARBAGES+=$(wildcard tests/test*/test)
-
-TESTS:=$(patsubst %,%/test,$(wildcard tests/test[0-9][0-9][0-9]))
-
-include $(wildcard tests/*/vars.mk)
+GARBAGES+=tests/testmain tests/testobj.dll
 

@@ -1,5 +1,5 @@
 # XPLC - Cross-Platform Lightweight Components
-# Copyright (C) 2000-2001, Pierre Phaneuf
+# Copyright (C) 2000-2002, Pierre Phaneuf
 # Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
@@ -17,13 +17,15 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.9 2002/05/25 00:11:21 pphaneuf Exp $
+# $Id: rules.mk,v 1.11 2002/09/12 03:54:09 pphaneuf Exp $
 
 .PHONY: tests
 
-tests: $(TESTS)
+tests: tests/testmain tests/testobj.dll
 	@echo "Running tests:"
-	@for TEST in $(TESTS); do $$TEST; done; true
+	@cd tests && ./testmain
 
-include $(wildcard tests/*/rules.mk)
+tests/testmain: tests/testmain.o $(patsubst %.cpp,%.o,$(wildcard tests/test[0-9][0-9][0-9].cpp)) libxplc_s.a $(LIBDL)
 
+tests/testobj.dll: tests/testobj.o
+	$(LINK.cc) -shared -o $@ $^

@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -30,6 +31,10 @@
 #else
 #define ENTRYPOINT extern "C"
 #endif
+
+/*
+ * The IModule returned by XPLC_GetModule should be already addRef'd.
+ */
 
 ENTRYPOINT IModule* XPLC_GetModule(IServiceManager*,
 				   const unsigned int);

@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2002, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -34,24 +35,24 @@ template<class Component>
 class TraceComponent: public Component {
 public:
   TraceComponent() {
-    fprintf(stderr, "%s: instantiated\n", __PRETTY_FUNCTION__);
+    fprintf(stderr, "%s: instantiated (%p)\n", __PRETTY_FUNCTION__, this);
   }
   virtual unsigned int addRef() {
     unsigned int refcount = Component::addRef();
 
-    fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount);
+    fprintf(stderr, "%s = %i (%p)\n", __PRETTY_FUNCTION__, refcount, this);
 
     return refcount;
   }
   virtual unsigned int release() {
     unsigned int refcount = Component::release();
 
-    fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount);
+    fprintf(stderr, "%s = %i (%p)\n", __PRETTY_FUNCTION__, refcount, this);
 
     return refcount;
   }
   virtual ~TraceComponent() {
-    fprintf(stderr, "%s: destroyed\n", __PRETTY_FUNCTION__);
+    fprintf(stderr, "%s: destroyed (%p)\n", __PRETTY_FUNCTION__, this);
   }
 };
 
