@@ -23,12 +23,10 @@
 #include "test.h"
 
 int main(int argc, char* argv[]) {
-  printf("%s: ", argv[0]);
-
   if(test())
-    printf("pass\n");
+    printf("%s passed\n", argv[0]);
   else
-    printf("FAIL\n");
+    printf("%s FAILED\n", argv[0]);
 
   return 0;
 }
