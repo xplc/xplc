@@ -22,10 +22,13 @@
 #include "test.h"
 #include <xplc/xplc.h>
 
-bool test() {
+const char* test() {
   IServiceManager* serv;
 
   serv = XPLC::getServiceManager();
 
-  return serv;
+  if(!serv)
+    return "could not obtain service manager";
+
+  return NULL;
 }

@@ -23,10 +23,16 @@
 #include "test.h"
 
 int main(int argc, char* argv[]) {
-  if(test())
+  const char* reason;
+
+  reason = test();
+
+  if(!reason) {
     printf("%s passed\n", argv[0]);
-  else
-    printf("%s FAILED\n", argv[0]);
+  } else {
+    printf("%s FAILED (%s)\n", argv[0], reason);
+    exit(1);
+  }
 
   return 0;
 }

@@ -22,6 +22,8 @@
 #ifndef __TESTS_TEST_H__
 #define __TESTS_TEST_H__
 
-bool test();
+#include <stdlib.h>
+
+const char* test();
 
 #endif /* __TESTS_TEST_H__ */
