@@ -21,3 +21,7 @@
 GARBAGES+=$(shell find . -name '*.o' -print)
 GARBAGES+=$(shell find . -name '*~' -print)
 
+ARFLAGS=rcS
+
+RANLIB=ranlib
+

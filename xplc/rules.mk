@@ -18,5 +18,11 @@
 #
 # $Id$
 
-xplc/libxplc.a: xplc/libxplc.a(xplc/xplc.o)
+LIBXPLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard xplc/*.cpp))
+
+xplc/libxplc_s.a: xplc/libxplc_s.a($(LIBXPLC_OBJS))
+	$(RANLIB) $@
+
+xplc/libxplc.so: $(LIBXPLC_OBJS)
+	gcc -shared  $^ -o $@
 
