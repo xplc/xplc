@@ -85,7 +85,7 @@ const char* test() {
   Foo* foo;
   IFoo* ifoo;
   IObject* obj;
-  UUID foouuid = {0x696bdfba, 0x9b5e, 0x4bcd, {0xaf, 0x10, 0x39, 0x94, 0x92, 0x94, 0x92, 0x3b}};
+  const UUID foouuid = {0x696bdfba, 0x9b5e, 0x4bcd, {0xaf, 0x10, 0x39, 0x94, 0x92, 0x94, 0x92, 0x3b}};
 
   serv = XPLC::getServiceManager();
 
@@ -112,6 +112,12 @@ const char* test() {
     return "test component has unexpected behavior";
 
   ifoo->release();
+
+  serv->unregisterUuid(foouuid);
+
+  obj = serv->getObjectByUuid(foouuid);
+  if(obj)
+    return "service manager did not unregister the test component";
 
   serv->shutdown();
 
