@@ -81,7 +81,7 @@ IObject* ServiceManager::getObject(const UUID& aUuid) {
   ObjectNode* obj;
 
   /*
-   * We look through the objects listand return if we find a match.
+   * We look through the objects list and return if we find a match.
    */
   obj = objects;
   while(obj) {
