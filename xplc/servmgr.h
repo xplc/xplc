@@ -48,9 +48,9 @@ public:
   /* IObject */
   virtual IObject* getInterface(const UUID&);
   /* IServiceManager */
-  virtual void registerUuid(const UUID&, IObject*);
-  virtual void unregisterUuid(const UUID&);
-  virtual IObject* getObjectByUuid(const UUID&);
+  virtual void addObject(const UUID&, IObject*);
+  virtual void removeObject(const UUID&);
+  virtual IObject* getObject(const UUID&);
   virtual void shutdown();
 };
 

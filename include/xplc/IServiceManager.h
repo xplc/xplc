@@ -27,9 +27,9 @@
 class IServiceManager: public IObject {
 public:
   static const UUID IID;
-  virtual void registerUuid(const UUID&, IObject*) = 0;
-  virtual void unregisterUuid(const UUID&) = 0;
-  virtual IObject* getObjectByUuid(const UUID&) = 0;
+  virtual void addObject(const UUID&, IObject*) = 0;
+  virtual void removeObject(const UUID&) = 0;
+  virtual IObject* getObject(const UUID&) = 0;
   virtual void shutdown() = 0;
 };
 

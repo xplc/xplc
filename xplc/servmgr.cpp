@@ -37,7 +37,7 @@ IObject* ServiceManager::getInterface(const UUID& uuid) {
   return this;
 }
 
-void ServiceManager::registerUuid(const UUID& aUuid, IObject* aObj) {
+void ServiceManager::addObject(const UUID& aUuid, IObject* aObj) {
   ObjectNode* node;
 
   node = registered;
@@ -59,7 +59,7 @@ void ServiceManager::registerUuid(const UUID& aUuid, IObject* aObj) {
   registered = node;
 }
 
-void ServiceManager::unregisterUuid(const UUID& aUuid) {
+void ServiceManager::removeObject(const UUID& aUuid) {
   ObjectNode* node;
   ObjectNode** ptr;
 
@@ -77,7 +77,7 @@ void ServiceManager::unregisterUuid(const UUID& aUuid) {
   }
 }
 
-IObject* ServiceManager::getObjectByUuid(const UUID& aUuid) {
+IObject* ServiceManager::getObject(const UUID& aUuid) {
   ObjectNode* node;
 
   node = registered;

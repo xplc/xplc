@@ -26,8 +26,7 @@
 /*
  * test002
  *
- * Verifies register, get and unregister operations on the service
- * manager.
+ * Verifies add, get and remove operations on the service manager.
  */
 
 class IFoo: public IObject {
@@ -96,9 +95,9 @@ const char* test() {
   if(!foo)
     return "could not instantiate test component";
 
-  serv->registerUuid(foouuid, foo);
+  serv->addObject(foouuid, foo);
 
-  obj = serv->getObjectByUuid(foouuid);
+  obj = serv->getObject(foouuid);
   if(!obj)
     return "could not get component from the service manager";
 
@@ -113,11 +112,11 @@ const char* test() {
 
   ifoo->release();
 
-  serv->unregisterUuid(foouuid);
+  serv->removeObject(foouuid);
 
-  obj = serv->getObjectByUuid(foouuid);
+  obj = serv->getObject(foouuid);
   if(obj)
-    return "service manager did not unregister the test component";
+    return "service manager did not remove the test component";
 
   serv->shutdown();
 
