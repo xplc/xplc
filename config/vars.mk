@@ -17,14 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: vars.mk,v 1.35 2004/06/13 21:57:11 pphaneuf Exp $
+# $Id: vars.mk,v 1.40 2004/10/07 16:53:42 sfllaw Exp $
 
 DEPFILES:=$(shell find . -name '.*.d')
 
 DUSTCLEAN+=$(shell find . -name '*~' -o -name '.\#*')
-CLEAN+=$(shell find . -name '*.o') libxplc.so* $(DEPFILES) $(addprefix debian/,$(shell cat debian/.cvsignore)) autom4te.cache xplc-[0-9]*
+CLEAN+=$(shell find . -name '*.o') libxplc.so* $(DEPFILES) $(addprefix debian/,$(shell cat debian/.cvsignore | grep -v control)) autom4te.cache xplc-[0-9]*
 DISTCLEAN+=config/config.mk include/xplc/autoconf.h ChangeLog.bak
-REALCLEAN+=ChangeLog include/xplc/autoconf.h.in
+REALCLEAN+=ChangeLog include/xplc/autoconf.h.in debian/control
 
 SIMPLETARGETS+=ChangeLog clean dustclean realclean distclean doxygen clean-doxygen
 
@@ -45,54 +45,9 @@ RANLIB=ranlib
 
 CXXFLAGS+=-pipe -Iinclude
 
-ifneq ("$(filter-out no,$(enable_debug))", "")
-DEBUG:=$(enable_debug)
-endif
-
-ifdef DEBUG
-CXXFLAGS+=-ggdb -DDEBUG
-ifneq ("$(DEBUG)", "yes")
-CXXFLAGS+=-DDEBUG_$(DEBUG)
-endif
-else
-CXXFLAGS+=-DNDEBUG
-endif
-
-ifeq ("$(call oddeven,$(VERSION_MINOR))", "odd")
-ifndef enable_unstable
-enable_unstable=yes
-endif
-endif
-
-ifeq ("$(enable_unstable)", "yes")
-CXXFLAGS+=-DUNSTABLE
-endif
-
-ifeq ("$(enable_fatal_warnings)", "yes")
-CXXFLAGS+=-Werror
-endif
-
-ifneq ("$(enable_optimization)", "no")
-CXXFLAGS+=-O2
-endif
-
-ifneq ("$(enable_warnings)", "no")
-CXXFLAGS+=-Wall -Woverloaded-virtual
-ifeq ("$(enable_warnings)", "yes")
-CXXFLAGS+=-Wold-style-cast
-endif
-endif
-
-ifneq ("$(enable_rtti)", "yes")
-CXXFLAGS+=-fno-rtti
-endif
-
-ifneq ("$(enable_exceptions)", "yes")
-CXXFLAGS+=-fno-exceptions
-endif
-
-ifneq ("$(enable_pic)", "no")
-CXXFLAGS+=-fpic
+# Ensure CVS2CL is there
+ifeq ("$(CVS2CL)", "no")
+CVS2CL=$(error Please install cvs2cl)
 endif
 
 ifeq ("$(so_style)", "darwin")

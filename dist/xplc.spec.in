@@ -15,6 +15,10 @@ Summary: Cross-platform lightweight component system (development)
 Group: Development/Libraries
 Requires: xplc = %{version}
 
+%package doc
+Summary: Cross-platform lightweight component system (documentation)
+Group: Development/Libraries
+
 %description
 XPLC (cross-platform lightweight components) is a component system
 that provide extensibility and reusability both inside and between
@@ -23,6 +27,9 @@ use and having the lowest possible overhead.
 
 %description devel
 This is the parts of XPLC needed for development.
+
+%description doc
+This package contains documentation and examples for XPLC.
 
 %prep
 %setup -q
@@ -47,19 +54,22 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 /usr/lib/libxplc.so.%{version}
-%doc README CREDITS NEWS LICENSE ChangeLog
 
 %files devel
 %defattr(-,root,root)
-/usr/include/xplc
-/usr/lib/libxplc.a
-/usr/lib/libxplc-cxx.a
-/usr/lib/libxplc_s.a
-/usr/lib/libxplc.so
-/usr/lib/pkgconfig/xplc.pc
+/usr/include/xplc-%{version}
+/usr/lib/xplc-%{version}
+/usr/lib/pkgconfig/xplc-%{version}.pc
+
+%files doc
+%defattr(-,root,root)
+%doc README CREDITS NEWS LICENSE ChangeLog
 %doc examples
 
 %changelog
+ * Wed Oct  6 2004  Pierre Phaneuf <pp@ludusdesign.com>
+ - Updated for the new parallel installation support.
+
  * Wed Apr  7 2004  Pierre Phaneuf <pp@ludusdesign.com>
  - Fixed the ownership of the documentation files.
  - Runs the unit tests while packaging.

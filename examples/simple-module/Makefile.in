@@ -5,8 +5,8 @@
 
 # the UNSTABLE flag is there because we agree to use interfaces that
 # have not been frozen yet.
-CPPFLAGS+=-DUNSTABLE $(shell pkg-config xplc-0.3.10 --cflags)
-LDFLAGS+=$(shell pkg-config xplc-0.3.10 --libs-only-L)
+CPPFLAGS+=-DUNSTABLE $(shell pkg-config xplc-@PACKAGE_VERSION@ --cflags)
+LDFLAGS+=$(shell pkg-config xplc-@PACKAGE_VERSION@ --libs-only-L)
 
 default: example.so
 

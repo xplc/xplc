@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.38 2004/07/01 06:22:36 pphaneuf Exp $
+# $Id: rules.mk,v 1.44 2004/10/07 03:17:10 sfllaw Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen examples
 
@@ -33,7 +33,7 @@
 	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 lib%_s.a: lib%.a
-	ln -sf $^ $@
+	$(LN_S) -f $^ $@
 
 %.a:
 	$(AR) $(ARFLAGS) $@ $^
@@ -58,7 +58,7 @@ examples: default
 	$(MAKE) -C $@
 
 .PHONY: $(DIST)
-$(DIST): ChangeLog README xplc.spec configure
+$(DIST): ChangeLog README xplc.spec debian/control configure
 	rm -rf $(DIST)
 	tar cf - . | (mkdir $(DIST) && cd $(DIST) && tar xf -)
 	$(MAKE) -C $(DIST) distclean
@@ -72,7 +72,7 @@ dist: default examples tests $(DIST).tar.gz
 
 ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
-	cvs2cl.pl --utc -U config/cvs-users
+	$(CVS2CL) --utc -U config/cvs-users
 
 doxygen: clean-doxygen
 	doxygen
@@ -81,6 +81,9 @@ README: dist/README.in configure.ac
 	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
 xplc.spec: dist/xplc.spec.in configure.ac
+	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
+
+debian/control: debian/control.in configure.ac
 	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
 dustclean:
@@ -98,21 +101,23 @@ realclean: distclean
 
 installdirs:
 	mkdir -p $(DESTDIR)$(libdir)/pkgconfig
+	mkdir -p $(DESTDIR)$(libdir)$(libdir_version)
 	mkdir -p $(DESTDIR)$(includedir)/xplc
 
 install: default installdirs
 	$(INSTALL_PROGRAM) libxplc.so $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION)
-	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) libxplc-cxx.a $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) dist/xplc.pc $(DESTDIR)$(libdir)/pkgconfig
+	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)$(libdir_version)
+	$(INSTALL_DATA) libxplc-cxx.a $(DESTDIR)$(libdir)$(libdir_version)
+	$(INSTALL_DATA) dist/xplc.pc $(DESTDIR)$(libdir)/pkgconfig/xplc$(pc_version).pc
 	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(DESTDIR)$(includedir)/xplc
-	ln -s libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/libxplc.so
-	ln -s libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
+	$(LN_S) $(lib_prefix_version)libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)$(libdir_version)/libxplc.so
+	$(LN_S) libxplc.a $(DESTDIR)$(libdir)$(libdir_version)/libxplc_s.a
 
 uninstall:
-	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/libxplc.so
-	rm -f $(DESTDIR)$(libdir)/libxplc.a $(DESTDIR)$(libdir)/libxplc_s.a
-	rm -f $(DESTDIR)$(libdir)/pkgconfig/xplc.pc
+	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)$(libdir_version)/libxplc.so
+	rm -f $(DESTDIR)$(libdir)$(libdir_version)/libxplc.a $(DESTDIR)$(libdir)$(libdir_version)/libxplc_s.a
+	rm -f $(DESTDIR)$(libdir)$(libdir_version)/libxplc-cxx.a
+	rm -f $(DESTDIR)$(libdir)/pkgconfig/xplc$(pc_version).pc
 	rm -rf $(DESTDIR)$(includedir)/xplc
 
 ifeq ($(filter-out $(SIMPLETARGETS),$(MAKECMDGOALS)),$(MAKECMDGOALS))

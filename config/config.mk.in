@@ -19,19 +19,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: config.mk.in,v 1.31 2004/01/08 16:10:47 pphaneuf Exp $
+# $Id: config.mk.in,v 1.37 2004/10/07 03:17:10 sfllaw Exp $
 
 # set variables from the configure script
 CXX=@CXX@
 CXXFLAGS+=@CXXFLAGS@
-enable_debug:=@enable_debug@
-enable_optimization:=@enable_optimization@
-enable_warnings:=@enable_warnings@
-enable_fatal_warnings:=@enable_fatal_warnings@
-enable_unstable:=@enable_unstable@
-enable_rtti:=@enable_rtti@
-enable_exceptions:=@enable_exceptions@
-enable_pic:=@enable_pic@
+pc_version:=@pc_version@
+libdir_version:=@libdir_version@
+lib_prefix_version:=@lib_prefix_version@
 enable_loader:=@enable_loader@
 with_dlopen:=@with_dlopen@
 so_style:=@so_style@
@@ -44,5 +39,7 @@ INSTALL_PROGRAM:=@INSTALL_PROGRAM@
 INSTALL_DATA:=@INSTALL_DATA@
 PACKAGE_TARNAME:=@PACKAGE_TARNAME@
 PACKAGE_VERSION:=@PACKAGE_VERSION@
+LN_S:=@LN_S@
 LIBS:=@LIBS@
+CVS2CL:=@CVS2CL@
 

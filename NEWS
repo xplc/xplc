@@ -1,3 +1,11 @@
+New in 0.3.10
+-------------
+
+ * Made it easy to install multiple versions of XPLC in parallel.
+ * Fixed compilation problems with Darwin/Mac OS X.
+ * Fixed a problem with Debian package uninstallation.
+ * Simon Law took over maintenance of the Debian package.
+
 New in 0.3.9
 ------------
 

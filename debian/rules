@@ -1,4 +1,24 @@
 #!/usr/bin/make -f
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/autotools.mk
+
+# Specify the 'make check' target
 DEB_MAKE_CHECK_TARGET := tests
+
+# Determine the version of XPLC automatically
+PKG_VERSION := $(shell awk -F, '/AC_INIT/{print $$2}' configure.ac \
+		 | sed 's/[ 	]//g')
+
+# Make sure the install files are in the right place
+build/libxplc$(PKG_VERSION)::
+	cp -f debian/libxplc.install debian/libxplc$(PKG_VERSION).install
+cleanbuilddir/libxplc$(PKG_VERSION)::
+	rm -f debian/libxplc$(PKG_VERSION).install
+build/libxplc$(PKG_VERSION)-dev::
+	cp -f debian/libxplc-dev.install debian/libxplc$(PKG_VERSION)-dev.install
+cleanbuilddir/libxplc$(PKG_VERSION)-dev::
+	rm -f debian/libxplc$(PKG_VERSION)-dev.install
+
+# Fix ldconfig-symlink-missing-for-shlib
+binary-predeb/libxplc$(PKG_VERSION)::
+	ldconfig -v -n debian/libxplc$(PKG_VERSION)/usr/lib

@@ -112,13 +112,13 @@ const char* loaderSymbol(void* aHandle,
   if ((((struct mach_header *)aHandle)->magic == MH_MAGIC) ||
       (((struct mach_header *)aHandle)->magic == MH_CIGAM)) {
     if (NSIsSymbolNameDefinedInImage((struct mach_header *)aHandle, sym)) {
-      nssym = NSLookupSymbolInImage((struct mach_header *)aHandle,
+      nssym = (NSModule *)NSLookupSymbolInImage((struct mach_header *)aHandle,
                                     sym,
                                     NSLOOKUPSYMBOLINIMAGE_OPTION_BIND
                                     | NSLOOKUPSYMBOLINIMAGE_OPTION_RETURN_ON_ERROR);
     }
   } else {
-    nssym = NSLookupSymbolInModule(aHandle, sym);
+    nssym = (NSModule *)NSLookupSymbolInModule(aHandle, sym);
   }
 
   free(sym);

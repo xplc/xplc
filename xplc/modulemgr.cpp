@@ -26,6 +26,13 @@
 
 #include "config.h"
 
+#ifdef HAVE_STDINT_H
+# include <stdint.h>
+#endif
+#ifdef HAVE_LIMITS_H
+# include <limits.h>
+#endif
+
 #if !defined(WIN32)
 # if HAVE_DIRENT_H
 #  include <dirent.h>

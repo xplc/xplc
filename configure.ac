@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(XPLC, 0.3.9, pp@ludusdesign.com)
-AC_REVISION($Id: configure.ac,v 1.25 2004/09/27 18:50:52 pphaneuf Exp $)
+AC_INIT(XPLC, 0.3.10, pp@ludusdesign.com)
+AC_REVISION($Id: configure.ac,v 1.34 2004/10/07 03:17:09 sfllaw Exp $)
 
 AC_CANONICAL_HOST
 
@@ -75,6 +75,12 @@ AC_LANG(C++)
 
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_LN_S
+
+AC_HEADER_DIRENT
+AC_CHECK_HEADERS([limits.h])
+
+AC_CHECK_PROGS([CVS2CL], [cvs2cl.pl cvs2cl], [no])
 
 case "$host_os" in
 darwin*|rhapsody*)
@@ -108,21 +114,71 @@ if test "$enable_loader" != "no"; then
     AC_DEFINE(ENABLE_LOADER, 1, [Define if you want to enable dynamic loading.])
 fi
 
-AC_HEADER_DIRENT
+if test "$enable_optimization" != "no"; then
+    CXXFLAGS="$CXXFLAGS -O2"
+fi
 
-AC_SUBST(enable_debug)
-AC_SUBST(enable_fatal_warnings)
-AC_SUBST(enable_optimization)
-AC_SUBST(enable_warnings)
-AC_SUBST(enable_unstable)
-AC_SUBST(enable_rtti)
-AC_SUBST(enable_exceptions)
-AC_SUBST(enable_pic)
+if test -z "$enable_debug"; then
+    enable_debug=no
+fi
+
+if test "$enable_debug" != "no"; then
+    CXXFLAGS="$CXXFLAGS -ggdb -DDEBUG"
+    if test "$enable_debug" != "yes"; then
+        CXXFLAGS="$CXXFLAGS -DDEBUG_$enable_debug"
+    fi
+else
+    CXXFLAGS="$CXXFLAGS -DNDEBUG"
+fi
+
+if test "$enable_fatal_warnings" = "yes"; then
+    CXXFLAGS="$CXXFLAGS -Werror"
+fi
+
+if test "$enable_warnings" != "no"; then
+    CXXFLAGS="$CXXFLAGS -Wall -Woverloaded-virtual"
+    if test "$enable_warnings" = "yes"; then
+        CXXFLAGS="$CXXFLAGS -Wold-style-cast"
+    fi
+fi
+
+if test "$enable_rtti" != "yes"; then
+    CXXFLAGS="$CXXFLAGS -fno-rtti"
+fi
+
+if test "$enable_exceptions" != "yes"; then
+    CXXFLAGS="$CXXFLAGS -fno-exceptions"
+fi
+
+if test "$enable_pic" != "no"; then
+    CXXFLAGS="$CXXFLAGS -fpic"
+fi
+
+pc_version=
+libdir_version=
+lib_prefix_version=
+if test "$(echo $PACKAGE_VERSION | awk -F. '{ print $2 % 2}')" -eq 1; then
+    AC_MSG_WARN([Unstable release, the API might change in the next release.])
+    enable_unstable=yes
+    includedir="$includedir/xplc-${PACKAGE_VERSION}"
+    pc_version="-${PACKAGE_VERSION}"
+    libdir_version="/xplc-${PACKAGE_VERSION}"
+    lib_prefix_version="../"
+fi
+
+if test "$enable_unstable" = "yes"; then
+    CXXFLAGS="$CXXFLAGS -DUNSTABLE"
+fi
+
+AC_SUBST(pc_version)
+AC_SUBST(libdir_version)
+AC_SUBST(lib_prefix_version)
 AC_SUBST(enable_loader)
 AC_SUBST(with_dlopen)
 AC_SUBST(so_style)
+AC_SUBST(CVS2CL)
 
-AC_CONFIG_FILES([config/config.mk dist/xplc.pc dist/xplc-uninstalled.pc])
+AC_CONFIG_FILES([config/config.mk dist/xplc.pc dist/xplc-uninstalled.pc examples/simple-module/Makefile examples/simple-module-user/Makefile])
 AC_CONFIG_HEADERS([include/autoconf.h])
 
 AC_OUTPUT

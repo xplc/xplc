@@ -1,3 +1,12 @@
+xplc (0.3.10-1) unstable; urgency=low
+
+  * New upstream release.
+  * New maintainer.
+  * Renamed libxplc and libxplc-dev to reflect that they have unstable
+    API and ABIs.
+
+ -- Simon Law <sfllaw@debian.org>  Mon, 04 Oct 2004 18:45:49 -0400
+
 xplc (0.3.9-1) unstable; urgency=low
 
   * New upstream release.
