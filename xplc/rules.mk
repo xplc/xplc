@@ -17,13 +17,16 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.8 2002/03/29 23:37:14 pphaneuf Exp $
+# $Id: rules.mk,v 1.9 2002/06/07 20:27:16 pphaneuf Exp $
 
 LIBXPLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard xplc/*.cpp))
 
-libxplc_s.a: $(LIBXPLC_OBJS)
+libxplc.a: $(LIBXPLC_OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
+
+libxplc_s.a: libxplc.a
+	ln -sf $^ $@
 
 libxplc.so.$(VERSION): $(LIBXPLC_OBJS) -ldl
 	$(LINK.cc) -shared -Wl,-soname,$(LIBXPLC_SONAME) $^ -o $@

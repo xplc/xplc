@@ -22,8 +22,6 @@
 #ifndef __XPLC_MONIKERNODE_H__
 #define __XPLC_MONIKERNODE_H__
 
-//#include <xplc/IObject.h>
-
 class MonikerNode {
 public:
   MonikerNode* next;

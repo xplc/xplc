@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -24,7 +25,7 @@
 
 #include <xplc/IServiceHandler.h>
 
-class IStaticServiceHandler: public IServiceHandler {
+class IStaticServiceHandler: public IServiceHandler { UNSTABLE_INTERFACE
 public:
   static const UUID IID;
   virtual void addObject(const UUID&, IObject*) = 0;

@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2001, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -21,6 +22,7 @@
 
 #include <stddef.h>
 #include <xplc/utils.h>
+#include <xplc/module.h>
 #include "testobj.h"
 
 /*
@@ -63,10 +65,47 @@ int TestComponent::getAnswer() {
   return 42;
 }
 
-extern "C"
-#ifdef WIN32
-__declspec(dllexport)
-#endif
-IObject* XPLC_SimpleModule() {
-  return TestComponent::create();
+class TestModule: public IModule {
+private:
+  TestComponent* component;
+public:
+  TestModule(): component(0) {}
+  virtual unsigned int addRef() {
+    return 2;
+  }
+  virtual unsigned int release() {
+    return 1;
+  }
+  virtual IObject* getInterface(const UUID& uuid) {
+    if(uuid.equals(IObject::IID))
+      return this;
+
+    if(uuid.equals(IModule::IID))
+      return this;
+
+    return 0;
+  }
+  virtual IObject* getObject(const UUID& uuid) {
+    if(!component) {
+      component = TestComponent::create();
+      component->addRef();
+    }
+
+    if(uuid.equals(TestComponent_CID)) {
+      component->addRef();
+      return component;
+    }
+
+    return 0;
+  }
+};
+
+TestModule module;
+
+ENTRYPOINT IModule* XPLC_GetModule(IServiceManager*,
+                                   const unsigned int version) {
+  if(version == 0)
+    return &module;
+
+  return 0;
 }

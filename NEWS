@@ -1,3 +1,19 @@
+New in 0.1.3
+------------
+
+ * Added a way to mark unstable interfaces as such, so that you cannot
+   accidentally use an unstable interface (there is a 'configure'
+   switch to allow unstable interfaces, and unstable releases of XPLC
+   have it enabled by default).
+ * Added an "uninstall" make target.
+ * Renamed the static library libxplc.a and added a libxplc_s.a
+   symbolic link pointing to it.
+ * Added a platform-independent dlopen/LoadLibrary abstraction.
+ * Changed the simple dynamic loader so that it does not require a
+   different binary interface from modules.
+ * Started laying down a binary interface for modules.
+ * Improved testing suite.
+
 New in 0.1.2
 ------------
 

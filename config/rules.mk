@@ -17,9 +17,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.12 2002/03/29 23:36:48 pphaneuf Exp $
+# $Id: rules.mk,v 1.14 2002/06/07 20:27:16 pphaneuf Exp $
 
-.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install
+.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall
 
 dist: distclean ChangeLog README
 	autoconf
@@ -53,9 +53,15 @@ installdirs:
 
 install: $(TARGETS) installdirs
 	$(INSTALL_PROGRAM) libxplc.so.$(VERSION) $(libdir)
-	$(INSTALL_DATA) libxplc_s.a $(libdir)
+	$(INSTALL_DATA) libxplc.a $(libdir)
 	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(includedir)/xplc
 	ln -s libxplc.so.$(VERSION) $(libdir)/libxplc.so
+	ln -s libxplc.a $(libdir)/libxplc_s.a
+
+uninstall:
+	rm -f $(libdir)/libxplc.so.$(VERSION) $(libdir)/libxplc.so
+	rm -f $(libdir)/libxplc.a $(libdir)/libxplc_s.a
+	rm -rf $(includedir)/xplc
 
 ifeq ($(filter-out $(SIMPLETARGETS),$(MAKECMDGOALS)),$(MAKECMDGOALS))
 

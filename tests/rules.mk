@@ -1,5 +1,6 @@
 # XPLC - Cross-Platform Lightweight Components
 # Copyright (C) 2000-2001, Pierre Phaneuf
+# Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -16,13 +17,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.7 2002/03/24 06:44:30 pphaneuf Exp $
+# $Id: rules.mk,v 1.9 2002/05/25 00:11:21 pphaneuf Exp $
 
 .PHONY: tests
 
 tests: $(TESTS)
 	@echo "Running tests:"
-	@for TEST in $(TESTS); do $$TEST || break; done
+	@for TEST in $(TESTS); do $$TEST; done; true
 
 include $(wildcard tests/*/rules.mk)
 

@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -20,26 +21,29 @@
  * 02111-1307, USA.
  */
 
-#ifndef __XPLC_ISIMPLEDL_H__
-#define __XPLC_ISIMPLEDL_H__
+#ifndef __XPLC_SIMPLEDL_H__
+#define __XPLC_SIMPLEDL_H__
 
+#include <xplc/IModule.h>
 #include <xplc/ISimpleDynamicLoader.h>
 
 class SimpleDynamicLoader: public ISimpleDynamicLoader {
 private:
   void* dlh;
-  IObject* (*factory)();
+  IModule* module;
 protected:
-  SimpleDynamicLoader(): dlh(0) {
+  SimpleDynamicLoader(): dlh(0), module(0) {
   }
+  virtual ~SimpleDynamicLoader();
 public:
   static IObject* create();
   /* IObject */
   virtual IObject* getInterface(const UUID&);
-  /* IFactory */
-  virtual IObject* createObject();
+  /* IServiceHandler */
+  virtual IObject* getObject(const UUID&);
+  virtual void shutdown();
   /* ISimpleDynamicLoader */
   virtual const char* loadModule(const char* filename);
 };
 
-#endif /* __XPLC_ISIMPLEDL_H__ */
+#endif /* __XPLC_SIMPLEDL_H__ */

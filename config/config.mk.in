@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: config.mk.in,v 1.21 2002/03/29 23:28:10 pphaneuf Exp $
+# $Id: config.mk.in,v 1.22 2002/06/07 20:12:06 pphaneuf Exp $
 
 TARGETS:=
 GARBAGES:=
@@ -35,6 +35,7 @@ enable_debug:=@enable_debug@
 enable_optimization:=@enable_optimization@
 enable_warnings:=@enable_warnings@
 enable_fatal_warnings:=@enable_fatal_warnings@
+enable_unstable:=@enable_unstable@
 enable_rtti:=@enable_rtti@
 enable_exceptions:=@enable_exceptions@
 prefix:=@prefix@

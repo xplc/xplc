@@ -1,7 +1,6 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
  * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,16 +19,21 @@
  * 02111-1307, USA.
  */
 
-#ifndef __TESTS_TEST004_TESTOBJ_H__
-#define __TESTS_TEST004_TESTOBJ_H__
+#ifndef __XPLC_IMODULE_H__
+#define __XPLC_IMODULE_H__
 
 #include <xplc/IObject.h>
 
-class ITestComponent: public IObject {
+class IModule: public IObject { UNSTABLE_INTERFACE
 public:
-  virtual int getAnswer() = 0;
+  static const UUID IID;
+  /*
+   * The object returned by IModule::getObject() is already
+   * addRef()'d.
+   */
+  virtual IObject* getObject(const UUID&) = 0;
 };
 
-const UUID TestComponent_CID = {0x746d2ba8, 0x0a52, 0x4156, {0xb9, 0x20, 0x05, 0x85, 0x3f, 0xf1, 0x73, 0x43}};
+DEFINE_UUID(IModule::IID) = {0x772689d4, 0x7932, 0x448a, {0x80, 0x8a, 0x6e, 0xbf, 0x1c, 0xe9, 0xf9, 0x4b}};
 
-#endif /* __TESTS_TEST004_TESTOBJ_H__ */
+#endif /* __XPLC_IMODULE_H__ */

@@ -1,5 +1,25 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Id: configure.in,v 1.14 2002/03/20 17:44:03 pphaneuf Exp $)
+
+dnl XPLC - Cross-Platform Lightweight Components
+dnl Copyright (C) 2000-2002, Pierre Phaneuf
+dnl Copyright (C) 2002, Net Integration Technologies, Inc.
+
+dnl This library is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU Library General Public License as
+dnl published by the Free Software Foundation; either version 2 of the
+dnl License, or (at your option) any later version.
+
+dnl This library is distributed in the hope that it will be useful, but
+dnl WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+dnl Library General Public License for more details.
+
+dnl You should have received a copy of the GNU Library General Public
+dnl License along with this library; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+dnl 02111-1307, USA.
+
+AC_REVISION($Id: configure.in,v 1.15 2002/06/07 20:12:06 pphaneuf Exp $)
 
 AC_INIT(include/xplc/xplc.h)
 
@@ -20,6 +40,10 @@ AC_SUBST(enable_optimization)
 AC_ARG_ENABLE(warnings,
   [  --disable-warnings      extra warnings])
 AC_SUBST(enable_warnings)
+
+AC_ARG_ENABLE(unstable,
+  [  --enable-unstable       allow unstable interfaces in stable version])
+AC_SUBST(enable_unstable)
 
 AC_ARG_ENABLE(rtti,
   [  --enable-rtti           C++ run-time type identification (compiler)])

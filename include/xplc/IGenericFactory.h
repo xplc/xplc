@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -24,7 +25,7 @@
 
 #include <xplc/IFactory.h>
 
-class IGenericFactory: public IFactory {
+class IGenericFactory: public IFactory { UNSTABLE_INTERFACE
 public:
   static const UUID IID;
   virtual void setFactory(IObject*(*)()) = 0;

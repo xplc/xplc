@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -23,16 +24,16 @@
 #ifndef __XPLC_ISIMPLEDYNAMICLOADER_H__
 #define __XPLC_ISIMPLEDYNAMICLOADER_H__
 
-#include <xplc/IFactory.h>
+#include <xplc/IServiceHandler.h>
 
-class ISimpleDynamicLoader: public IFactory {
+class ISimpleDynamicLoader: public IServiceHandler { UNSTABLE_INTERFACE
 public:
   static const UUID IID;
   /*
    * Loading a library while the component already has another library
-   * open will result in the first library to be unloaded.
-	 * Returns error message on error, or NULL if the module was loaded
-	 * successfully.
+   * open will result in the first library to be unloaded. Returns
+   * error message on error, or NULL if the module was loaded
+   * successfully.
    */
   virtual const char* loadModule(const char* filename) = 0;
 };

@@ -1,8 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
- * Copyright (C) 2002, Net Integration Technologies, Inc.
+ * Copyright (C) 2002, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -20,16 +19,24 @@
  * 02111-1307, USA.
  */
 
-#ifndef __TESTS_TEST004_TESTOBJ_H__
-#define __TESTS_TEST004_TESTOBJ_H__
+#ifndef __XPLC_MODULE_H__
+#define __XPLC_MODULE_H__
 
-#include <xplc/IObject.h>
+#include <xplc/IModule.h>
+#include <xplc/IServiceManager.h>
 
-class ITestComponent: public IObject {
-public:
-  virtual int getAnswer() = 0;
-};
+#ifdef WIN32
+#define ENTRYPOINT __declspec(dllexport) extern "C"
+#else
+#define ENTRYPOINT extern "C"
+#endif
 
-const UUID TestComponent_CID = {0x746d2ba8, 0x0a52, 0x4156, {0xb9, 0x20, 0x05, 0x85, 0x3f, 0xf1, 0x73, 0x43}};
+ENTRYPOINT IModule* XPLC_GetModule(IServiceManager*,
+				   const unsigned int);
 
-#endif /* __TESTS_TEST004_TESTOBJ_H__ */
+typedef IModule*(*XPLC_GetModuleFunc)(IServiceManager*,
+				      const unsigned int);
+
+#define XPLC_MODULE_VERSION 0
+
+#endif /* __XPLC_MODULE_H__ */

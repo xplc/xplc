@@ -3,6 +3,7 @@
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000-2001, Pierre Phaneuf
  * Copyright (C) 2001, Stéphane Lajoie
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -20,19 +21,12 @@
  * 02111-1307, USA.
  */
 
-#ifdef __linux__
-#include <dlfcn.h>
-#endif
-
-#ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN
-#include <windows.h>
-#endif
-
-#include "simpledl.h"
-#include <xplc/utils.h>
 #include <stddef.h>
+#include <xplc/xplc.h>
+#include <xplc/module.h>
+#include <xplc/utils.h>
+#include "loader.h"
+#include "simpledl.h"
 
 IObject* SimpleDynamicLoader::create() {
   return new GenericComponent<SimpleDynamicLoader>;
@@ -44,9 +38,9 @@ IObject* SimpleDynamicLoader::getInterface(const UUID& aUuid) {
     return static_cast<IObject*>(this);
   }
 
-  if(aUuid.equals(IFactory::IID)) {
+  if(aUuid.equals(IServiceHandler::IID)) {
     addRef();
-    return static_cast<IFactory*>(this);
+    return static_cast<IServiceHandler*>(this);
   }
 
   if(aUuid.equals(ISimpleDynamicLoader::IID)) {
@@ -57,98 +51,69 @@ IObject* SimpleDynamicLoader::getInterface(const UUID& aUuid) {
   return 0;
 }
 
-IObject* SimpleDynamicLoader::createObject() {
-  IObject* obj;
+SimpleDynamicLoader::~SimpleDynamicLoader() {
+  if(module)
+    module->release();
 
-  obj = factory();
+  if(dlh)
+    loaderClose(dlh);
+}
 
-  if(obj)
-    obj->addRef();
+IObject* SimpleDynamicLoader::getObject(const UUID& uuid) {
+  if(module)
+    return module->getObject(uuid);
+  else
+    return 0;
+}
 
-  return obj;
+void SimpleDynamicLoader::shutdown() {
+  module->release();
+  module = 0;
 }
 
 const char* SimpleDynamicLoader::loadModule(const char* filename) {
-#ifdef __GNUC__
   const char* err;
+  XPLC_GetModuleFunc getmodule = 0;
+  IServiceManager* servmgr;
 
-  /* clear out dl error */
-  static_cast<void>(dlerror());
+  if(module) {
+    module->release();
+    module = 0;
+  }
 
   if(dlh)
-    dlclose(dlh);
+    loaderClose(dlh);
 
-  err = dlerror();
+  err = loaderOpen(filename, &dlh);
   if(err)
     return err;
 
-  /*
-   * FIXME: should we open with RTLD_LAZY instead? RTLD_NOW is safer,
-   * but if it is too costly, maybe we should just verify that
-   * libraries are complete during development?
-   */
-  dlh = dlopen(filename, RTLD_NOW);
-  if(!dlh) {
-    err = dlerror();
+  err = loaderSymbol(dlh, "XPLC_GetModule",
+                     reinterpret_cast<void**>(&getmodule));
+  if(err) {
+    loaderClose(dlh);
+    dlh = 0;
     return err;
   }
 
-  /*
-   * My appreciation for C++ sinks to an all-time low with this
-   * incredible casting maneuver. We're avoiding a warning which says
-   * that "ISO C++ forbids casting between pointer-to-function and
-   * pointer-to-object". And silly me, I had forgotten that 'void' is
-   * actually an object type! :-)
-   * 
-   * Beside causing insanity on sight, this is dependent on
-   * 'ptrdiff_t' being the same size as a pointer, which I am pretty
-   * sure is correct on every platforms.
-   */
+  if(!getmodule) {
+    loaderClose(dlh);
+    dlh = 0;
+    return "could not find XPLC_GetModule entry point";
+  }
 
-  factory = reinterpret_cast<IObject*(*)()>(reinterpret_cast<ptrdiff_t>(dlsym(dlh, "XPLC_SimpleModule")));
-  err = dlerror();
-  if(err)
-    return err;
+  servmgr = XPLC::getServiceManager();
+
+  module = getmodule(servmgr, XPLC_MODULE_VERSION);
+  if(!module) {
+    loaderClose(dlh);
+    dlh = 0;
+    return "could not obtain module";
+  }
+
+  if(servmgr)
+    servmgr->release();
 
   return 0;
-#endif
-#ifdef WIN32
-
-	/*
-	 * FIXME: unload previous DLL?
-	 */
-
-	// buffer for possible error message
-	static char msg[256];
-
-	/*
-	 * Load the DLL. This will do a typical DLL search: application dir, current dir,
-	 * windows/system, windows, path.
-	 */
-	HINSTANCE hInstance = LoadLibraryEx(filename, 0, 0);
-	if(!hInstance) {
-		if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, msg, sizeof(msg), 0))
-			return msg;
-		else
-			return "Something went wrong loading a module and error handling failed. Blame Windows.";
-	}
-
-	/*
-	 * Get entry point.
-	 */
-	FARPROC proc = GetProcAddress(hInstance, "XPLC_SimpleModule");
-	if(!proc) {
-		if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, msg, sizeof(msg), 0))
-			return msg;
-		else
-			return "Something went wrong finding the exported symbol and error handling failed. Blame Windows.";
-	}
-
-	/*
-	 * All done!
-	 */
-	factory = (IObject*(*)())proc;
-	return 0;
-#endif
 }
 

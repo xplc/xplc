@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: vars.mk,v 1.14 2002/03/29 23:12:31 pphaneuf Exp $
+# $Id: vars.mk,v 1.15 2002/06/07 20:12:06 pphaneuf Exp $
 
 DISTCLEAN+=config/config.mk ChangeLog.bak config/depends.mk
 REALCLEAN+=ChangeLog
@@ -46,6 +46,16 @@ CXXFLAGS+=-DDEBUG_$(DEBUG)
 endif
 else
 CXXFLAGS+=-DNDEBUG
+endif
+
+ifeq ("$(call oddeven,$(VERSION_MINOR))", "odd")
+ifndef enable_unstable
+enable_unstable=yes
+endif
+endif
+
+ifeq ("$(enable_unstable)", "yes")
+CXXFLAGS+=-DUNSTABLE
 endif
 
 ifeq ("$(enable_fatal_warnings)", "yes")

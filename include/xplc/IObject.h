@@ -2,6 +2,7 @@
  *
  * XPLC - Cross-Platform Lightweight Components
  * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -24,7 +25,13 @@
 
 #include <xplc/uuid.h>
 
-class IObject {
+#ifndef UNSTABLE
+#define UNSTABLE_INTERFACE static bool UNSTABLE_INTERFACE = true;
+#else
+#define UNSTABLE_INTERFACE
+#endif
+
+class IObject { UNSTABLE_INTERFACE
 protected:
   /*
    * FIXME: This is so that only the component itself can "delete"
