@@ -21,14 +21,13 @@
 
 #include <stdlib.h>
 #include <xplc/xplc.h>
-#include <xplc/utils.h>
 #include "servmgr.h"
 
-static ServiceManager* servmgr;
+static IServiceManager* servmgr;
 
 IServiceManager* XPLC::getServiceManager() {
   if(!servmgr)
-    servmgr = new GenericComponent<ServiceManager>;
+    servmgr = ServiceManager::create();
 
   if(servmgr)
     servmgr->addRef();

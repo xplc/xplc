@@ -34,6 +34,7 @@ public:
   ServiceManager(): objects(NULL),
                     handlers(NULL) {
   }
+  static ServiceManager* create();
   /* IObject */
   virtual IObject* getInterface(const UUID&);
   /* IServiceManager */

@@ -20,7 +20,12 @@
  */
 
 #include <stdlib.h>
+#include <xplc/utils.h>
 #include "servmgr.h"
+
+ServiceManager* ServiceManager::create() {
+  return new GenericComponent<ServiceManager>;
+}
 
 IObject* ServiceManager::getInterface(const UUID& uuid) {
   do {
