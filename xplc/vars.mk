@@ -18,7 +18,7 @@
 #
 # $Id$
 
-TARGETS+=xplc/libxplc.so xplc/libxplc_s.a
+TARGETS+=xplc/libxplc_s.a xplc/libxplc.so
 
 CXXDEPS+=$(wildcard xplc/*.cpp)
 

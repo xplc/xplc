@@ -22,11 +22,9 @@
 
 TESTS_EXE:=$(patsubst %.cpp,%,$(wildcard tests/test[0-9][0-9][0-9].cpp))
 
-tests: LDLIBS+=-lxplc_s
-tests: LDFLAGS=-Lxplc
-tests: all $(TESTS_EXE)
+tests: $(TESTS_EXE)
 	@echo "Running tests:"
-	@for TEST in tests/test[0-9][0-9][0-9]; do $$TEST; done
+	@for TEST in $(TESTS_EXE); do $$TEST; done
 
-$(TESTS_EXE): tests/test.o
+$(TESTS_EXE): tests/test.o xplc/libxplc_s.a
 

@@ -20,6 +20,7 @@
 
 GARBAGES+=$(shell find . -name '*.o' -print)
 GARBAGES+=$(shell find . -name '*~' -print)
+GARBAGES+=config/depends.mk
 
 ARFLAGS=rcS
 
