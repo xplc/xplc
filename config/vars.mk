@@ -22,7 +22,9 @@ GARBAGES+=config/depends.mk
 
 DISTCLEAN+=config/config.mk
 
-ARFLAGS=rcS
+# the 'S' option to 'ar' seems to cause problem on Solaris?
+#ARFLAGS=rcS
+ARFLAGS=rc
 
 RANLIB=ranlib
 

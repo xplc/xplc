@@ -20,7 +20,8 @@
 
 LIBXPLC_OBJS:=$(patsubst %.cpp,%.o,$(wildcard xplc/*.cpp))
 
-xplc/libxplc_s.a: xplc/libxplc_s.a($(LIBXPLC_OBJS))
+xplc/libxplc_s.a: $(LIBXPLC_OBJS)
+	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
 xplc/libxplc.so: $(LIBXPLC_OBJS)
