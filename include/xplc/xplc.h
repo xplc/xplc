@@ -30,14 +30,15 @@ public:
    * Global methods
    */
   static IServiceManager* getServiceManager();
-  static void addObject(const UUID&, IObject*);
-  static void removeObject(const UUID&);
   /*
    * XPLC components
    */
+  static const UUID staticServiceHandler;
   static const UUID simpleDynamicLoader;
   static const UUID genericFactory;
 };
+
+DEFINE_UUID(XPLC::staticServiceHandler) = {0xf8c76062, 0xf241, 0x4f38, {0x80, 0x8d, 0x73, 0x88, 0x31, 0x22, 0x89, 0xd8}};
 
 DEFINE_UUID(XPLC::simpleDynamicLoader) = {0xc8c4d2c6, 0x76b8, 0x4f86, {0x90, 0x7d, 0x05, 0x42, 0x9b, 0xc8, 0x62, 0xe8}};
 

@@ -33,6 +33,7 @@ static IStaticServiceHandler* handler = NULL;
 IServiceManager* XPLC::getServiceManager() {
   IObject* obj;
   IGenericFactory* factory;
+  IFactory* factoryfactory;
 
   if(servmgr) {
     servmgr->addRef();
@@ -68,14 +69,7 @@ IServiceManager* XPLC::getServiceManager() {
    * Populate the static service handler.
    */
 
-  obj = GenericFactory::create();
-  if(obj)
-    obj->addRef();
-  factory = mutateInterface<IGenericFactory>(obj);
-  if(factory) {
-    factory->setFactory(SimpleDynamicLoader::create);
-    handler->addObject(XPLC::simpleDynamicLoader, factory);
-  }
+  handler->addObject(XPLC::staticServiceHandler, handler);
 
   obj = GenericFactory::create();
   if(obj)
@@ -86,19 +80,17 @@ IServiceManager* XPLC::getServiceManager() {
     handler->addObject(XPLC::genericFactory, factory);
   }
 
+  /*
+   * We will use the factory to create the other factories.
+   */
+  factoryfactory = factory;
+
+  factory = mutateInterface<IGenericFactory>(factoryfactory->createObject());
+  if(factory) {
+    factory->setFactory(SimpleDynamicLoader::create);
+    handler->addObject(XPLC::simpleDynamicLoader, factory);
+  }
+
   return servmgr;
-}
-
-void XPLC::addObject(const UUID& aUuid, IObject* aObj) {
-  if(!handler)
-    handler = StaticServiceHandler::create();
-
-  if(handler)
-    handler->addObject(aUuid, aObj);
-}
-
-void XPLC::removeObject(const UUID& aUuid) {
-  if(handler)
-    handler->removeObject(aUuid);
 }
 
