@@ -33,10 +33,6 @@ ifeq ("@debug@", "yes")
 CXXFLAGS+=-ggdb
 endif
 
-ifeq ("@idlc@", "yes")
-BUILD_IDLC:=yes
-endif
-
 .PHONY: test
 
 prefix:=@prefix@

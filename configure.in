@@ -9,12 +9,7 @@ AC_ARG_ENABLE(debug,
   [  --enable-debug          Debugging options],
   debug=yes, debug=no)
 
-AC_ARG_ENABLE(idlc,
-  [  --enable-idlc           Build IDL compiler (BROKEN)],
-  idlc=yes, idlc=no)
-
 AC_SUBST(debug)
-AC_SUBST(idlc)
 
 dnl Checks for programs.
 CXXFLAGS="$CXXFLAGS "
