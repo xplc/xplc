@@ -1,3 +1,8 @@
+New in 0.3.9
+------------
+
+ * Fixed a compile problem in the "illegal delete detector".
+
 New in 0.3.8
 ------------
 

@@ -40,6 +40,7 @@
  */
 
 #include <new>
+#include <memory>
 
 #ifdef __XPLC_IOBJECT_H__
 #error "<xplc/delete.h> has to be included before <xplc/IObject.h>."
