@@ -17,9 +17,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.37 2004/06/25 19:01:08 pphaneuf Exp $
+# $Id: rules.mk,v 1.38 2004/07/01 06:22:36 pphaneuf Exp $
 
-.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen
+.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen examples
 
 %.o: %.cpp
 	@$(COMPILE.cpp) -M -E $< | sed -e 's|^.*:|$@:|' > $(dir $@).$(notdir $(@:.o=.d))
@@ -54,6 +54,9 @@ lib%_s.a: lib%.a
 %.bz2: %
 	bzip2 -c9 $< > $@
 
+examples: default
+	$(MAKE) -C $@
+
 .PHONY: $(DIST)
 $(DIST): ChangeLog README xplc.spec configure
 	rm -rf $(DIST)
@@ -63,7 +66,7 @@ $(DIST): ChangeLog README xplc.spec configure
 		echo ':pserver:anonymous@cvs.sourceforge.net:/cvsroot/xplc' >$$FILE; \
 	done
 
-dist: default tests $(DIST).tar.gz
+dist: default examples tests $(DIST).tar.gz
 	@echo REMINDER: did you update the version number in configure.ac?
 	@echo The NEWS file? The debian/changelog file?
 
@@ -85,6 +88,7 @@ dustclean:
 
 clean: dustclean
 	-rm -rf $(wildcard $(CLEAN))
+	$(MAKE) -C examples clean
 
 distclean: clean
 	-rm -rf $(wildcard $(DISTCLEAN))

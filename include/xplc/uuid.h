@@ -101,7 +101,7 @@ typedef GUID UUID;
 /// The NULL UUID.  Nothing will ever have this UUID, I promise.
 static const UUID UUID_null = {0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}};
 
-/** \struct IID uuid.h xplc/uuid.h
+/** \struct XPLC_IID uuid.h xplc/uuid.h
  *
  * An Interface IDentifier.  Every interface (abstract classes derived from
  * IObject) must have a unique IID, so that getInterface() can ask for that

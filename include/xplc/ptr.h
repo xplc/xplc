@@ -38,7 +38,6 @@
  * Smart pointer for XPLC interfaces.
  */
 
-#include <assert.h>
 #include <xplc/IObject.h>
 
 #ifndef UNSTABLE
@@ -69,9 +68,18 @@ public:
   xplc_ptr():
     ptr(0) {
   }
+  /**
+   * Construct an xplc_ptr from a raw pointer. This is the only way
+   * that an xplc_ptr will take ownership of an interface from its
+   * previous owner.
+   */
   explicit xplc_ptr(T* aObj):
     ptr(aObj) {
   }
+  /**
+   * Construct an xplc_ptr from another xplc_ptr. This will addRef the
+   * interface, if the xplc_ptr is non-NULL.
+   */
   template<class P>
   explicit xplc_ptr(const xplc_ptr<P>& aObj):
     ptr(aObj) {
@@ -82,12 +90,29 @@ public:
     if(ptr)
       ptr->release();
   }
+  /**
+   * Provide an operator->. This allows you to invoke methods on the
+   * interface pointed at by the xplc_ptr. As with a raw pointer, if
+   * the xplc_ptr is NULL, this will cause a crash. The interface is
+   * wrapped in some basic protection, to avoid accidental addRef or
+   * release.
+   */
   ProtectedPtr* operator->() const {
     return static_cast<ProtectedPtr*>(ptr);
   }
+  /**
+   * Provide an operator*. This is so you can use "*foo" with an
+   * xplc_ptr like you could with the raw pointer. It also applies
+   * some basic protection.
+   */
   operator ProtectedPtr*() const {
     return static_cast<ProtectedPtr*>(ptr);
   }
+  /**
+   * Assign a raw pointer to an xplc_ptr. This will addRef the
+   * interface, and release the interface previously pointed at by the
+   * xplc_ptr, if any.
+   */
   xplc_ptr& operator=(T* _ptr) {
     if(_ptr)
       _ptr->addRef();
@@ -100,5 +125,19 @@ public:
     return *this;
   }
 };
+
+
+/**
+ * Used to addRef an object before passing it to something that would
+ * otherwise "steal" the reference.
+ */
+template<class T>
+T* do_addRef(T* obj) {
+  if (obj)
+    obj->addRef();
+
+  return obj;
+}
+
 
 #endif /* __XPLC_PTR_H__ */

@@ -1,3 +1,10 @@
+New in 0.3.7
+------------
+
+ * Some example code to show the basic use of XPLC.
+ * Added an addModuleDirectory method to the XPLC helper class.
+ * Added missing Doxygen documentation.
+
 New in 0.3.6
 ------------
 

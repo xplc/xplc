@@ -47,24 +47,34 @@
 
 #include <xplc/IObject.h>
 
+/**
+ * \defgroup DeleteDetector This is the "delete detector".
+ */
+
+/// \ingroup DeleteDetector
 class CheckIObject {};
 class CheckIObjectOk {};
+/// \ingroup DeleteDetector
 class CheckIObjectOkVector {};
 
 template<class T>
 class ConversionIObject
 {
 public:
+  //@{
   typedef char Yes;
+  /// \ingroup DeleteDetector
   struct No { char dummy[2]; };
   static T* from;
   static Yes test(const IObject*);
   static No test(...);
+  //@}
 };
 
 template<bool>
 struct XPLC_CTAssert;
 template<>
+/// \ingroup DeleteDetector
 struct XPLC_CTAssert<true> {};
 
 template<class T>
@@ -83,9 +93,34 @@ inline void operator&&(CheckIObjectOkVector, const T* obj) {
   delete[] obj;
 }
 
+
+/**
+ * Undefine xplcdelete. <xplc/utils.h> defines xplcdelete, we should
+ * undo this, in case it has been included before.
+ */
 #undef xplcdelete
+
+/**
+ * Macro used to indicate a valid use of the delete keyword with an
+ * XPLC interface. In some cases, you really need to use delete on an
+ * object that derives from IObject. In those cases, use "xplcdelete"
+ * instead of "delete".
+ */
 #define xplcdelete CheckIObjectOk() &&
+
+/**
+ * Overriding the delete keyword. This replaces the delete keyword
+ * with an invocation of the operator&& using a specific marker class
+ * as the left operand, allowing it to be templated on the right
+ * operand.
+ */
 #define delete CheckIObject() &&
+
+/**
+ * Remplacement for delete[]. Because we cannot capture usage of
+ * delete[] using macros, we have to add a replacement for it,
+ * unfortunately.
+ */
 #define deletev CheckIObjectOkVector() &&
 
 #endif /* __XPLC_DELETE_H__ */

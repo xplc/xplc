@@ -35,6 +35,7 @@ make tests
 %install
 rm -rf %{buildroot}
 %makeinstall
+rm -rf $(find examples -name CVS -type d -o -name .cvsignore)
 
 %clean
 rm -rf %{buildroot}
@@ -56,6 +57,7 @@ rm -rf %{buildroot}
 /usr/lib/libxplc_s.a
 /usr/lib/libxplc.so
 /usr/lib/pkgconfig/xplc.pc
+%doc examples
 
 %changelog
  * Wed Apr  7 2004  Pierre Phaneuf <pp@ludusdesign.com>

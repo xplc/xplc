@@ -101,6 +101,10 @@ struct IObjectImplInternal {
 };
 
 #ifndef xplcdelete
+/**
+ * Internal macro. This macro is needed to cooperate correctly with
+ * the "delete detector".
+ */
 #define xplcdelete delete
 #endif
 

@@ -35,11 +35,16 @@
 #endif
 #include <xplc/IModule.h>
 
+/**
+ * XPLC module magic number. Used to ensure that we are dealing with a
+ * valid XPLC module.
+ */
 #define XPLC_MODULE_MAGIC 0x58504c43UL
 
 /**
  * The current XPLC module ABI version.
  */
+//@{
 #ifdef UNSTABLE
 #define XPLC_MODULE_VERSION_MAJOR UINT_MAX
 #define XPLC_MODULE_VERSION_MINOR 0
@@ -47,6 +52,7 @@
 #define XPLC_MODULE_VERSION_MAJOR 0
 #define XPLC_MODULE_VERSION_MINOR 0
 #endif
+//@}
 
 /**
  * Defines attributes required for exported symbols.
@@ -57,15 +63,26 @@
 #define ENTRYPOINT extern "C"
 #endif
 
+/**
+ * Entry for a component. Modules have an array of these, where the
+ * function pointed at by getObject will be used to obtain an
+ * interface pointer when the requested UUID matches the one in uuid.
+ */
 struct XPLC_ComponentEntry {
+  //@{
   const UUID& uuid;
   IObject* (*getObject)();
+  //@}
 };
 
 /**
  * Information for an XPLC module.
  */
 struct XPLC_ModuleInfo {
+  /**
+   * XPLC module magic number. This is to ensure that it is in fact a
+   * valid XPLC module that has been loaded.
+   */
   unsigned long magic;
   /**
    * The XPLC module ABI version that this module conforms to. This
@@ -73,13 +90,37 @@ struct XPLC_ModuleInfo {
    * structure, as the meaning of the following members depend on it.
    */
   unsigned int version_major;
+  /**
+   * The XPLC module ABI sub-version that this module conforms
+   * to. This is used for optional and backward-compatible changes in
+   * the module ABI.
+   */
   unsigned int version_minor;
 
+  /**
+   * Description string for the module.
+   */
   const char* description;
 
+  /**
+   * List of components supported by the module. This is a pointer to
+   * the list of components that will be made available by this
+   * module.
+   */
   const XPLC_ComponentEntry* const components;
 
+  /**
+   * Hook on module loading. If not NULL, the function pointed at by
+   * loadModule will be called when loading the module. If the return
+   * value is false, the loading will be aborted.
+   */
   bool (*loadModule)();
+  /**
+   * Hook on module unloading. If not NULL, the function pointed at by
+   * unloadModule will be called before unloading the module. If the
+   * return value is false, the unloading will be aborted and the
+   * module will be kept in memory.
+   */
   bool (*unloadModule)();
 };
 

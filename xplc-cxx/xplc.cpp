@@ -32,8 +32,17 @@
 
 #include <xplc/IMoniker.h>
 #include <xplc/IFactory.h>
+#include <xplc/IModuleLoader.h>
 #include <xplc/xplc.h>
 #include <xplc/ptr.h>
+
+void XPLC::addModuleDirectory(const char* directory) {
+  xplc_ptr<IModuleLoader> loader(create<IModuleLoader>(XPLC_moduleLoader));
+
+  loader->setModuleDirectory(directory);
+
+  servmgr->addHandler(loader);
+}
 
 IObject* XPLC::create(const UUID& cid) {
   if(!servmgr)
@@ -62,8 +71,4 @@ IObject* XPLC::create(const char* aMoniker) {
   return factory->createObject();
 }
 
-XPLC::~XPLC() {
-  if(servmgr)
-    servmgr->release();
-}
 

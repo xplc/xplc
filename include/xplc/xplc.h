@@ -40,6 +40,7 @@
 
 #include <xplc/core.h>
 #include <xplc/utils.h>
+#include <xplc/ptr.h>
 
 /** \class XPLC xplc.h xplc/xplc.h
  *
@@ -49,17 +50,19 @@
 
 class XPLC {
 private:
-  IServiceManager* servmgr;
+  xplc_ptr<IServiceManager> servmgr;
 public:
   XPLC(): servmgr(XPLC_getServiceManager()) {}
   /**
    * Create an XPLC object using an existing service manager
    * reference.
    */
-  XPLC(IServiceManager* _servmgr): servmgr(_servmgr) {
-    servmgr->addRef();
-  }
-  ~XPLC();
+  XPLC(IServiceManager* _servmgr): servmgr(do_addRef(_servmgr)) {}
+
+  /**
+   * Adds a directory to the module loader path.
+   */
+  void addModuleDirectory(const char* directory);
 
   /**
    * Obtain an XPLC object. Obtains an object with the provided UUID
