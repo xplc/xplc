@@ -27,7 +27,7 @@ struct UUID {
   unsigned short data1;
   unsigned short data2;
   unsigned char data3[8];
-  inline bool equals(const Uuid& uuid) const {
+  inline bool equals(const UUID& uuid) const {
     return (((unsigned int*)&data0)[0] == ((unsigned int*)&uuid.data0)[0] &&
             ((unsigned int*)&data0)[1] == ((unsigned int*)&uuid.data0)[1] &&
             ((unsigned int*)&data0)[2] == ((unsigned int*)&uuid.data0)[2] &&
