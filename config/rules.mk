@@ -31,7 +31,7 @@ configure: configure.in
 	@echo "Please run 'autoconf'."
 	@exit 1
 
-config/depends.mk:
+config/depends.mk: config/config.mk
 	@echo "Building dependencies file ($@)"
 	@$(foreach DEP,$(CXXDEPS),$(COMPILE.cc) -M $(DEP) | sed -e 's|^.*:|$(dir $(DEP))&|' >> $@;)
 
