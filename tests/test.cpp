@@ -19,13 +19,17 @@
  * 02111-1307, USA.
  */
 
+#include <stdio.h>
 #include "test.h"
-#include <xplc/xplc.h>
 
-bool test() {
-  IServiceManager* serv;
+int main(int argc, char* argv[]) {
+  printf("%s: ", argv[0]);
 
-  serv = XPLC::getServiceManager();
+  if(test())
+    printf("pass\n");
+  else
+    printf("FAIL\n");
 
-  return serv;
+  return 0;
 }
+

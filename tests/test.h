@@ -19,13 +19,9 @@
  * 02111-1307, USA.
  */
 
-#include "test.h"
-#include <xplc/xplc.h>
+#ifndef __TESTS_TEST_H__
+#define __TESTS_TEST_H__
 
-bool test() {
-  IServiceManager* serv;
+bool test();
 
-  serv = XPLC::getServiceManager();
-
-  return serv;
-}
+#endif /* __TESTS_TEST_H__ */

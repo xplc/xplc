@@ -20,9 +20,13 @@
 
 .PHONY: tests
 
+TESTS_EXE:=$(patsubst %.cpp,%,$(wildcard tests/test[0-9][0-9][0-9].cpp))
+
 tests: LDLIBS+=-lxplc_s
 tests: LDFLAGS=-Lxplc
-tests: all $(patsubst %.cpp,%,$(wildcard tests/test[0-9][0-9][0-9].cpp))
+tests: all $(TESTS_EXE)
 	@echo "Running tests:"
 	@for TEST in tests/test[0-9][0-9][0-9]; do $$TEST; done
+
+$(TESTS_EXE): tests/test.o
 

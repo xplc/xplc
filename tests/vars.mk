@@ -20,5 +20,5 @@
 
 GARBAGES+=$(patsubst %.cpp,%,$(wildcard tests/test[0-9][0-9][0-9].cpp))
 
-CXXDEPS+=$(wildcard tests/test[0-9][0-9][0-9].cpp)
+CXXDEPS+=tests/test.cpp $(wildcard tests/test[0-9][0-9][0-9].cpp)
 
