@@ -25,6 +25,8 @@
 #include <xplc/IServiceManager.h>
 
 class ServiceManager: public IServiceManager {
+private:
+  unsigned int refcount;
 public:
   /* IObject */
   void operator delete(void* aObj) {
@@ -37,9 +39,7 @@ public:
   virtual void registerUuid(const UUID&, IObject*);
   virtual void unregisterUuid(const UUID&);
   virtual IObject* getObjectByUuid(const UUID&);
-  virtual void registerAlias(const char*, const UUID&);
-  virtual void unregisterAlias(const char*);
-  virtual IObject* getObjectByAlias(const char*);
+  virtual void shutdown();
 };
 
 #endif /* __XPLC_SERVMGR_H__ */

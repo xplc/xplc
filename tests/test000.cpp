@@ -30,5 +30,10 @@ const char* test() {
   if(!serv)
     return "could not obtain service manager";
 
+  serv->shutdown();
+
+  if(serv->release())
+    return "service manager has non-zero refcount after shutdown/release";
+
   return NULL;
 }

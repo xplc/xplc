@@ -23,15 +23,35 @@
 #include "servmgr.h"
 
 unsigned int ServiceManager::addRef() {
-  return 1;
+  return ++refcount;
 }
 
 unsigned int ServiceManager::release() {
+  if(--refcount)
+    return refcount;
+
+  /* protect against re-entering the destructor */
+  refcount = 1;
+
+  delete this;
+
   return 0;
 }
 
-IObject* ServiceManager::getInterface(const UUID&) {
-  return NULL;
+IObject* ServiceManager::getInterface(const UUID& uuid) {
+
+  do {
+    if(uuid.equals(IObject::IID))
+      break;
+
+    if(uuid.equals(IServiceManager::IID))
+      break;
+
+    return NULL;
+  } while(0);
+
+  addRef();
+  return this;
 }
 
 void ServiceManager::registerUuid(const UUID&, IObject*) {
@@ -44,13 +64,6 @@ IObject* ServiceManager::getObjectByUuid(const UUID&) {
   return NULL;
 }
 
-void ServiceManager::registerAlias(const char*, const UUID&) {
-}
-
-void ServiceManager::unregisterAlias(const char*) {
-}
-
-IObject* ServiceManager::getObjectByAlias(const char*) {
-  return NULL;
+void ServiceManager::shutdown() {
 }
 

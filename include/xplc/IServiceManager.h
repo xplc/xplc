@@ -30,9 +30,7 @@ public:
   virtual void registerUuid(const UUID&, IObject*) = 0;
   virtual void unregisterUuid(const UUID&) = 0;
   virtual IObject* getObjectByUuid(const UUID&) = 0;
-  virtual void registerAlias(const char*, const UUID&) = 0;
-  virtual void unregisterAlias(const char*) = 0;
-  virtual IObject* getObjectByAlias(const char*) = 0;
+  virtual void shutdown() = 0;
 };
 
 const UUID IServiceManager::IID __attribute__((weak)) = {0x22bdabd9, 0xa63a, 0x4b5e, {0xb1, 0x61, 0xb6, 0x36, 0x52, 0x27, 0xd7, 0x8e}};
