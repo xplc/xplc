@@ -78,21 +78,26 @@ void ServiceManager::removeObject(const UUID& aUuid) {
 }
 
 IObject* ServiceManager::getObject(const UUID& aUuid) {
-  ObjectNode* node;
+  ObjectNode* obj;
 
-  node = registered;
-  while(node) {
-    if(node->uuid.equals(aUuid))
-      break;
+  /*
+   * We look through the registered objects and return if we find a
+   * match.
+   */
+  obj = registered;
+  while(obj) {
+    if(obj->uuid.equals(aUuid)) {
+      obj->obj->addRef();
+      return obj->obj;
+    }
 
-    node = node->next;
+    obj = obj->next;
   }
 
-  if(node) {
-    node->obj->addRef();
-    return node->obj;
-  } else
-    return NULL;
+  /*
+   * No match was found, we return empty-handed.
+   */
+  return NULL;
 }
 
 void ServiceManager::shutdown() {
