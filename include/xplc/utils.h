@@ -23,10 +23,12 @@
 #define __XPLC_UTILS_H__
 
 template<class Component>
-class RefcountedComponent: public Component {
+class GenericComponent: public Component {
 private:
   unsigned int refcount;
- public:
+public:
+  GenericComponent(): refcount(0) {
+  }
   void operator delete(void* self) {
     ::delete self;
   }

@@ -28,7 +28,7 @@ static ServiceManager* servmgr;
 
 IServiceManager* XPLC::getServiceManager() {
   if(!servmgr)
-    servmgr = new RefcountedComponent<ServiceManager>;
+    servmgr = new GenericComponent<ServiceManager>;
 
   if(servmgr)
     servmgr->addRef();
