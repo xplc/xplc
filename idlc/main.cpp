@@ -31,21 +31,45 @@ public:
 
 class InterfaceNode: public Node {
 private:
-  IDL_tree parent;
+  char* name;
+  char* parent;
 public:
   InterfaceNode(IDL_tree ident, IDL_tree inherit, IDL_tree body);
+};
+
+class MethodNode: public Node {
+public:
+  MethodNode(IDL_tree node);
 };
 
 Node::Node(): next(NULL) {
 }
 
+void showprops(const char* name, IDL_tree node) {
+  if(IDL_NODE_PROPERTIES(node))
+    printf("%s: %i properties\n", name, g_hash_table_size(IDL_NODE_PROPERTIES(node)));
+  else
+    printf("%s: no properties\n", name);
+}
+
+MethodNode::MethodNode(IDL_tree node) {
+  printf("Method node: %s\n", IDL_IDENT(IDL_OP_DCL(node).ident).str);
+}
+
 InterfaceNode::InterfaceNode(IDL_tree ident,
-			     IDL_tree inherit,
-			     IDL_tree body) {
+                             IDL_tree inherit,
+                             IDL_tree body): name(NULL),
+                                             parent(NULL) {
+  Node* head;
+  Node* node;
+  IDL_tree ptr;
+
   if(IDL_NODE_TYPE(ident) != IDLN_IDENT) {
     printf("InterfaceNode: ident is not an IDLN_IDENT!\n");
     exit(1);
   }
+
+  name = IDL_IDENT(ident).str;
 
   if(inherit) {
     if(IDL_NODE_TYPE(inherit) != IDLN_LIST) {
@@ -58,8 +82,12 @@ InterfaceNode::InterfaceNode(IDL_tree ident,
       exit(1);
     }
 
-    parent = IDL_LIST(inherit).data;
-    printf("parent is %s\n", IDL_NODE_TYPE_NAME(parent));
+    if(IDL_NODE_TYPE(IDL_LIST(inherit).data) != IDLN_IDENT) {
+      printf("InterfaceNode: parent is not an IDLN_IDENT!\n");
+      exit(1);
+    }
+
+    parent = IDL_IDENT(IDL_LIST(inherit).data).str;
   } else
     parent = NULL;
 
@@ -68,10 +96,20 @@ InterfaceNode::InterfaceNode(IDL_tree ident,
     exit(1);
   }
 
+  if(body) {
+    head = Node::convertIdlToNode(IDL_LIST(body).data);
+    node = head;
+    ptr = IDL_LIST(body).next;
+    while(ptr) {
+      node->next = Node::convertIdlToNode(IDL_LIST(ptr).data);
+      ptr = IDL_LIST(ptr).next;
+    }
+  }
+
   if(parent)
-    printf("interface %s: public %s\n", IDL_IDENT(ident).str, IDL_IDENT(parent).str);
+    printf("interface %s: %s\n", name, parent);
   else
-    printf("interface %s\n", IDL_IDENT(ident).str);
+    printf("interface %s\n", name);
 }
 
 Node* Node::convertIdlToNode(IDL_tree tree) {
@@ -100,8 +138,24 @@ Node* Node::convertIdlToNode(IDL_tree tree) {
 				IDL_INTERFACE(tree).inheritance_spec,
 				IDL_INTERFACE(tree).body);
     break;
+  case IDLN_MODULE:
+    printf("\"module\" keyword not supported!\n");
+    exit(1);
+    break;
+  case IDLN_ATTR_DCL:
+    printf("attributes not supported!\n");
+    exit(1);
+    break;
+  case IDLN_OP_DCL:
+    current = new MethodNode(tree);
+    break;
   default:
     printf("Unknown node type (%s), aborting.\n", IDL_NODE_TYPE_NAME(tree));
+    exit(1);
+  }
+
+  if(!current) {
+    printf("convertIdlToNode is returning a null node!\n");
     exit(1);
   }
 
@@ -112,7 +166,7 @@ void parse_file(const char* fn) {
   IDL_tree tree;
   Node* root;
   printf("parsing file %s\n", fn);
-  IDL_parse_filename(fn, NULL, NULL, &tree, NULL, 0, IDL_WARNINGMAX);
+  IDL_parse_filename(fn, NULL, NULL, &tree, NULL, IDLF_PROPERTIES|IDLF_CODEFRAGS, IDL_WARNINGMAX);
 
   root = Node::convertIdlToNode(tree);
 }
