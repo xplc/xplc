@@ -20,10 +20,37 @@
  */
 
 #include <stdlib.h>
-#include <xplc/xplc.h>
 #include "servmgr.h"
 
-IServiceManager* XPLC::getServiceManager() {
-  return new ServiceManager;
+unsigned int ServiceManager::addRef() {
+  return 1;
+}
+
+unsigned int ServiceManager::release() {
+  return 0;
+}
+
+IObject* ServiceManager::getInterface(const UUID&) {
+  return NULL;
+}
+
+void ServiceManager::registerUuid(const UUID&, IObject*) {
+}
+
+void ServiceManager::unregisterUuid(const UUID&) {
+}
+
+IObject* ServiceManager::getObjectByUuid(const UUID&) {
+  return NULL;
+}
+
+void ServiceManager::registerAlias(const char*, const UUID&) {
+}
+
+void ServiceManager::unregisterAlias(const char*) {
+}
+
+IObject* ServiceManager::getObjectByAlias(const char*) {
+  return NULL;
 }
 

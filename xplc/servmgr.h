@@ -19,11 +19,27 @@
  * 02111-1307, USA.
  */
 
-#include <stdlib.h>
-#include <xplc/xplc.h>
-#include "servmgr.h"
+#ifndef __XPLC_SERVMGR_H__
+#define __XPLC_SERVMGR_H__
 
-IServiceManager* XPLC::getServiceManager() {
-  return new ServiceManager;
-}
+#include <xplc/IServiceManager.h>
 
+class ServiceManager: public IServiceManager {
+public:
+  /* IObject */
+  void operator delete(void* aObj) {
+    ::delete aObj;
+  }
+  virtual unsigned int addRef();
+  virtual unsigned int release();
+  virtual IObject* getInterface(const UUID&);
+  /* IServiceManager */
+  virtual void registerUuid(const UUID&, IObject*);
+  virtual void unregisterUuid(const UUID&);
+  virtual IObject* getObjectByUuid(const UUID&);
+  virtual void registerAlias(const char*, const UUID&);
+  virtual void unregisterAlias(const char*);
+  virtual IObject* getObjectByAlias(const char*);
+};
+
+#endif /* __XPLC_SERVMGR_H__ */
