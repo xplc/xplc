@@ -1,7 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -53,7 +54,7 @@ void test() {
   obj = handler->getObject(TestObject_CID);
   ASSERT(obj != 0, "could not get test component from static service handler");
 
-  itest = mutateInterface<ITestInterface>(obj);
+  itest = mutate<ITestInterface>(obj);
   ASSERT(itest != 0, "test component does not have the expected interface");
 
   VERIFY(test->getRefCount() == 3, "the test object has an incorrect refcount");

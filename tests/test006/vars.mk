@@ -1,5 +1,5 @@
 # XPLC - Cross-Platform Lightweight Components
-# Copyright (C) 2000, Pierre Phaneuf
+# Copyright (C) 2001, Pierre Phaneuf
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: vars.mk,v 1.1 2001/06/08 15:06:49 pphaneuf Exp $
+# $Id: vars.mk,v 1.2 2002/03/24 06:44:30 pphaneuf Exp $
 
 CXXDEPS+=$(wildcard tests/test006/*.cpp)
 

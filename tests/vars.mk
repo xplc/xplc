@@ -1,5 +1,6 @@
 # XPLC - Cross-Platform Lightweight Components
-# Copyright (C) 2000, Pierre Phaneuf
+# Copyright (C) 2000-2002, Pierre Phaneuf
+# Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -16,11 +17,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: vars.mk,v 1.4 2000/12/28 19:40:14 pphaneuf Exp $
+# $Id: vars.mk,v 1.9 2002/03/29 19:57:22 pphaneuf Exp $
 
 CXXDEPS+=tests/testmain.cpp
 
 GARBAGES+=$(wildcard tests/test*/test)
+
+TESTS:=$(patsubst %,%/test,$(wildcard tests/test[0-9][0-9][0-9]))
 
 include $(wildcard tests/*/vars.mk)
 

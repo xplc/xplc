@@ -1,7 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -45,13 +46,13 @@ void test() {
   obj = servmgr->getObject(XPLC::simpleDynamicLoader);
   ASSERT(obj != 0, "could not obtain simple dynamic loader component");
 
-  dynfactory = mutateInterface<IFactory>(obj);
+  dynfactory = mutate<IFactory>(obj);
   ASSERT(dynfactory != 0, "factory does not have expected interface");
 
   obj = dynfactory->createObject();
   ASSERT(obj != 0, "could not create simple dynamic loader component");
 
-  dyn = mutateInterface<ISimpleDynamicLoader>(obj);
+  dyn = mutate<ISimpleDynamicLoader>(obj);
   ASSERT(dyn != 0, "simple dynamic loader does not have expected interface");
 
   err = dyn->loadModule("tests/test005/testobj.dll");
@@ -60,7 +61,7 @@ void test() {
   obj = dyn->createObject();
   ASSERT(obj != 0, "could not create test object");
 
-  test = mutateInterface<ITestComponent>(obj);
+  test = mutate<ITestComponent>(obj);
   ASSERT(test != 0, "test object did not have expected interface");
 
   ASSERT(test->getAnswer() == 42, "test object did not have expected behavior");

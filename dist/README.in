@@ -1,7 +1,7 @@
 XPLC (Cross-Platform Lightweight Components)
 ============================================
 
-Release: 0.1.1
+Release: @VERSION@
 Web Site: http://xplc.sourceforge.net/
 Maintainer: Pierre Phaneuf <pp@ludusdesign.com>
 
@@ -9,6 +9,13 @@ General
 -------
 
 Do not use XPLC unless you actually work on it. :-)
+
+Thanks
+------
+
+I would like to thank Net Integration Technologies, my employers, for
+allowing me to work on XPLC a day a week and generally being a cool
+place to work at.
 
 License
 -------
@@ -45,7 +52,8 @@ but could also be send via e-mail to the maintainer.
                           *** IMPORTANT ***
 Before preparing a patch, you should make sure that 'make tests'
 passes all tests. Those tests are made to be as easy to use as
-possible, so please use them.
+possible, so please use them. Using the "--enable-fatal-warnings"
+option of the "configure" script is also recommended.
 
 The simpler way to prepare a patch requires CVS and Internet
 access. Just issue the following command in the root XPLC project

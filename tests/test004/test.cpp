@@ -1,7 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -44,7 +45,7 @@ void test() {
 
   obj->addRef();
 
-  factory = mutateInterface<IGenericFactory>(obj);
+  factory = mutate<IGenericFactory>(obj);
   ASSERT(factory != 0, "factory does not have expected interface");
 
   factory->setFactory(testfactory);
@@ -52,7 +53,7 @@ void test() {
   obj = factory->createObject();
   ASSERT(obj != 0, "factory did not create test object");
 
-  test = mutateInterface<ITestInterface>(obj);
+  test = mutate<ITestInterface>(obj);
   ASSERT(test != 0, "test object does not have expected interface");
 
   VERIFY(test->release() == 0, "test object has non-zero refcount after release");

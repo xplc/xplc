@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2001-2002, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -110,15 +110,15 @@ void test() {
   ASSERT(test, "could not instantiate test object");
 
   iobj = static_cast<IFoo*>(test)->getInterface(IObject::IID);
-  VERIFY(iobj, "getInterface<IObject> failed on test object");
+  VERIFY(iobj, "getInterface(IObject::IID) failed on test object");
 
   VERIFY(reinterpret_cast<void*>(iobj) == reinterpret_cast<void*>(test), "identity test failed");
 
-  ifoo = getInterface<IFoo>(iobj);
-  VERIFY(ifoo, "getInterface<IFoo> failed on test object");
+  ifoo = get<IFoo>(iobj);
+  VERIFY(ifoo, "get<IFoo> failed on test object");
 
-  ibar = getInterface<IBar>(ifoo);
-  VERIFY(ibar, "getInterface<IBar> failed on test object");
+  ibar = get<IBar>(ifoo);
+  VERIFY(ibar, "get<IBar> failed on test object");
 
   ifoo->setFoo(10);
   ibar->setBar(20);

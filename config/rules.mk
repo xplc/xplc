@@ -1,5 +1,6 @@
 # XPLC - Cross-Platform Lightweight Components
-# Copyright (C) 2000, Pierre Phaneuf
+# Copyright (C) 2000-2002, Pierre Phaneuf
+# Copyright (C) 2002, Net Integration Technologies, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -16,20 +17,24 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id: rules.mk,v 1.6 2001/06/08 15:32:23 pphaneuf Exp $
+# $Id: rules.mk,v 1.12 2002/03/29 23:36:48 pphaneuf Exp $
 
-.PHONY: ChangeLog dist dustclean clean distclean realclean
+.PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install
 
-dist: distclean ChangeLog
+dist: distclean ChangeLog README
 	autoconf
 
 ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
 	cvs2cl.pl --utc -U config/cvs-users
 
+README: dist/README.in
+	sed $< -e 's%@VERSION@%$(VERSION)%g' > $@
+
 dustclean:
 	rm -f $(shell find . -name 'core' -print)
 	rm -f $(shell find . -name '*~' -print)
+	rm -f $(shell find . -name '.#*' -print)
 
 clean: dustclean
 	rm -f $(shell find . -name '*.o' -print)
@@ -42,17 +47,30 @@ distclean: clean
 realclean: distclean
 	rm -f $(REALCLEAN)
 
+installdirs:
+	mkdir -p $(libdir)
+	mkdir -p $(includedir)/xplc
+
+install: $(TARGETS) installdirs
+	$(INSTALL_PROGRAM) libxplc.so.$(VERSION) $(libdir)
+	$(INSTALL_DATA) libxplc_s.a $(libdir)
+	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(includedir)/xplc
+	ln -s libxplc.so.$(VERSION) $(libdir)/libxplc.so
+
+ifeq ($(filter-out $(SIMPLETARGETS),$(MAKECMDGOALS)),$(MAKECMDGOALS))
+
 config/config.mk: config/config.mk.in configure
 	@echo "Please run './configure'."
 	@exit 1
 
 configure: configure.in
-	@echo "Please run 'autoconf'."
-	@exit 1
+	autoconf
 
 config/depends.mk: config/config.mk
 	@echo "Building dependencies file ($@)"
 	@$(foreach DEP,$(CXXDEPS),$(COMPILE.cc) -M $(DEP) | sed -e 's|^.*:|$(dir $(DEP))&|' >> $@;)
 
 -include config/depends.mk
+
+endif
 

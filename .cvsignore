@@ -5,7 +5,9 @@ config.log
 config.status
 Debug
 Release
+README
 *.dsw
 *.opt
 *.ncb
 Tags.WW
+libxplc.so.*

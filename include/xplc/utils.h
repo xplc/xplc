@@ -1,7 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -25,52 +26,20 @@
 #include <xplc/IObject.h>
 
 /*
- * Define this if you want to debug components using the
- * GenericComponent template.
- */
-#undef GENERICDEBUG
-
-/*
- * Define this if you want to debug addRef()s and release()s.
- */
-#undef GENERICDEBUG_REFS
-
-#if defined(GENERICDEBUG) || defined(GENERICDEBUG_REFS)
-#include <stdio.h>
-#endif
-
-/*
- * This template contains an implementation of methods a basic
+ * Mix-in template that contains an implementation of methods a basic
  * component will need to implement.
  */
-
 template<class Component>
 class GenericComponent: public Component {
 private:
   unsigned int refcount;
 public:
   GenericComponent(): refcount(0) {
-#ifdef GENERICDEBUG
-    fprintf(stderr, "%s: instantiated\n", __PRETTY_FUNCTION__);
-#endif
   }
-#ifdef GENERICDEBUG
-  virtual ~GenericComponent() {
-    fprintf(stderr, "%s: destroyed\n", __PRETTY_FUNCTION__);
-  }
-#endif
   virtual unsigned int addRef() {
-#ifdef GENERICDEBUG_REFS
-    fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount + 1);
-#endif
-
     return ++refcount;
   }
   virtual unsigned int release() {
-#ifdef GENERICDEBUG_REFS
-    fprintf(stderr, "%s = %i\n", __PRETTY_FUNCTION__, refcount - 1);
-#endif
-
     if(--refcount)
       return refcount;
 
@@ -88,9 +57,8 @@ public:
  * method of a component and cast it properly. If the component does
  * not support the interface, a NULL pointer will be returned.
  */
-
 template<class Interface>
-Interface* getInterface(IObject* aObj) {
+Interface* get(IObject* aObj) {
   if(!aObj)
     return 0;
 
@@ -98,13 +66,13 @@ Interface* getInterface(IObject* aObj) {
 }
 
 /*
- * This templated function is very similar to the getInterface one,
- * except that it automatically releases the inbound reference,
- * without regard whether the getInterface actually yielded something.
+ * This templated function is very similar to the "get" one, except
+ * that it automatically releases the inbound reference, without
+ * regard whether the getInterface actually yielded something.
  */
 
 template<class Interface>
-Interface* mutateInterface(IObject* aObj) {
+Interface* mutate(IObject* aObj) {
   Interface* rv;
 
   if(!aObj)

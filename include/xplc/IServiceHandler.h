@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -32,6 +32,7 @@ public:
    * already addRef()'d.
    */
   virtual IObject* getObject(const UUID&) = 0;
+  virtual void shutdown() = 0;
 };
 
 DEFINE_UUID(IServiceHandler::IID) = {0xe897384f, 0x3ba6, 0x46e3, {0xad, 0x06, 0x53, 0x76, 0x21, 0xa6, 0x0a, 0x03}};

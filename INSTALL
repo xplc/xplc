@@ -1,6 +1,13 @@
+XPLC Installation
+=================
 
-Simple: do not install this! :-)
+Quick Start
+-----------
 
-If you don't know what to do, then you don't need XPLC right
-now (see the 'README' file)... Come back later!
+ - ./configure
+ - make
+ - make tests (optional)
+ - make install
+
+You might have to use "ldconfig" to finish setting up the system.
 

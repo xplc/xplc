@@ -1,7 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2002, Net Integration Technologies, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -28,18 +29,7 @@ StaticServiceHandler* StaticServiceHandler::create() {
 }
 
 StaticServiceHandler::~StaticServiceHandler() {
-  ObjectNode* node;
-  ObjectNode* ptr;
-
-  node = objects;
-
-  while(node) {
-    ptr = node;
-    node = node->next;
-    delete ptr;
-  }
-
-  objects = 0;
+  shutdown();
 }
 
 IObject* StaticServiceHandler::getInterface(const UUID& uuid) {
@@ -81,8 +71,27 @@ IObject* StaticServiceHandler::getObject(const UUID& aUuid) {
   return 0;
 }
 
+void StaticServiceHandler::shutdown() {
+  ObjectNode* node;
+  ObjectNode* ptr;
+
+  node = objects;
+
+  while(node) {
+    ptr = node;
+    node = node->next;
+    delete ptr;
+  }
+
+  objects = 0;
+}
+
 void StaticServiceHandler::addObject(const UUID& aUuid, IObject* aObj) {
   ObjectNode* node;
+
+  /* No object given? */
+  if(!aObj)
+    return;
 
   node = objects;
 

@@ -1,7 +1,8 @@
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
  *
  * XPLC - Cross-Platform Lightweight Components
- * Copyright (C) 2000, Pierre Phaneuf
+ * Copyright (C) 2000-2002, Pierre Phaneuf
+ * Copyright (C) 2001, Stéphane Lajoie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -47,6 +48,8 @@ public:
 
     return 0;
   }
+  virtual void shutdown() {
+  }
   virtual IObject* getInterface(const UUID& uuid) {
     if(uuid.equals(IObject::IID)) {
       addRef();
@@ -76,6 +79,8 @@ public:
 
     return 0;
   }
+  virtual void shutdown() {
+  }
   virtual IObject* getInterface(const UUID& uuid) {
     if(uuid.equals(IObject::IID)) {
       addRef();
@@ -104,6 +109,8 @@ public:
     }
 
     return 0;
+  }
+  virtual void shutdown() {
   }
   virtual IObject* getInterface(const UUID& uuid) {
     if(uuid.equals(IObject::IID)) {
