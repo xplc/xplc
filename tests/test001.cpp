@@ -23,9 +23,9 @@
 #include <xplc/xplc.h>
 
 /*
- * test000
+ * test001
  *
- * Verifies that we can obtain the service manager.
+ * Verifies that shutdown properly releases all the involved objects.
  */
 
 const char* test() {
@@ -35,6 +35,11 @@ const char* test() {
 
   if(!serv)
     return "could not obtain service manager";
+
+  serv->shutdown();
+
+  if(serv->release())
+    return "service manager has non-zero refcount after shutdown/release";
 
   return NULL;
 }
