@@ -27,6 +27,10 @@
 class IServiceManagerHandler: public IObject {
 public:
   static const UUID IID;
+  /*
+   * The object returned by IServiceManagerHandler::getObject() is
+   * already addRef()'d.
+   */
   virtual IObject* getObject(const UUID&) = 0;
 };
 
