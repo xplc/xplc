@@ -22,6 +22,8 @@
 #ifndef __XPLC_UTILS_H__
 #define __XPLC_UTILS_H__
 
+#include <xplc/IObject.h>
+
 /*
  * Define this if you want to debug components using the
  * GenericComponent template.
