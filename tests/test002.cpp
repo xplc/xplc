@@ -102,12 +102,9 @@ const char* test() {
   if(!obj)
     return "could not get component from the service manager";
 
-  ifoo = (IFoo*)obj->getInterface(IFoo::IID);
+  ifoo = mutateInterface<IFoo>(obj);
   if(!ifoo)
     return "test component does not have expected interface";
-
-  if(!obj->release())
-    return "test component was released too soon";
 
   ifoo->setFoo(10);
   ifoo->incFoo();

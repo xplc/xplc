@@ -22,11 +22,19 @@
 #ifndef __XPLC_UTILS_H__
 #define __XPLC_UTILS_H__
 
-#undef GENERICDEBUG
+/*
+ * Define this if you want to debug components using the
+ * GenericComponent template.  #undef GENERICDEBUG
+ */
 
 #ifdef GENERICDEBUG
 #include <stdio.h>
 #endif
+
+/*
+ * This template contains an implementation of methods a basic
+ * component will need to implement.
+ */
 
 template<class Component>
 class GenericComponent: public Component {
@@ -69,5 +77,39 @@ public:
     return 0;
   }
 };
+
+/*
+ * This templated function is a typesafe way to call the getInterface
+ * method of a component and cast it properly. If the component does
+ * not support the interface, a NULL pointer will be returned.
+ */
+
+template<class Interface>
+Interface* getInterface(IObject* aObj) {
+  if(!aObj)
+    return NULL;
+
+  return (Interface*)aObj->getInterface(Interface::IID);
+}
+
+/*
+ * This templated function is very similar to the getInterface one,
+ * except that it automatically releases the inbound reference,
+ * without regard whether the getInterface actually yielded something.
+ */
+
+template<class Interface>
+Interface* mutateInterface(IObject* aObj) {
+  Interface* rv;
+
+  if(!aObj)
+    return NULL;
+
+  rv = (Interface*)aObj->getInterface(Interface::IID);
+
+  aObj->release();
+
+  return rv;
+}
 
 #endif /* __XPLC_UTILS_H__ */
