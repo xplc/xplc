@@ -18,6 +18,22 @@
 #
 # $Id$
 
-config/config.mk: config/config.mk.in
+.PHONY: clean
+
+clean:
+	rm -f $(GARBAGES) $(TARGETS)
+
+config/config.mk: config/config.mk.in configure
 	@echo "Please run './configure'."
 	@exit 1
+
+configure: configure.in
+	@echo "Please run 'autoconf'."
+	@exit 1
+
+config/depends.mk:
+	@echo "Building dependencies file ($@)"
+	@$(foreach DEP,$(CXXDEPS),$(COMPILE.cc) -M $(DEP) | sed -e 's|^.*:|$(dir $(DEP))&|' >> $@;)
+
+-include config/depends.mk
+

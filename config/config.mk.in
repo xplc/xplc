@@ -20,5 +20,10 @@
 #
 # $Id$
 
-CXXFLAGS=@CFLAGS@ -Iinclude
+TARGETS:=
+GARBAGES:=
+
+CXXDEPS:=
+
+CXXFLAGS=-Wall -pedantic -pipe -Iinclude
 

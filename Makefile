@@ -18,9 +18,17 @@
 #
 # $Id$
 
-.PHONY: test
+.PHONY: default all test
 
-include config/main.mk
+default: all
+
+-include config/config.mk
+
+include $(wildcard */vars.mk)
+
+include $(wildcard */rules.mk)
+
+all: $(TARGETS)
 
 test:
 	@echo "bindir = \"@bindir@\""

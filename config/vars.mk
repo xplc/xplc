@@ -18,4 +18,6 @@
 #
 # $Id$
 
--include config/config.mk
+GARBAGES+=$(shell find . -name '*.o' -print)
+GARBAGES+=$(shell find . -name '*~' -print)
+

@@ -18,4 +18,5 @@
 #
 # $Id$
 
-xplc/libxplc.a: xplc/xplc.o
+xplc/libxplc.a: xplc/libxplc.a(xplc/xplc.o)
+

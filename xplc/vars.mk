@@ -18,6 +18,7 @@
 #
 # $Id$
 
-TARGETS += xplc/libxplc.a
+TARGETS+=xplc/libxplc.a
 
-DEPENDS += xplc/xplc.cpp
+CXXDEPS+=xplc/xplc.cpp
+
