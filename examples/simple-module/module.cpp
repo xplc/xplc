@@ -24,7 +24,6 @@ const XPLC_ModuleInfo XPLC_Module = {
   XPLC_MODULE_VERSION_MINOR,
   "Simple Example Module",
   components,
-  0,
   0
 };
 

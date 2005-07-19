@@ -1,0 +1,16 @@
+{
+   ulrich_sucks1
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+}
+{
+   ulrich_sucks2
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+}

@@ -22,17 +22,26 @@
 #ifndef __XPLC_CATEGORYNODE_H__
 #define __XPLC_CATEGORYNODE_H__
 
+#include <string.h>
+#include <stdlib.h>
+
 class CategoryEntryNode {
 public:
   CategoryEntryNode* next;
   UUID entry;
+  char* str;
   CategoryEntryNode(const UUID& aUuid,
+                    const char* aStr,
                     CategoryEntryNode* aNext): next(aNext),
-                                               entry(aUuid) {
+                                               entry(aUuid),
+                                               str(aStr ? strdup(aStr) : 0) {
   }
   ~CategoryEntryNode() {
     if(next)
       delete next;
+
+    if(str)
+      free(str);
   }
 };
 

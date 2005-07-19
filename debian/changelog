@@ -1,8 +1,35 @@
-xplc (0.3.11-0.1) experimental; urgency=low
+xplc (0.3.12-1.1) NONE; urgency=low
 
   * Unofficial build from CVS.
 
- -- J. Random Hacker <jrhacker@example.com>  Thu,  4 Feb 2005 11:13:04 -0500
+ -- J. Random Hacker <jrhacker@example>  Wed,  7 Jul 2005 00:00:00 -0000
+
+xplc (0.3.12-1) unstable; urgency=low
+
+  * New upstream release.
+  * Built for G++ 4.0.
+
+ -- Simon Law <sfllaw@debian.org>  Wed,  6 Jul 2005 12:36:20 -0400
+
+xplc (0.3.11-1) unstable; urgency=low
+
+  * New Upstream release. (Closes: #286505)
+  * Acknowledge NMU. (Closes: #290424)
+
+ -- James Morrison <phython@debian.org>  Tue, 22 Mar 2005 22:57:10 -0500
+
+xplc (0.3.10-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix for int size issues that break building on 64-bit platforms; not
+    release-critical for this package, but is holding up RC bugfixes for
+    packages that reverse-depend on xplc.  Thanks to Kurt Roeckx for the
+    patch.  (Closes: #286505)
+  * Invoke ldconfig as /sbin/ldconfig, fixing build failures when /sbin
+    is not part of the path (as is the case on many third-party build
+    systems).  Closes: #290424
+
+ -- Steve Langasek <vorlon@debian.org>  Tue, 18 Jan 2005 03:57:10 -0800
 
 xplc (0.3.10-3) unstable; urgency=low
 

@@ -45,6 +45,13 @@ const UUID& CategoryIterator::getUuid() {
   return UUID_null;
 }
 
+const char* CategoryIterator::getString() {
+  if(current)
+    return current->str;
+
+  return 0;
+}
+
 void CategoryIterator::next() {
   if(current)
     current = current->next;

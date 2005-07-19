@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(XPLC, 0.3.11, pp@ludusdesign.com)
-AC_REVISION($Id: configure.ac,v 1.35 2005/02/04 16:12:24 pphaneuf Exp $)
+AC_INIT(XPLC, 0.3.12, pp@ludusdesign.com)
+AC_REVISION($Id: configure.ac,v 1.37 2005/07/19 22:26:19 pphaneuf Exp $)
 
 AC_CANONICAL_HOST
 
@@ -158,7 +158,6 @@ pc_version=
 libdir_version=
 lib_prefix_version=
 if test "$(echo $PACKAGE_VERSION | awk -F. '{ print $2 % 2}')" -eq 1; then
-    AC_MSG_WARN([Unstable release, the API might change in the next release.])
     enable_unstable=yes
     includedir="$includedir/xplc-${PACKAGE_VERSION}"
     pc_version="-${PACKAGE_VERSION}"
@@ -182,6 +181,10 @@ AC_CONFIG_FILES([config/config.mk dist/xplc.pc dist/xplc-uninstalled.pc examples
 AC_CONFIG_HEADERS([include/autoconf.h])
 
 AC_OUTPUT
+
+if test "$(echo $PACKAGE_VERSION | awk -F. '{ print $2 % 2}')" -eq 1; then
+    AC_MSG_WARN([Unstable release, the API might change in the next release.])
+fi
 
 if test "$enable_loader" = "no"; then
     AC_MSG_WARN([Dynamic loading is disabled.])

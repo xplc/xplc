@@ -1,3 +1,9 @@
+New in 0.3.12
+-------------
+
+ * Additional work done on the category system.
+ * Improved the module loader.
+
 New in 0.3.11
 -------------
 

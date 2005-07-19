@@ -34,6 +34,7 @@ private:
 public:
   CategoryIterator(ICategory*, CategoryEntryNode*);
   virtual const UUID& getUuid();
+  virtual const char* getString();
   virtual void next();
   virtual bool done();
   virtual ~CategoryIterator();

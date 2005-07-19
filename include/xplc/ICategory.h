@@ -29,11 +29,7 @@
  * Represents a category.
  */
 
-#if 0
-class ICategory: public IFactory {
-#else
 class ICategory: public IObject {
-#endif
   UNSTABLE_INTERFACE
 public:
   /** Gets an iterator for the category. */

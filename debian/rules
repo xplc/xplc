@@ -26,4 +26,4 @@ cleanbuilddir/libxplc$(PKG_VERSION)-dev::
 
 # Fix ldconfig-symlink-missing-for-shlib
 binary-predeb/libxplc$(PKG_VERSION)::
-	ldconfig -v -n debian/libxplc$(PKG_VERSION)/usr/lib
+	/sbin/ldconfig -v -n debian/libxplc$(PKG_VERSION)/usr/lib

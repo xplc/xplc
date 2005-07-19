@@ -34,6 +34,8 @@ class ICategoryIterator: public IObject {
 public:
   /** Returns the UUID of the category entry. */
   virtual const UUID& getUuid() = 0;
+  /** Returns the string associated with the category entry. */
+  virtual const char* getString() = 0;
   /** Advances to the next category entry. */
   virtual void next() = 0;
   /** Tests if the iterator is past the last item. The iterator is

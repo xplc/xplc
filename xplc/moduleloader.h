@@ -37,9 +37,9 @@ class Module: public IModule {
   IMPLEMENT_IOBJECT(Module);
 private:
   void *handle;
-  XPLC_ModuleInfo* moduleinfo;
-  Module(void* aHandle, XPLC_ModuleInfo* aModuleInfo);
+  const XPLC_ModuleInfo* moduleinfo;
 public:
+  Module(void* aHandle, const XPLC_ModuleInfo* aModuleInfo);
   static Module* loadModule(const char* modulename);
   virtual IObject* getObject(const UUID& cid);
   virtual ~Module();

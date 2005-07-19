@@ -20,19 +20,19 @@
  * USA
  */
 
+#include <string.h>
 #include <xplc/ICategoryManager.h>
+#include <xplc/IModuleManagerFactory.h>
 #include <xplc/utils.h>
 #include "test.h"
+#include "testobj.h"
+#include "config.h"
 
 /*
  * test010
  *
  * Tests categories.
  */
-
-static const UUID myCategory = {0x14b4b499, 0xc5f3, 0x42c1,
-                                {0x9e, 0x9b, 0x91, 0x9e,
-                                 0x6a, 0xd2, 0xe9, 0xe9}};
 
 static const UUID myComponent1 = {0xb4a924ca, 0x0b81, 0x48de,
                                   {0xb6, 0x61, 0x5c, 0x63,
@@ -46,6 +46,12 @@ static const UUID myComponent3 = {0xea511e95, 0x5be4, 0x4b08,
                                   {0x86, 0xca, 0xad, 0xd5,
                                    0x9a, 0xf7, 0xe2, 0x94}};
 
+#ifdef ENABLE_LOADER
+#define NUM_CATITEM 4
+#else
+#define NUM_CATITEM 3
+#endif
+
 void test010() {
   IServiceManager* servmgr;
   IObject* obj;
@@ -53,7 +59,11 @@ void test010() {
   ICategory* cat;
   ICategoryIterator* iter;
   unsigned int num;
-  bool seen[3] = { false, false, false };
+  bool seen[NUM_CATITEM];
+#ifdef ENABLE_LOADER
+  IModuleManagerFactory* mgrfactory;
+  IServiceHandler* modulemgr;
+#endif
 
   servmgr = XPLC_getServiceManager();
   ASSERT(servmgr != 0, "could not obtain service manager");
@@ -64,40 +74,75 @@ void test010() {
   catmgr = mutate<ICategoryManager>(obj);
   ASSERT(catmgr != 0, "category manager does not have expected interface");
 
-  catmgr->registerComponent(myCategory, myComponent1);
-  catmgr->registerComponent(myCategory, myComponent2);
-  catmgr->registerComponent(myCategory, myComponent3);
+#ifdef ENABLE_LOADER
+  obj = servmgr->getObject(XPLC_moduleManagerFactory);
+  ASSERT(obj != 0, "could not obtain module manager factory");
 
-  cat = catmgr->getCategory(myCategory);
+  mgrfactory = mutate<IModuleManagerFactory>(obj);
+  ASSERT(mgrfactory != 0, "factory does not have expected interface");
+
+  modulemgr = mgrfactory->createModuleManager(".");
+  ASSERT(modulemgr, "could not create module manager");
+
+  VERIFY(mgrfactory->release() == 1, "factory has wrong refcount");
+#endif
+
+  catmgr->registerComponent(testCategory, myComponent1, "myComponent1");
+  catmgr->registerComponent(testCategory, myComponent2, "myComponent2");
+  catmgr->registerComponent(testCategory, myComponent3, 0);
+
+  cat = catmgr->getCategory(testCategory);
   ASSERT(cat, "could not obtain the category");
 
-  num = 0;
+  for(num = 0; num < NUM_CATITEM; ++num) {
+    seen[num] = false;
+  }
 
   iter = cat->getIterator();
 
   ASSERT(iter, "could not obtain the category iterator");
 
+  num = 0;
   for(; !iter->done(); iter->next()) {
     ++num;
 
     if(iter->getUuid() == myComponent1) {
       VERIFY(!seen[0], "myComponent1 already seen");
+      VERIFY(iter->getString()
+             && strcmp(iter->getString(), "myComponent1") == 0,
+             "incorrect string for myComponent1");
       seen[0] = true;
     } else if(iter->getUuid() == myComponent2) {
       VERIFY(!seen[1], "myComponent2 already seen");
+      VERIFY(iter->getString()
+             && strcmp(iter->getString(), "myComponent2") == 0,
+             "incorrect string for myComponent2");
       seen[1] = true;
     } else if(iter->getUuid() == myComponent3) {
       VERIFY(!seen[2], "myComponent3 already seen");
+      VERIFY(!iter->getString(), "incorrect string for myComponent3");
       seen[2] = true;
+#ifdef ENABLE_LOADER
+    } else if(iter->getUuid() == TestComponent_CID) {
+      VERIFY(!seen[3], "TestComponent already seen");
+      VERIFY(iter->getString()
+             && strcmp(iter->getString(), "TestComponent") == 0,
+             "incorrect string for TestComponent");
+      seen[3] = true;
+#endif
     } else {
       VERIFY(false, "got an unknown component");
     }
   }
 
   VERIFY(iter->release() == 0, "category iterator has wrong refcount");
-  VERIFY(num == 3, "the category has an incorrect number of items");
+  VERIFY(num == NUM_CATITEM, "the category has an incorrect number of items");
 
   VERIFY(cat->release() == 0, "category has wrong refcount");
+
+#ifdef ENABLE_LOADER
+  VERIFY(modulemgr->release() == 0, "incorrect refcount on module loader");
+#endif
 
   VERIFY(catmgr->release() == 1, "category manager has wrong refcount");
 

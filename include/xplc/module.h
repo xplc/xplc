@@ -77,6 +77,18 @@ struct XPLC_ComponentEntry {
 };
 
 /**
+ * Entry for a category registration. Modules have an array of these,
+ * used to indicate the category information for the module.
+ */
+struct XPLC_CategoryEntry {
+  //@{
+  const UUID& category;
+  const UUID& uuid;
+  const char* const string;
+  //@}
+};
+
+/**
  * Information for an XPLC module.
  */
 struct XPLC_ModuleInfo {
@@ -111,18 +123,9 @@ struct XPLC_ModuleInfo {
   const XPLC_ComponentEntry* const components;
 
   /**
-   * Hook on module loading. If not NULL, the function pointed at by
-   * loadModule will be called when loading the module. If the return
-   * value is false, the loading will be aborted.
+   * List of category registrations for the module.
    */
-  bool (*loadModule)();
-  /**
-   * Hook on module unloading. If not NULL, the function pointed at by
-   * unloadModule will be called before unloading the module. If the
-   * return value is false, the unloading will be aborted and the
-   * module will be kept in memory.
-   */
-  bool (*unloadModule)();
+  const XPLC_CategoryEntry* const categories;
 };
 
 /**

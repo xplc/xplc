@@ -32,10 +32,6 @@ private:
   CategoryEntryNode* entries;
 public:
   Category(ICategoryManager*, CategoryEntryNode*);
-#if 0
-  /* IFactory */
-  virtual IObject* createObject();
-#endif
   /* ICategory */
   virtual ICategoryIterator* getIterator();
   virtual ~Category();

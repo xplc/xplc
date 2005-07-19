@@ -28,7 +28,6 @@
 
 UUID_MAP_BEGIN(CategoryManager)
   UUID_MAP_ENTRY(IObject)
-  UUID_MAP_ENTRY(IServiceHandler)
   UUID_MAP_ENTRY(ICategoryManager)
   UUID_MAP_END
 
@@ -41,12 +40,9 @@ CategoryManager::~CategoryManager() {
     delete categories;
 }
 
-IObject* CategoryManager::getObject(const UUID&) {
-  return NULL;
-}
-
 void CategoryManager::registerComponent(const UUID& aCatid,
-                                        const UUID& aUuid) {
+                                        const UUID& aUuid,
+                                        const char* aString) {
   CategoryNode* cat;
   CategoryEntryNode* entry;
 
@@ -67,7 +63,7 @@ void CategoryManager::registerComponent(const UUID& aCatid,
       return;
   }
 
-  entry = new CategoryEntryNode(aUuid, cat->entries);
+  entry = new CategoryEntryNode(aUuid, aString, cat->entries);
   assert(entry);
 
   cat->entries = entry;

@@ -25,9 +25,6 @@
 
 UUID_MAP_BEGIN(Category)
   UUID_MAP_ENTRY(IObject)
-#if 0
-  UUID_MAP_ENTRY(IFactory)
-#endif
   UUID_MAP_ENTRY(ICategory)
   UUID_MAP_END
 
@@ -40,13 +37,6 @@ Category::Category(ICategoryManager* aMgr, CategoryEntryNode* aEntries):
    */
   mgr->addRef();
 }
-
-#if 0
-/* FIXME: unimplemented... */
-IObject* Category::createObject() {
-  return NULL;
-}
-#endif
 
 ICategoryIterator* Category::getIterator() {
   return new CategoryIterator(this, entries);
