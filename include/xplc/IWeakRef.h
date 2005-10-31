@@ -22,6 +22,10 @@
 #ifndef __XPLC_IWEAKREF_H__
 #define __XPLC_IWEAKREF_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 #include <xplc/IObject.h>
 
 /** \interface IWeakRef IWeakRef.h xplc/IWeakRef.h

@@ -1,15 +1,16 @@
-xplc (0.3.12-1.1) NONE; urgency=low
+xplc (0.3.13-1.1) NONE; urgency=low
 
   * Unofficial build from CVS.
 
- -- J. Random Hacker <jrhacker@example>  Wed,  7 Jul 2005 00:00:00 -0000
+ -- J. Random Hacker <jrhacker@example>  Sat, 22 Oct 2005 00:00:00 -0000
 
-xplc (0.3.12-1) unstable; urgency=low
+xplc (0.3.13-1) unstable; urgency=low
 
   * New upstream release.
+    - Includes /usr/bin/uuidcdef.  (Closes: Bug#310755)
   * Built for G++ 4.0.
 
- -- Simon Law <sfllaw@debian.org>  Wed,  6 Jul 2005 12:36:20 -0400
+ -- Simon Law <sfllaw@debian.org>  Fri, 21 Oct 2005 09:48:37 -0400
 
 xplc (0.3.11-1) unstable; urgency=low
 

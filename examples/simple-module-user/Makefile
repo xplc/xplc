@@ -5,8 +5,8 @@
 
 # the UNSTABLE flag is there because we agree to use interfaces that
 # have not been frozen yet.
-CPPFLAGS+=-DUNSTABLE -I../simple-module $(shell pkg-config xplc-0.3.12 --cflags)
-LDFLAGS+=$(shell pkg-config xplc-0.3.12 --libs-only-L)
+CPPFLAGS+=-DUNSTABLE -I../simple-module $(shell pkg-config xplc-0.3.13 --cflags)
+LDFLAGS+=$(shell pkg-config xplc-0.3.13 --libs-only-L)
 
 default: example
 

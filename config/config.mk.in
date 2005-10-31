@@ -19,21 +19,28 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: config.mk.in,v 1.37 2004/10/07 03:17:10 sfllaw Exp $
+# $Id: config.mk.in,v 1.41 2005/10/26 19:19:28 sfllaw Exp $
 
 # set variables from the configure script
+CC=@CC@
+CFLAGS+=@CFLAGS@
 CXX=@CXX@
 CXXFLAGS+=@CXXFLAGS@
+LDFLAGS+=@LDFLAGS@
 pc_version:=@pc_version@
-libdir_version:=@libdir_version@
+xplcdir_version:=@xplcdir_version@
 lib_prefix_version:=@lib_prefix_version@
 enable_loader:=@enable_loader@
 with_dlopen:=@with_dlopen@
 so_style:=@so_style@
+with_uuid:=@with_uuid@
+with_uuid_static:=@with_uuid_static@
 prefix:=@prefix@
 exec_prefix:=@exec_prefix@
 includedir:=@includedir@
 libdir:=@libdir@
+bindir:=@bindir@
+mandir:=@mandir@
 INSTALL:=@INSTALL@
 INSTALL_PROGRAM:=@INSTALL_PROGRAM@
 INSTALL_DATA:=@INSTALL_DATA@

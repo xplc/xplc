@@ -32,6 +32,10 @@
 #ifndef __XPLC_FACTORY_H__
 #define __XPLC_FACTORY_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 #include <xplc/IFactory.h>
 #include <xplc/utils.h>
 

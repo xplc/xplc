@@ -34,6 +34,10 @@
 #ifndef __XPLC_UUIDOPS_H__
 #define __XPLC_UUIDOPS_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 #include <xplc/uuid.h>
 
 #if !defined _SYS_GUID_OPERATOR_EQ_ && !defined _NO_SYS_GUID_OPERATOR_EQ_

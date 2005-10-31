@@ -24,6 +24,10 @@
 #ifndef __XPLC_IOBJECT_H__
 #define __XPLC_IOBJECT_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 /** \file
  *
  * This file contains the %XPLC foundation interface.

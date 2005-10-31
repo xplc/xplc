@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(XPLC, 0.3.12, pp@ludusdesign.com)
-AC_REVISION($Id: configure.ac,v 1.37 2005/07/19 22:26:19 pphaneuf Exp $)
+AC_INIT(XPLC, 0.3.13, pp@ludusdesign.com)
+AC_REVISION($Id: configure.ac,v 1.41 2005/10/31 23:19:35 pphaneuf Exp $)
 
 AC_CANONICAL_HOST
 
@@ -69,10 +69,15 @@ AC_ARG_WITH(dyld,
             AC_HELP_STRING([--with-dyld],
                            [dyld]))
 
+AC_ARG_WITH(libuuid,
+            AC_HELP_STRING([--with-libuuid],
+                           [libuuid]))
+
 AC_CONFIG_SRCDIR([include/xplc/xplc.h])
 
 AC_LANG(C++)
 
+AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -90,6 +95,9 @@ darwin*|rhapsody*)
     so_style=sysv
     ;;
 esac
+
+# Make sure we link in libc.
+LDFLAGS="$LDFLAGS -lc"
 
 if test "$with_dlopen" != "no"; then
     AC_CHECK_HEADERS(dlfcn.h)
@@ -114,8 +122,42 @@ if test "$enable_loader" != "no"; then
     AC_DEFINE(ENABLE_LOADER, 1, [Define if you want to enable dynamic loading.])
 fi
 
+dnl Do some checks for uuid/ since no native library is available
+with_uuid=no
+if test "$with_uuid" == "no" && test "$with_libuuid" != "no"; then
+    AC_CHECK_HEADERS(uuid/uuid.h,
+		     AC_CHECK_LIB(uuid, uuid_unparse,
+				  with_uuid=-luuid))
+fi
+if test "$with_uuid" == "no"; then
+    AC_CHECK_SIZEOF(short)
+    AC_CHECK_SIZEOF(int)
+    AC_CHECK_SIZEOF(long)
+    AC_CHECK_SIZEOF(long long)
+    SIZEOF_SHORT=$ac_cv_sizeof_short
+    SIZEOF_INT=$ac_cv_sizeof_int
+    SIZEOF_LONG=$ac_cv_sizeof_long
+    SIZEOF_LONG_LONG=$ac_cv_sizeof_long_long
+    AC_SUBST(SIZEOF_SHORT)
+    AC_SUBST(SIZEOF_INT)
+    AC_SUBST(SIZEOF_LONG)
+    AC_SUBST(SIZEOF_LONG_LONG)
+    AC_CHECK_HEADERS([inttypes.h stdlib.h unistd.h])
+    AC_CHECK_HEADERS([net/if.h net/if_dl.h netinet/in.h])
+    AC_CHECK_HEADERS([sys/ioctl.h sys/socket.h sys/sockio.h])
+    AC_CHECK_FUNCS(srandom)
+    AC_CHECK_MEMBER(struct sockaddr.sa_len,
+		    AC_DEFINE_UNQUOTED(HAVE_SA_LEN,
+				       1,
+				       [Define if struct sockaddr contains sa_len]),,
+		    [#include <sys/typesDD.h>
+	             #include <sys/socket.h>])
+    with_uuid=
+    with_uuid_static=uuid/libuuid.a
+fi
+
 if test "$enable_optimization" != "no"; then
-    CXXFLAGS="$CXXFLAGS -O2"
+    CFLAGS="$CFLAGS -O2"
 fi
 
 if test -z "$enable_debug"; then
@@ -123,20 +165,21 @@ if test -z "$enable_debug"; then
 fi
 
 if test "$enable_debug" != "no"; then
-    CXXFLAGS="$CXXFLAGS -ggdb -DDEBUG"
+    CFLAGS="$CFLAGS -ggdb -DDEBUG"
     if test "$enable_debug" != "yes"; then
-        CXXFLAGS="$CXXFLAGS -DDEBUG_$enable_debug"
+        CFLAGS="$CFLAGS -DDEBUG_$enable_debug"
     fi
 else
-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
+    CFLAGS="$CFLAGS -DNDEBUG"
 fi
 
 if test "$enable_fatal_warnings" = "yes"; then
-    CXXFLAGS="$CXXFLAGS -Werror"
+    CFLAGS="$CFLAGS -Werror"
 fi
 
 if test "$enable_warnings" != "no"; then
-    CXXFLAGS="$CXXFLAGS -Wall -Woverloaded-virtual"
+    CFLAGS="$CFLAGS -Wall"
+    CXXFLAGS="$CXXFLAGS -Woverloaded-virtual"
     if test "$enable_warnings" = "yes"; then
         CXXFLAGS="$CXXFLAGS -Wold-style-cast"
     fi
@@ -151,33 +194,40 @@ if test "$enable_exceptions" != "yes"; then
 fi
 
 if test "$enable_pic" != "no"; then
-    CXXFLAGS="$CXXFLAGS -fpic"
+    CFLAGS="$CFLAGS -fpic"
 fi
 
 pc_version=
-libdir_version=
+xplcdir_version=
 lib_prefix_version=
 if test "$(echo $PACKAGE_VERSION | awk -F. '{ print $2 % 2}')" -eq 1; then
     enable_unstable=yes
-    includedir="$includedir/xplc-${PACKAGE_VERSION}"
     pc_version="-${PACKAGE_VERSION}"
-    libdir_version="/xplc-${PACKAGE_VERSION}"
+    xplcdir_version="/xplc-${PACKAGE_VERSION}"
     lib_prefix_version="../"
 fi
 
 if test "$enable_unstable" = "yes"; then
-    CXXFLAGS="$CXXFLAGS -DUNSTABLE"
+    CFLAGS="$CFLAGS -DUNSTABLE"
 fi
 
+CXXFLAGS="$CXXFLAGS $CFLAGS"
+
 AC_SUBST(pc_version)
-AC_SUBST(libdir_version)
+AC_SUBST(xplcdir_version)
 AC_SUBST(lib_prefix_version)
 AC_SUBST(enable_loader)
 AC_SUBST(with_dlopen)
 AC_SUBST(so_style)
+AC_SUBST(with_uuid)
+AC_SUBST(with_uuid_static)
 AC_SUBST(CVS2CL)
 
-AC_CONFIG_FILES([config/config.mk dist/xplc.pc dist/xplc-uninstalled.pc examples/simple-module/Makefile examples/simple-module-user/Makefile])
+AC_CONFIG_FILES([config/config.mk])
+AC_CONFIG_FILES([dist/xplc.pc dist/xplc-uninstalled.pc])
+AC_CONFIG_FILES([examples/simple-module/Makefile])
+AC_CONFIG_FILES([examples/simple-module-user/Makefile])
+AC_CONFIG_FILES([uuid/uuid_types.h])
 AC_CONFIG_HEADERS([include/autoconf.h])
 
 AC_OUTPUT

@@ -34,6 +34,10 @@
 #ifndef __XPLC_UTILS_H__
 #define __XPLC_UTILS_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 /** \file
  *
  * Various utility functions, macros and templates.

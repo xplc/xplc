@@ -17,9 +17,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 #
-# $Id: rules.mk,v 1.44 2004/10/07 03:17:10 sfllaw Exp $
+# $Id: rules.mk,v 1.49 2005/10/21 15:00:44 sfllaw Exp $
 
 .PHONY: ChangeLog dist dustclean clean distclean realclean installdirs install uninstall doxygen clean-doxygen examples
+
+%.o: %.c
+	@$(COMPILE.c) -M -E $< | sed -e 's|^.*:|$@:|' > $(dir $@).$(notdir $(@:.o=.d))
+	$(COMPILE.c) $(OUTPUT_OPTION) $<
 
 %.o: %.cpp
 	@$(COMPILE.cpp) -M -E $< | sed -e 's|^.*:|$@:|' > $(dir $@).$(notdir $(@:.o=.d))
@@ -100,25 +104,38 @@ realclean: distclean
 	-rm -rf $(wildcard $(REALCLEAN))
 
 installdirs:
+	mkdir -p $(DESTDIR)$(bindir)
+	mkdir -p $(DESTDIR)$(mandir)/man1
 	mkdir -p $(DESTDIR)$(libdir)/pkgconfig
-	mkdir -p $(DESTDIR)$(libdir)$(libdir_version)
-	mkdir -p $(DESTDIR)$(includedir)/xplc
+	mkdir -p $(DESTDIR)$(libdir)$(xplcdir_version)
+	mkdir -p $(DESTDIR)$(includedir)$(xplcdir_version)/xplc
 
 install: default installdirs
 	$(INSTALL_PROGRAM) libxplc.so $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION)
-	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)$(libdir_version)
-	$(INSTALL_DATA) libxplc-cxx.a $(DESTDIR)$(libdir)$(libdir_version)
+	$(INSTALL_DATA) libxplc.a $(DESTDIR)$(libdir)$(xplcdir_version)
+	$(INSTALL_DATA) libxplc-cxx.a $(DESTDIR)$(libdir)$(xplcdir_version)
 	$(INSTALL_DATA) dist/xplc.pc $(DESTDIR)$(libdir)/pkgconfig/xplc$(pc_version).pc
-	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(DESTDIR)$(includedir)/xplc
-	$(LN_S) $(lib_prefix_version)libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)$(libdir_version)/libxplc.so
-	$(LN_S) libxplc.a $(DESTDIR)$(libdir)$(libdir_version)/libxplc_s.a
+	$(INSTALL_DATA) $(wildcard include/xplc/*.h) $(DESTDIR)$(includedir)$(xplcdir_version)/xplc
+	$(INSTALL_PROGRAM) uuid/bin/uuidgen $(DESTDIR)$(bindir)
+	$(INSTALL_DATA) uuid/bin/uuidgen.1 $(DESTDIR)$(mandir)/man1
+	$(LN_S) $(lib_prefix_version)libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)$(xplcdir_version)/libxplc.so
+	$(LN_S) libxplc.a $(DESTDIR)$(libdir)$(xplcdir_version)/libxplc_s.a
+	$(LN_S) uuidgen $(DESTDIR)$(bindir)/uuidcdef
+	$(LN_S) uuidgen.1 $(DESTDIR)$(mandir)/man1/uuidcdef.1
 
 uninstall:
-	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)$(libdir_version)/libxplc.so
-	rm -f $(DESTDIR)$(libdir)$(libdir_version)/libxplc.a $(DESTDIR)$(libdir)$(libdir_version)/libxplc_s.a
-	rm -f $(DESTDIR)$(libdir)$(libdir_version)/libxplc-cxx.a
+	rm -f $(DESTDIR)$(libdir)/libxplc.so.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)$(xplcdir_version)/libxplc.so
+	rm -f $(DESTDIR)$(libdir)$(xplcdir_version)/libxplc.a $(DESTDIR)$(libdir)$(xplcdir_version)/libxplc_s.a
+	rm -f $(DESTDIR)$(libdir)$(xplcdir_version)/libxplc-cxx.a
 	rm -f $(DESTDIR)$(libdir)/pkgconfig/xplc$(pc_version).pc
-	rm -rf $(DESTDIR)$(includedir)/xplc
+	rm -f $(DESTDIR)$(bindir)/uuidgen $(DESTDIR)$(bindir)/uuidcdef
+	rm -f $(DESTDIR)$(mandir)/man1/uuidgen.1
+	rm -f $(DESTDIR)$(mandir)/man1/uuidcdef.1
+	rm -rf $(DESTDIR)$(includedir)$(xplcdir_version)/xplc
+ifneq ($(xplcdir_version),)
+	rm -rf $(DESTDIR)$(libdir)$(xplcdir_version)
+	rm -rf $(DESTDIR)$(includedir)$(xplcdir_version)
+endif
 
 ifeq ($(filter-out $(SIMPLETARGETS),$(MAKECMDGOALS)),$(MAKECMDGOALS))
 

@@ -23,6 +23,10 @@
 #ifndef __XPLC_ISTATICSERVICEHANDLER_H__
 #define __XPLC_ISTATICSERVICEHANDLER_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 #include <xplc/IServiceHandler.h>
 
 /**

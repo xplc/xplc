@@ -15,6 +15,10 @@ Summary: Cross-platform lightweight component system (development)
 Group: Development/Libraries
 Requires: xplc = %{version}
 
+%package uuidgen
+Summary: Cross-platform lightweight component system (uuidgen)
+Group: Development/Libraries
+
 %package doc
 Summary: Cross-platform lightweight component system (documentation)
 Group: Development/Libraries
@@ -27,6 +31,10 @@ use and having the lowest possible overhead.
 
 %description devel
 This is the parts of XPLC needed for development.
+
+%description uuidgen
+This is a UUID generator. It is not strictly needed, as there are other
+tools available to generate UUIDs.
 
 %description doc
 This package contains documentation and examples for XPLC.
@@ -60,6 +68,11 @@ rm -rf %{buildroot}
 /usr/include/xplc-%{version}
 /usr/lib/xplc-%{version}
 /usr/lib/pkgconfig/xplc-%{version}.pc
+
+%files uuidgen
+%defattr(-,root,root)
+/usr/bin/uuidgen
+%doc /usr/share/man/man1/uuidgen.1.gz
 
 %files doc
 %defattr(-,root,root)

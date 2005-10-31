@@ -4,7 +4,7 @@ compat
 files
 libxplc
 libxplc-dev
-libxplc.substvars
+uuidcdef.substvars
 stamp-autotools-files
 stamp-makefile-build
 tmp

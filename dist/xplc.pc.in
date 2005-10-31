@@ -1,7 +1,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
-libdir=@libdir@@libdir_version@
-includedir=@includedir@
+libdir=@libdir@@xplcdir_version@
+includedir=@includedir@@xplcdir_version@
 
 Name: XPLC
 Description: Cross-platform lightweight component system

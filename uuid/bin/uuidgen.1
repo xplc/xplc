@@ -1,0 +1,89 @@
+.\" Man page for uuidgen
+.\" Copyright (C) 2005, Net Integration Technologies, Inc.
+.\"
+.\" This library is free software; you can redistribute it and/or
+.\" modify it under the terms of the GNU Lesser General Public License
+.\" as published by the Free Software Foundation; either version 2.1 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" This library is distributed in the hope that it will be useful, but
+.\" WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" Lesser General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Lesser General Public
+.\" License along with this library; if not, write to the Free Software
+.\" Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+.\"
+.\" As a special exception, you may use this file as part of a free
+.\" software library without restriction.  Specifically, if other files
+.\" instantiate templates or use macros or inline functions from this
+.\" file, or you compile this file and link it with other files to
+.\" produce an executable, this file does not by itself cause the
+.\" resulting executable to be covered by the GNU Lesser General Public
+.\" License.  This exception does not however invalidate any other
+.\" reasons why the executable file might be covered by the GNU Lesser
+.\" General Public License.
+.TH uuidgen 1 "October 2005" "tvtime 0.3.13"
+.\"
+.SH NAME
+uuidgen \- a universally unique identifier (UUID) generator for XPLC
+.\"
+.SH SYNOPSIS
+.B uuidgen
+[
+.IR OPTION
+] ...
+.br
+.B uuidcdef
+[
+.IR OPTION
+] ...
+.\"
+.SH DESCRIPTION
+.B uuidgen
+generates a new universally unique identifier (UUID).  This UUID can
+be assumed to be unique to any other UUIDs generated on the local
+system, as well as those created on any other systems, at any time in
+the past or future.
+
+By default,
+.B uuidgen
+will try to generate a UUID with as much randomness as possible.  It
+tries to pick out a high-quality randomness source.  If it cannot find
+one, it will fall back on using a time-based algorithm.
+.\"
+.SH OPTIONS
+.TP
+.B \-c, \-\-cdef
+Print the UUID as an initializer for a C structure, compatible with
+the type used by XPLC.
+
+This is the default mode for
+.BR uuidcdef .
+.\"
+.TP
+.B \-r, \-\-random
+Demand that the random-based algorithm be used to generate the UUID.
+This will prefer a high-quality randomness source, but may fall back
+on a low-entropy one.
+.\"
+.TP
+.B \-t, \-\-time
+Demand that the time-based algorithm be used to generate the UUID.
+.\"
+.TP
+.B \-u, \-\-uuid
+Print the UUID like: "26175a27-c35d-4615-8dfb-1509eab28ef8".
+This is the
+.BR printf (3)
+format: "%08x-%04x-%04x-%04x-%012x".
+
+This is the default mode for
+.BR uuidgen .
+.\"
+.SH AUTHOR
+Simon Law
+.\"
+.SH "SEE ALSO"
+.BR uuidgen (1).

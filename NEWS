@@ -1,3 +1,11 @@
+New in 0.3.13
+-------------
+
+ * Added a uuidgen program.
+ * Suppress warnings in GCC 4.
+ * Put headers in a versioned location.
+ * Fixed building of XPLC on FreeBSD.
+
 New in 0.3.12
 -------------
 

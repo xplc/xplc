@@ -23,6 +23,10 @@
 #ifndef __XPLC_IMONIKERSERVICE_H__
 #define __XPLC_IMONIKERSERVICE_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 #include <xplc/IMoniker.h>
 
 /** \interface IMonikerService IMonikerService.h xplc/IMonikerService.h

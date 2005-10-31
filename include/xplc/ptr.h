@@ -33,6 +33,10 @@
 #ifndef __XPLC_PTR_H__
 #define __XPLC_PTR_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 /** \file
  *
  * Smart pointer for XPLC interfaces.

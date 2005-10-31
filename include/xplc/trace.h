@@ -33,6 +33,10 @@
 #ifndef __XPLC_TRACE_H__
 #define __XPLC_TRACE_H__
 
+#if defined(__GNUC__) && __GNUC__ > 3
+# pragma GCC system_header
+#endif
+
 #ifdef DEBUG
 
 #include <stdio.h>
