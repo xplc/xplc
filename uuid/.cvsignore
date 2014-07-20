@@ -1,4 +1,0 @@
-.*.d
-*.o
-libuuid.a
-uuid_types.h
