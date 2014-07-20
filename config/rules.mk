@@ -62,7 +62,7 @@ examples: default
 	$(MAKE) -C $@
 
 .PHONY: $(DIST)
-$(DIST): ChangeLog README xplc.spec debian/control configure
+$(DIST): ChangeLog xplc.spec debian/control configure
 	rm -rf $(DIST)
 	tar cf - . | (mkdir $(DIST) && cd $(DIST) && tar xf -)
 	$(MAKE) -C $(DIST) distclean
@@ -80,9 +80,6 @@ ChangeLog:
 
 doxygen: clean-doxygen
 	doxygen
-
-README: dist/README.in configure.ac
-	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@
 
 xplc.spec: dist/xplc.spec.in configure.ac
 	sed $< -e 's%@VERSION@%$(PACKAGE_VERSION)%g' > $@

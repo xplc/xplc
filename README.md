@@ -1,7 +1,6 @@
 XPLC (Cross-Platform Lightweight Components)
 ============================================
 
-Release: @VERSION@
 Web Site: http://xplc.sourceforge.net/
 Maintainer: Pierre Phaneuf <pp@ludusdesign.com>
 

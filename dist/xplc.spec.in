@@ -76,7 +76,7 @@ rm -rf %{buildroot}
 
 %files doc
 %defattr(-,root,root)
-%doc README CREDITS NEWS LICENSE ChangeLog
+%doc README.md CREDITS NEWS LICENSE ChangeLog
 %doc examples
 
 %changelog

@@ -27,7 +27,7 @@ default:
 
 CLEAN+=$(wildcard libxplc*.a libxplc.so.* doxygen)
 DISTCLEAN+=config.cache config.log config.status dist/xplc.pc dist/xplc-uninstalled.pc xplc-uninstalled.pc
-REALCLEAN+=configure README xplc.spec
+REALCLEAN+=configure xplc.spec
 PATH:=$(PWD)/dist:$(PATH)
 
 include $(wildcard */vars.mk)

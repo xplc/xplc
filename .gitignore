@@ -5,7 +5,6 @@
 *.so
 .*.d
 /ChangeLog
-/README
 /autom4te.cache/
 /config.cache
 /config.log
