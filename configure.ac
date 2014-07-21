@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
-AC_INIT(XPLC, 0.3.13, pp@ludusdesign.com)
+AC_INIT(XPLC, 0.3.13, pphaneuf@gmail.com)
 AC_REVISION($Id: configure.ac,v 1.41 2005/10/31 23:19:35 pphaneuf Exp $)
 
 AC_CANONICAL_HOST

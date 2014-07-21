@@ -3,7 +3,7 @@ Mon, 23 Oct 2003 19:49:14 -0400.
 
 It was downloaded from http://xplc.sourceforge.net/
 
-Upstream Author: Pierre Phaneuf <pp@ludusdesign.com>
+Upstream Author: Pierre Phaneuf <pphaneuf@gmail.com>
 
 Copyright: 
 
@@ -18,7 +18,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 details.
 
 XPLC is Copyright 2000-2004, Pierre Phaneuf,
- Copyright 2000-2004 Stéphane Lajoie and
+ Copyright 2000-2004 StÃ©phane Lajoie and
  Copyright 2002-2005 Net Integration Technologies, Inc.
 
 This package also contains libuuid, which is extracted from e2fsprogs-1.38:
