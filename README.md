@@ -70,32 +70,13 @@ Patches should preferably be submitted to the patch tracking system on
 our SourceForge project page (http://sourceforge.net/projects/xplc/),
 but could also be send via e-mail to the maintainer.
 
-                          *** IMPORTANT ***
+IMPORTANT
+=========
 				   
 Before preparing a patch, you should make sure that 'make tests'
 passes all tests. Those tests are made to be as easy to use as
 possible, so please use them. Using the "--enable-fatal-warnings"
 option of the "configure" script is also recommended.
 
-The simpler way to prepare a patch requires CVS and Internet
-access. Just issue the following command in the root XPLC project
-directory:
-
-$ cvs diff -u > mypatch.diff
-
-You can also send a patch that is limited to a few files in the
-following way:
-
-$ cvs diff -u [FILES] > mypatch.diff
-
-If you do not have CVS and/or Internet access, you should do the
-following:
-
- - rename the XPLC source directory to something like 'xplc-modified'
- - unpack the fresh XPLC sources
- - run the following command:
-
-$ diff -ruN xplc-X.Y.Z xplc-modified > mypatch.diff
-
-You can then submit the mypatch.diff file for inclusion in XPLC!
-
+The simplest way to send us a patch is to do so by using a Github pull
+request.

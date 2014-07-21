@@ -50,7 +50,6 @@ make tests
 %install
 rm -rf %{buildroot}
 %makeinstall
-rm -rf $(find examples -name CVS -type d -o -name .cvsignore)
 
 %clean
 rm -rf %{buildroot}

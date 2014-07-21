@@ -10,8 +10,8 @@ DEB_MAKE_CHECK_TARGET := tests
 PKG_VERSION := $(shell awk -F, '/AC_INIT/{print $$2}' configure.ac \
 		 | sed 's/[ 	]//g')
 
-# Don't install the CVS/ and .cvsignore from the examples
-DEB_INSTALL_EXAMPLES_libxplc$(PKG_VERSION)-dev := -XCVS -X.cvsignore
+# Don't install the .gitignore from the examples
+DEB_INSTALL_EXAMPLES_libxplc$(PKG_VERSION)-dev := -X.gitignore
 
 # Make sure the install files are in the right place
 build/libxplc$(PKG_VERSION)::

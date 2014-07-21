@@ -22,7 +22,7 @@
 DEPFILES:=$(shell find . -name '.*.d')
 
 DUSTCLEAN+=$(shell find . -name '*~' -o -name '.\#*')
-CLEAN+=$(shell find . -name '*.o') libxplc.so* $(DEPFILES) $(addprefix debian/,$(shell cat debian/.cvsignore | grep -v control)) autom4te.cache xplc-[0-9]*
+CLEAN+=$(shell find . -name '*.o') libxplc.so* $(DEPFILES) $(patsubst /%,%,$(shell grep '^/debian\/' .gitignore | grep -v control)) autom4te.cache xplc-[0-9]*
 DISTCLEAN+=config/config.mk include/autoconf.h ChangeLog.bak
 REALCLEAN+=ChangeLog include/autoconf.h.in debian/control
 
@@ -44,11 +44,6 @@ ARFLAGS=rc
 RANLIB=ranlib
 
 CXXFLAGS+=-pipe -Iinclude
-
-# Ensure CVS2CL is there
-ifeq ("$(CVS2CL)", "no")
-CVS2CL=$(error Please install cvs2cl)
-endif
 
 ifeq ("$(so_style)", "darwin")
 SHARED=-bundle

@@ -66,9 +66,6 @@ $(DIST): ChangeLog xplc.spec debian/control configure
 	rm -rf $(DIST)
 	tar cf - . | (mkdir $(DIST) && cd $(DIST) && tar xf -)
 	$(MAKE) -C $(DIST) distclean
-	for FILE in $$(find $(DIST) -name Root | grep CVS); do \
-		echo ':pserver:anonymous@cvs.sourceforge.net:/cvsroot/xplc' >$$FILE; \
-	done
 
 dist: default examples tests $(DIST).tar.gz
 	@echo REMINDER: did you update the version number in configure.ac?
@@ -76,7 +73,6 @@ dist: default examples tests $(DIST).tar.gz
 
 ChangeLog:
 	rm -f ChangeLog ChangeLog.bak
-	$(CVS2CL) --utc -U config/cvs-users
 
 doxygen: clean-doxygen
 	doxygen
