@@ -20,7 +20,7 @@
  */
 
 #ifndef __XPLC_CATITER_H__
-#define __XPLC_CATEITER_H__
+#define __XPLC_CATITER_H__
 
 #include <xplc/ICategory.h>
 #include <xplc/ICategoryIterator.h>
@@ -40,4 +40,4 @@ public:
   virtual ~CategoryIterator();
 };
 
-#endif /* __XPLC_CATEITER_H__ */
+#endif /* __XPLC_CATITER_H__ */
