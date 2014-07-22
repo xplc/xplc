@@ -64,7 +64,7 @@ examples: default
 .PHONY: $(DIST)
 $(DIST): ChangeLog xplc.spec debian/control configure
 	rm -rf $(DIST)
-	tar cf - . | (mkdir $(DIST) && cd $(DIST) && tar xf -)
+	tar cf - --exclude .git . | (mkdir $(DIST) && cd $(DIST) && tar xf -)
 	$(MAKE) -C $(DIST) distclean
 
 dist: default examples tests $(DIST).tar.gz
