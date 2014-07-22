@@ -33,3 +33,5 @@
 /uuid/bin/uuidcdef
 /uuid/bin/uuidgen
 /uuid/uuid_types.h
+/xplc-*.tar.gz
+/xplc.spec
