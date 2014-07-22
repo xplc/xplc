@@ -32,7 +32,7 @@ endif
 
 ifneq ("$(enable_loader)", "no")
 ifneq ("$(with_dlopen)", "no")
-libxplc.so: LDFLAGS+=$(with_dlopen)
+libxplc.so: LDLIBS+=$(with_dlopen)
 endif
 endif
 

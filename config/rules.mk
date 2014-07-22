@@ -44,7 +44,7 @@ lib%_s.a: lib%.a
 	$(RANLIB) $@
 
 %.so:
-	$(LINK.cc) $(SHARED) $^ -o $@
+	$(LINK.cc) $(SHARED) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 %.dll:
 	$(LINK.cc) $(SHARED) $^ -o $@
