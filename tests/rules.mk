@@ -29,7 +29,7 @@ endif
 	@echo "Running tests:"
 	@cd tests && ./testmain $(TESTS)
 
-tests/testmain: tests/testmain.o $(patsubst %.cpp,%.o,$(wildcard tests/test[0-9][0-9][0-9].cpp)) libxplc.a libxplc-cxx.a $(LIBS)
+tests/testmain: tests/testmain.o $(patsubst %.cpp,%.o,$(wildcard tests/test[0-9][0-9][0-9].cpp)) libxplc.a libxplc-cxx.a
 
 tests/testobj.dll: tests/testobj.o libxplc-cxx.a
 
