@@ -62,7 +62,7 @@ Module* Module::loadModule(const char* modulename) {
 
   switch(moduleinfo->version_major) {
 #ifdef UNSTABLE
-  case -1:
+  case (unsigned int)-1:
     /* nothing to do */
     break;
 #endif
